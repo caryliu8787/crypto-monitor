@@ -1,10 +1,9 @@
 #!/bin/bash
 # Telegram Push Script for Crypto Monitor
 # Usage: ./scripts/telegram-push.sh [report_date] [session]
-# Example: ./scripts/telegram-push.sh 2026-04-04 morning
 #
-# Reads data from data/latest.json and config from config/output.json
-# Sends a rich formatted Telegram message that's fully readable in-app
+# 1. Git push HTML report to GitHub (triggers GitHub Pages update)
+# 2. Send report URL to Telegram (click to open in mobile browser)
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -15,193 +14,155 @@ BOT_TOKEN=$(python3 -c "import json; print(json.load(open('$CONFIG'))['formats']
 CHAT_ID=$(python3 -c "import json; print(json.load(open('$CONFIG'))['formats']['telegram']['chat_id'])")
 
 if [ -z "$BOT_TOKEN" ] || [ "$BOT_TOKEN" = "" ]; then
-  echo "Error: telegram.bot_token not configured in $CONFIG"
+  echo "Error: telegram.bot_token not configured"
   exit 1
 fi
 if [ -z "$CHAT_ID" ] || [ "$CHAT_ID" = "" ]; then
-  echo "Error: telegram.chat_id not configured in $CONFIG"
+  echo "Error: telegram.chat_id not configured"
   exit 1
 fi
 
 API="https://api.telegram.org/bot${BOT_TOKEN}"
 DATE="${1:-$(date +%Y-%m-%d)}"
 SESSION="${2:-morning}"
-DATA="data/latest.json"
+HTML_FILE="reports/${DATE}_${SESSION}.html"
+PAGES_URL="https://caryliu8787.github.io/crypto-monitor/reports/${DATE}_${SESSION}.html"
 
-# Generate rich message from latest.json
+# Step 1: Push HTML to GitHub
+if [ -f "$HTML_FILE" ]; then
+  echo "Pushing report to GitHub..."
+  git add "$HTML_FILE" data/latest.json 2>/dev/null
+  git commit -m "Report: ${DATE} ${SESSION}" --allow-empty 2>/dev/null || true
+  git push origin main 2>&1 | tail -1
+  echo "Waiting for GitHub Pages deploy..."
+  for i in $(seq 1 12); do
+    sleep 10
+    STATUS=$(gh api repos/caryliu8787/crypto-monitor/pages/builds/latest 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('status','unknown'))" 2>/dev/null || echo "unknown")
+    if [ "$STATUS" = "built" ]; then
+      echo "Pages deployed."
+      break
+    fi
+    echo "  Build status: $STATUS ($((i*10))s)..."
+  done
+else
+  echo "Error: $HTML_FILE not found"
+  exit 1
+fi
+
+# Step 2: Generate Telegram message from latest.json
 MESSAGE=$(python3 << 'PYEOF'
-import json, sys
+import json, sys, os
+
+date = os.environ.get("DATE", "")
+session = os.environ.get("SESSION", "")
+pages_url = os.environ.get("PAGES_URL", "")
 
 try:
     d = json.load(open("data/latest.json"))
 except:
-    print("⚠️ data/latest.json not found")
-    sys.exit(0)
+    print("data/latest.json not found")
+    sys.exit(1)
 
 c = d.get("coins", {})
 btc = c.get("btc", {})
-eth = c.get("eth", {})
-sol = c.get("sol", {})
-link = c.get("link", {})
-arb = c.get("arb", {})
-mon = c.get("monad", {})
-plume = c.get("plume", {})
 score = d.get("market_score", {})
-alerts = d.get("alerts_triggered", [])
 
-def fmt_pct(v):
+def pct(v):
     if v is None: return "—"
     return f"+{v}%" if v >= 0 else f"{v}%"
 
-def fmt_price(v):
+def price(v):
     if v is None: return "—"
     if v >= 1000: return f"${v:,.0f}"
     if v >= 1: return f"${v:.2f}"
+    if v >= 0.01: return f"${v:.3f}"
     return f"${v:.4f}"
 
-# Header
-msg = f"<b>📊 加密货币每日情报简报</b>\n"
-msg += f"<code>{d.get('timestamp','')[:10]} {d.get('session','')}</code>\n\n"
+total = score.get("total", 0)
+phase = "强牛市" if total>=16 else "偏多" if total>=12 else "中性偏空" if total>=8 else "偏空" if total>=4 else "强熊市"
 
-# Alerts
-if alerts:
-    msg += "⚠️ <b>告警:</b>\n"
-    for a in alerts:
-        msg += f"  • {a}\n"
-    msg += "\n"
-
-# Market Status
 fgi = btc.get("fear_greed", "—")
-fgi_label = btc.get("fear_greed_label", "")
-dom = btc.get("dominance", "—")
-total = score.get("total", "—")
-phase = ""
-if isinstance(total, (int, float)):
-    if total >= 16: phase = "强牛市"
-    elif total >= 12: phase = "偏多"
-    elif total >= 8: phase = "中性偏空"
-    elif total >= 4: phase = "偏空"
-    else: phase = "强熊市"
 
-msg += f"<b>━━ 市场状态 ━━</b>\n"
-msg += f"恐惧贪婪: <b>{fgi}</b> {fgi_label}\n"
-msg += f"综合评分: <b>{total}/20</b> {phase}\n"
-msg += f"BTC主导率: {dom}% | 山寨季: {btc.get('altseason_index','—')}\n\n"
-
-# 4-dim scores
-msg += f"<b>━━ 四维评分 ━━</b>\n"
-dims = [("BTC趋势", score.get("btc_trend")), ("资金面", score.get("funding")),
-        ("情绪面", score.get("sentiment")), ("宏观面", score.get("macro"))]
+# Score bars
+dims = [("BTC趋势", score.get("btc_trend",0)), ("资金面", score.get("funding",0)),
+        ("情绪面", score.get("sentiment",0)), ("宏观面", score.get("macro",0))]
+score_lines = ""
 for name, val in dims:
-    bar = "🟩" * (val or 0) + "⬜" * (5 - (val or 0))
-    msg += f"{name}: {bar} {val}/5\n"
-msg += "\n"
+    bar = "🟩" * val + "⬜" * (5 - val)
+    score_lines += f"{name} {bar} {val}/5\n"
 
-# Price Overview
-msg += f"<b>━━ 价格概览 ━━</b>\n"
-coins_list = [
-    ("BTC", btc.get("price"), btc.get("change_24h"), btc.get("change_7d")),
-    ("ETH", eth.get("price"), eth.get("change_24h"), None),
-    ("SOL", sol.get("price"), sol.get("change_24h"), None),
-    ("LINK", link.get("price"), link.get("change_24h"), None),
-    ("ARB", arb.get("price"), arb.get("change_24h"), None),
-    ("MON", mon.get("price"), mon.get("change_24h"), None),
-    ("PLUME", plume.get("price"), plume.get("change_24h"), None),
+# Prices
+coins_data = [
+    ("BTC", c.get("btc",{})), ("ETH", c.get("eth",{})), ("SOL", c.get("sol",{})),
+    ("LINK", c.get("link",{})), ("ARB", c.get("arb",{})),
+    ("MON", c.get("monad",{})), ("PLUME", c.get("plume",{}))
 ]
-for name, price, ch24, ch7 in coins_list:
-    line = f"{name} {fmt_price(price)} ({fmt_pct(ch24)})"
-    if ch7 is not None:
-        line += f" 7d:{fmt_pct(ch7)}"
-    msg += line + "\n"
-msg += "\n"
+price_lines = ""
+for name, coin in coins_data:
+    p = coin.get("price")
+    ch = coin.get("change_24h")
+    if p is not None:
+        price_lines += f"<code>{name:6}</code> {price(p):>10}  {pct(ch)}\n"
 
-# On-chain
-msg += f"<b>━━ BTC 链上 ━━</b>\n"
-msg += f"MVRV: {btc.get('mvrv_zscore','—')} | SOPR: {btc.get('sopr_sth','—')}(STH) {btc.get('sopr_aggregate','—')}(agg)\n"
-reserves = btc.get('exchange_reserves')
-reserves_trend = btc.get('exchange_reserves_trend', '')
-if reserves:
-    msg += f"交易所储备: {reserves/1e6:.2f}M BTC ({reserves_trend})\n"
-msg += f"资金费率: {btc.get('funding_rate','—')}% | OI: ${btc.get('open_interest',0)/1e9:.1f}B\n"
-msg += f"期权MaxPain: ${btc.get('options_max_pain','—'):,} | P/C: {btc.get('put_call_ratio','—')}\n"
-ath_ch = btc.get('ath_change')
-if ath_ch: msg += f"距ATH: {ath_ch}% (ATH ${btc.get('ath',0):,})\n"
-msg += "\n"
-
-# ETF
-etf = btc.get('etf_daily_flow')
-if etf:
-    msg += f"<b>━━ ETF ━━</b>\n"
-    msg += f"最近净流入: ${etf/1e6:.1f}M | 累计: ${btc.get('etf_cumulative',0)/1e9:.1f}B\n\n"
-
-# Ecosystem
-msg += f"<b>━━ 生态 TVL ━━</b>\n"
-tvl_list = [("ETH", eth.get("tvl")), ("SOL", sol.get("tvl")), ("ARB", arb.get("tvl")),
-            ("MON", mon.get("tvl")), ("PLUME", plume.get("tvl"))]
-for name, tvl in tvl_list:
-    if tvl:
-        if tvl >= 1e9: msg += f"{name}: ${tvl/1e9:.1f}B\n"
-        else: msg += f"{name}: ${tvl/1e6:.0f}M\n"
-msg += "\n"
-
-# LINK specifics
-if link.get("revenue_30d"):
-    msg += f"<b>━━ LINK 深度 ━━</b>\n"
-    msg += f"质押: {link.get('staking_tvl_link',0)/1e6:.0f}M LINK (${link.get('staking_tvl_usd',0)/1e6:.0f}M)\n"
-    msg += f"CCIP年化: ${link.get('ccip_annual_volume',0)/1e9:.1f}B\n"
-    msg += f"30d收入: ${link.get('revenue_30d',0)/1e6:.1f}M\n\n"
-
-# ARB unlock
-if arb.get("next_unlock_date"):
-    msg += f"<b>━━ ARB ⚠️ ━━</b>\n"
-    msg += f"解锁: {arb['next_unlock_date']} ({arb.get('next_unlock_amount','—')})\n"
-    msg += f"TVL: ${arb.get('tvl',0)/1e9:.2f}B | 30d费用: ${arb.get('fees_30d',0)/1e3:.0f}K\n\n"
-
-# PLUME
-if plume.get("rwa_assets"):
-    msg += f"<b>━━ PLUME (RWA) ━━</b>\n"
-    msg += f"RWA资产: ${plume.get('rwa_assets',0)/1e6:.0f}M | 持有者: {plume.get('rwa_holders',0)/1e3:.0f}K\n"
-    msg += f"TVL: ${plume.get('tvl',0)/1e6:.1f}M | 稳定币: ${plume.get('stablecoin_supply',0)/1e6:.0f}M\n\n"
-
-# Key support/resistance
+# Key metrics
+mvrv = btc.get("mvrv_zscore", "—")
+sopr = btc.get("sopr_sth", "—")
+reserves = btc.get("exchange_reserves")
+reserves_str = f"{reserves/1e6:.2f}M" if reserves else "—"
+funding = btc.get("funding_rate", "—")
 support = btc.get("key_support")
 resistance = btc.get("key_resistance")
+
+# Alerts
+alerts = d.get("alerts_triggered", [])
+alert_str = ""
+if alerts:
+    for a in alerts:
+        alert_str += f"  ⚡ {a}\n"
+
+# Build message
+msg = f"""<b>📊 加密货币每日情报</b>
+<code>{date} {session}</code>
+
+<b>FGI {fgi}</b> {btc.get('fear_greed_label','')} | 评分 <b>{total}/20</b> {phase}
+BTC主导率 {btc.get('dominance','—')}% | 山寨季 {btc.get('altseason_index','—')}/100
+
+{score_lines}
+<b>━ 价格 ━</b>
+{price_lines}
+<b>━ BTC 链上 ━</b>
+MVRV {mvrv} | SOPR {sopr} | 储备 {reserves_str}
+费率 {funding}% | OI ${btc.get('open_interest',0)/1e9:.1f}B"""
+
 if support and resistance:
-    msg += f"<b>━━ 技术面 ━━</b>\n"
-    msg += f"支撑: ${support:,} | 阻力: ${resistance:,}\n"
-    msg += f"趋势: {btc.get('trend_direction','—')}\n\n"
+    msg += f"\n支撑 ${support:,} | 阻力 ${resistance:,}"
 
-# Macro
-fomc = d.get("macro", {}).get("next_fomc")
-if fomc:
-    msg += f"<b>━━ 宏观 ━━</b>\n"
-    msg += f"下次FOMC: {fomc}\n\n"
+if alert_str:
+    msg += f"\n\n<b>━ 告警 ━</b>\n{alert_str}"
 
-# Footer
-msg += "<i>💡 手机打开HTML附件: 点击文件 → 分享(↗️) → Safari</i>"
+# ARB unlock
+arb = c.get("arb", {})
+if arb.get("next_unlock_date"):
+    msg += f"\n⚠️ ARB 解锁 {arb['next_unlock_date']}: {arb.get('next_unlock_amount','—')}"
+
+msg += f"""
+
+<b>👉 <a href="{pages_url}">打开完整报告</a></b>"""
 
 print(msg)
 PYEOF
 )
 
-# Send rich message
-echo "Sending rich summary..."
-curl -s -X POST "${API}/sendMessage" \
+# Step 3: Send to Telegram
+export DATE SESSION PAGES_URL
+echo "Sending to Telegram..."
+RESPONSE=$(curl -s -X POST "${API}/sendMessage" \
   -d "chat_id=${CHAT_ID}" \
   -d "parse_mode=HTML" \
-  -d "disable_web_page_preview=true" \
-  --data-urlencode "text=${MESSAGE}" \
-  -o /dev/null -w "HTTP %{http_code}\n"
+  -d "disable_web_page_preview=false" \
+  --data-urlencode "text=${MESSAGE}")
 
-# Send HTML report as document (optional deep dive)
-HTML_FILE="reports/${DATE}_${SESSION}.html"
-if [ -f "$HTML_FILE" ]; then
-  echo "Sending HTML report..."
-  curl -s -X POST "${API}/sendDocument" \
-    -F "chat_id=${CHAT_ID}" \
-    -F "document=@${HTML_FILE}" \
-    -F "caption=📊 完整报告 — 点击文件 → 分享(↗️) → Safari 打开" \
-    -o /dev/null -w "HTTP %{http_code}\n"
-fi
+HTTP_CODE=$(echo "$RESPONSE" | python3 -c "import json,sys; r=json.load(sys.stdin); print('OK' if r.get('ok') else r.get('description','error'))")
+echo "Telegram: $HTTP_CODE"
 
-echo "Done."
+echo "Done. Report URL: ${PAGES_URL}"
