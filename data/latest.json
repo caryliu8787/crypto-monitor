@@ -1,100 +1,98 @@
 {
-  "timestamp": "2026-04-04T08:00:00+08:00",
+  "timestamp": "2026-04-05T08:00:00+08:00",
   "session": "morning",
   "coins": {
     "btc": {
-      "price": 67096,
-      "change_24h": 0.38,
-      "change_7d": 1.17,
-      "change_30d": -5.34,
+      "price": 68816,
+      "change_24h": 2.16,
+      "change_7d": 4.57,
+      "change_30d": 0.60,
       "dominance": 59,
       "fear_greed": 12,
       "fear_greed_label": "Extreme Fear",
       "altseason_index": 37,
-      "etf_daily_flow": -173700000,
+      "etf_daily_flow": -174000000,
       "etf_cumulative": 55950000000,
       "mvrv_zscore": 1.2,
       "sopr_sth": 0.94,
       "sopr_aggregate": 0.98,
       "exchange_reserves": 2210000,
       "exchange_reserves_trend": "declining_7yr_low",
+      "whale_monthly_accumulation": 270000,
       "funding_rate": 0.006,
-      "open_interest": 46700000000,
-      "options_max_pain": 96000,
-      "put_call_ratio": 0.55,
+      "open_interest": 47000000000,
       "key_support": 65700,
       "key_resistance": 69000,
-      "trend_direction": "weak_bearish",
+      "trend_direction": "recovering",
       "ath": 126080,
-      "ath_change": -46.78,
-      "market_cap": 1340000000000,
+      "ath_change": -45.41,
+      "market_cap": 1380000000000,
       "dev_commits_4w": 108,
       "dev_contributors": 846
     },
     "eth": {
-      "price": 2057.62,
-      "change_24h": 0.32,
-      "eth_btc": 0.0307,
-      "tvl": 53033797022,
-      "stablecoin_supply": 165295816185,
+      "price": 2112.50,
+      "change_24h": 2.27,
+      "tvl": 53074147058,
+      "stablecoin_supply": 165600000000,
       "staking_rate": 28.91,
-      "market_cap": 248300000000
+      "market_cap": 255000000000
     },
     "sol": {
-      "price": 80.60,
-      "change_24h": 0.61,
-      "tvl": 5519160323,
-      "stablecoin_supply": 15048496528,
+      "price": 81.15,
+      "change_24h": 0.43,
+      "tvl": 5461543215,
+      "stablecoin_supply": 15100000000,
       "market_cap": 46200000000
     },
     "link": {
-      "price": 8.66,
-      "change_24h": 0.32,
+      "price": 8.77,
+      "change_24h": 0.85,
       "staking_tvl_link": 92000000,
       "staking_tvl_usd": 817000000,
       "ccip_annual_volume": 7770000000,
       "revenue_30d": 4545447,
-      "market_cap": 6300000000
+      "market_cap": 6380000000
     },
     "arb": {
-      "price": 0.092293,
-      "change_24h": 0.58,
-      "tvl": 1893221297,
-      "stablecoin_supply": 4088376836,
+      "price": 0.092923,
+      "change_24h": 0.23,
+      "tvl": 1890983573,
+      "stablecoin_supply": 4100000000,
       "fees_30d": 387947,
       "next_unlock_date": "2026-04-16",
       "next_unlock_amount": "92.65M ARB",
       "next_unlock_pct": 2.01,
-      "market_cap": 557400000
+      "market_cap": 559400000
     },
     "monad": {
-      "price": 0.0266,
-      "change_24h": -1.95,
-      "tvl": 377574025,
-      "stablecoin_supply": 454369260,
-      "market_cap": 288300000
+      "price": 0.028157,
+      "change_24h": 3.23,
+      "tvl": 381780616,
+      "stablecoin_supply": 454500000,
+      "market_cap": 303900000
     },
     "plume": {
       "price": 0.009464,
       "change_24h": -2.71,
-      "tvl": 14031645,
-      "stablecoin_supply": 214571978,
+      "tvl": 14097112,
+      "stablecoin_supply": 214700000,
       "rwa_assets": 645000000,
-      "rwa_holders": 280000,
-      "market_cap": null
+      "rwa_holders": 280000
     }
   },
   "market_score": {
-    "btc_trend": 2,
+    "btc_trend": 3,
     "funding": 2,
     "sentiment": 1,
     "macro": 3,
-    "total": 8
+    "total": 9
   },
   "alerts_triggered": [
-    "fgi_near_critical",
-    "arb_unlock_approaching",
-    "onchain_5_bottom_signals"
+    "fgi_extreme_fear",
+    "onchain_5_bottom_signals_day3",
+    "arb_unlock_11_days",
+    "btc_approaching_resistance"
   ],
   "macro": {
     "next_fomc": "2026-04-28"
