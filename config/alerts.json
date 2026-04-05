@@ -1,0 +1,177 @@
+{
+  "_comment": "告警规则配置。severity: critical/warning/info。动态阈值使用百分比或相对值，不硬编码绝对价格。",
+
+  "price_alerts": [
+    {
+      "id": "p0_p1_major_drop",
+      "description": "P0/P1 币种 24h 大幅下跌",
+      "coins": ["btc", "eth", "sol", "link"],
+      "condition": "24h_change < -5%",
+      "severity": "critical",
+      "message_template": "{{ticker}} 24h 跌幅 {{change}}%，触发重大下跌告警"
+    },
+    {
+      "id": "p0_p1_major_pump",
+      "description": "P0/P1 币种 24h 大幅上涨",
+      "coins": ["btc", "eth", "sol", "link"],
+      "condition": "24h_change > +10%",
+      "severity": "warning",
+      "message_template": "{{ticker}} 24h 涨幅 {{change}}%，关注是否过热"
+    },
+    {
+      "id": "btc_support_break",
+      "description": "BTC 跌破当日技术分析搜索到的关键支撑位",
+      "coins": ["btc"],
+      "condition": "price < searched_key_support",
+      "severity": "critical",
+      "message_template": "BTC 跌破关键支撑 ${{support}}，趋势可能转弱"
+    },
+    {
+      "id": "btc_resistance_break",
+      "description": "BTC 突破当日技术分析搜索到的关键阻力位",
+      "coins": ["btc"],
+      "condition": "price > searched_key_resistance",
+      "severity": "info",
+      "message_template": "BTC 突破关键阻力 ${{resistance}}，趋势偏强"
+    },
+    {
+      "id": "altcoin_divergence",
+      "description": "持仓山寨币波动幅度超过 BTC 的 3 倍",
+      "coins": ["eth", "sol", "link", "arb", "monad"],
+      "condition": "abs(coin_24h_change) > 3 * abs(btc_24h_change)",
+      "severity": "warning",
+      "message_template": "{{ticker}} 24h 波动 {{change}}% 显著偏离 BTC（{{btc_change}}%）"
+    },
+    {
+      "id": "report_delta_large",
+      "description": "与上期报告相比价格变化超过阈值",
+      "coins": ["btc", "eth", "sol", "link", "arb", "monad"],
+      "condition": "abs(price_vs_last_report) > 5%",
+      "severity": "warning",
+      "message_template": "{{ticker}} 自上期报告以来变动 {{delta}}%"
+    }
+  ],
+
+  "on_chain_alerts": [
+    {
+      "id": "exchange_reserve_spike",
+      "description": "BTC 交易所储备 24h 增加超过 2%，可能面临抛压",
+      "coins": ["btc"],
+      "condition": "exchange_reserves_change > +2%",
+      "severity": "warning",
+      "message_template": "BTC 交易所储备增加 {{change}}%，潜在抛压信号"
+    },
+    {
+      "id": "mvrv_overheated",
+      "description": "BTC MVRV 比率超过 3.5，市场可能过热",
+      "coins": ["btc"],
+      "condition": "mvrv_ratio > 3.5",
+      "severity": "warning",
+      "message_template": "BTC MVRV 比率 {{mvrv}}，市场可能过热"
+    },
+    {
+      "id": "mvrv_deep_value",
+      "description": "BTC MVRV 比率低于 1.0，历史性低估区间",
+      "coins": ["btc"],
+      "condition": "mvrv_ratio < 1.0",
+      "severity": "info",
+      "message_template": "BTC MVRV 比率 {{mvrv}}，进入历史性低估区间"
+    },
+    {
+      "id": "funding_rate_extreme",
+      "description": "资金费率极端，多空拥挤",
+      "coins": ["btc"],
+      "condition": "funding_rate > 0.1% OR funding_rate < -0.05%",
+      "severity": "warning",
+      "message_template": "BTC 资金费率 {{rate}}%，{{direction}}拥挤"
+    }
+  ],
+
+  "macro_alerts": [
+    {
+      "id": "fomc_imminent",
+      "description": "FOMC 会议在 24h 内",
+      "condition": "fomc_date within 24h",
+      "severity": "critical",
+      "message_template": "FOMC 会议即将召开（{{date}}），预期波动加剧"
+    },
+    {
+      "id": "cpi_release",
+      "description": "CPI 数据在 24h 内发布",
+      "condition": "cpi_date within 24h",
+      "severity": "warning",
+      "message_template": "CPI 数据即将发布（{{date}}），关注通胀预期"
+    },
+    {
+      "id": "surprise_rate_change",
+      "description": "意外的利率变动",
+      "condition": "detected_in_search",
+      "severity": "critical",
+      "message_template": "检测到意外利率变动：{{detail}}"
+    }
+  ],
+
+  "ecosystem_alerts": [
+    {
+      "id": "major_hack",
+      "description": "持仓币种相关重大安全事件",
+      "condition": "detected_in_search",
+      "severity": "critical",
+      "message_template": "{{ticker}} 相关安全事件：{{detail}}"
+    },
+    {
+      "id": "regulatory_action",
+      "description": "监管打击或执法行动",
+      "condition": "detected_in_search",
+      "severity": "critical",
+      "message_template": "监管行动：{{detail}}"
+    },
+    {
+      "id": "large_unlock_imminent",
+      "description": "大额代币解锁在 7 天内",
+      "coins": ["link", "arb", "monad", "plume"],
+      "condition": "next_unlock_date within 7 days",
+      "severity": "warning",
+      "message_template": "{{ticker}} 将于 {{date}} 解锁 {{amount}}，注意抛压"
+    },
+    {
+      "id": "tvl_weekly_drop",
+      "description": "TVL 周跌幅超过 15%",
+      "coins": ["eth", "sol", "arb", "monad", "plume"],
+      "condition": "tvl_7d_change < -15%",
+      "severity": "warning",
+      "message_template": "{{ticker}} TVL 周跌 {{change}}%，生态资金外流"
+    },
+    {
+      "id": "major_partnership",
+      "description": "重大合作或集成公告",
+      "condition": "detected_in_search",
+      "severity": "info",
+      "message_template": "{{ticker}} 新合作：{{detail}}"
+    }
+  ],
+
+  "cross_coin_alerts": [
+    {
+      "id": "altseason_signal",
+      "description": "山寨季信号：BTC 主导率下降 + 山寨季指数高",
+      "condition": "btc_dominance_7d_change < -2% AND altseason_index > 75",
+      "severity": "info",
+      "message_template": "山寨季信号触发：BTC 主导率 {{dominance}}%（周降 {{dom_change}}%），山寨季指数 {{index}}"
+    },
+    {
+      "id": "risk_off_signal",
+      "description": "避险信号：BTC 主导率上升 + 恐惧情绪",
+      "condition": "btc_dominance_7d_change > +2% AND fear_greed < 25",
+      "severity": "warning",
+      "message_template": "避险信号：BTC 主导率上升至 {{dominance}}%，恐惧贪婪 {{fgi}}，山寨风险加剧"
+    },
+    {
+      "id": "eth_btc_breakdown",
+      "description": "ETH/BTC 比率创 30 日新低",
+      "condition": "eth_btc_ratio < 30d_low",
+      "severity": "warning",
+      "message_template": "ETH/BTC 比率 {{ratio}} 创 30 日新低，ETH 相对弱势"
+    }
+  ]
+}

@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>加密货币每日情报简报</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+/* ===== CSS Reset & Variables ===== */
+:root {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-card-hover: #1c2129;
+  --border: #21262d;
+  --border-light: #30363d;
+  --text: #c9d1d9;
+  --text-secondary: #8b949e;
+  --text-muted: #484f58;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --yellow: #e3b341;
+  --purple: #bc8cff;
+  --radius: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Layout ===== */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+/* ===== Typography ===== */
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 700;
+  border-left: 4px solid var(--accent);
+  padding-left: 12px;
+  margin: 40px 0 16px;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 24px 0 10px;
+}
+
+h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 20px 0 8px;
+}
+
+p, li {
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* ===== Inline Value Colors ===== */
+.up { color: var(--green); }
+.down { color: var(--red); }
+.warn { color: var(--orange); }
+.neutral { color: var(--text-secondary); }
+.accent { color: var(--accent); }
+
+/* ===== Header ===== */
+.report-header {
+  text-align: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.report-header .meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ===== Alert / Key Changes Box ===== */
+.alert-box {
+  border-left: 4px solid var(--red);
+  background: rgba(248, 81, 73, 0.06);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.alert-box.warning {
+  border-left-color: var(--orange);
+  background: rgba(210, 153, 34, 0.06);
+}
+
+.alert-box.info {
+  border-left-color: var(--accent);
+  background: rgba(88, 166, 255, 0.04);
+}
+
+.key-changes {
+  border-left: 4px solid var(--accent);
+  background: rgba(88, 166, 255, 0.04);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.key-changes ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.key-changes li {
+  margin-bottom: 4px;
+}
+
+/* ===== Card ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+/* ===== Tables ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+.data-table th {
+  text-align: left;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.data-table tr:hover td {
+  background: var(--bg-card-hover);
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table .meaning {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* Compact table variant */
+.data-table.compact td,
+.data-table.compact th {
+  padding: 5px 8px;
+}
+
+/* ===== Signal / Analysis Boxes ===== */
+.signal-box {
+  border-left: 4px solid var(--green);
+  background: rgba(63, 185, 80, 0.06);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 12px 0;
+}
+
+.signal-box.bearish {
+  border-left-color: var(--red);
+  background: rgba(248, 81, 73, 0.06);
+}
+
+.signal-box.neutral {
+  border-left-color: var(--orange);
+  background: rgba(210, 153, 34, 0.06);
+}
+
+.analysis-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 12px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.analysis-block .conclusion {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(88, 166, 255, 0.06);
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ===== Charts (inline, compact) ===== */
+.chart-inline {
+  position: relative;
+  height: 180px;
+  margin: 12px 0;
+}
+
+.chart-inline canvas {
+  max-height: 100%;
+}
+
+.chart-small {
+  position: relative;
+  height: 150px;
+  margin: 10px 0;
+}
+
+.chart-small canvas {
+  max-height: 100%;
+}
+
+/* ===== ETF Text Summary ===== */
+.etf-text-summary {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 8px 0 4px;
+  line-height: 1.6;
+}
+
+/* ===== Macro Calendar ===== */
+.macro-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+.macro-table th {
+  text-align: left;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 6px 8px;
+  border-bottom: 2px solid var(--border);
+}
+
+.macro-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ===== Recommendation Cards ===== */
+.rec-card {
+  border-left: 4px solid var(--text-muted);
+  background: var(--bg-card);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.rec-card.buy { border-left-color: var(--green); }
+.rec-card.hold { border-left-color: var(--yellow); }
+.rec-card.sell { border-left-color: var(--red); }
+.rec-card.watch { border-left-color: var(--purple); }
+
+.rec-card .rec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.rec-card .rec-coin {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.rec-card .rec-action {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+.rec-card .rec-action.buy { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+.rec-card .rec-action.hold { background: rgba(227, 179, 65, 0.15); color: var(--yellow); }
+.rec-card .rec-action.sell { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+.rec-card .rec-action.watch { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+
+.rec-card .rec-body {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== Checklist ===== */
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 13px;
+}
+
+.checklist-item::before {
+  content: "\2610";
+  font-size: 15px;
+  line-height: 1.2;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.checklist-item.done::before {
+  content: "\2611";
+  color: var(--green);
+}
+
+/* ===== Score Bars (4-dimension) ===== */
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.score-row .label {
+  width: 90px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.score-track {
+  flex: 1;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.score-row .val {
+  width: 30px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== Progress Bar (FGI) ===== */
+.progress-track {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fgi {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--red) 0%, var(--orange) 25%, var(--yellow) 50%, var(--green) 100%);
+}
+
+/* ===== Heatmap ===== */
+.heatmap-grid {
+  display: grid;
+  gap: 4px;
+}
+
+.heatmap-cell {
+  border-radius: 4px;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ===== Divider ===== */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0 8px;
+}
+
+/* ===== Footer ===== */
+.report-footer {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* ===== Grid Helpers ===== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .container { padding: 20px 16px 32px; }
+  h1 { font-size: 20px; }
+  h2 { font-size: 16px; padding-left: 10px; border-left-width: 3px; }
+  h3 { font-size: 13px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .chart-inline { height: 160px; }
+  .chart-small { height: 130px; }
+  .rec-card { padding: 12px; }
+  .rec-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 12px 10px 24px; }
+  body { font-size: 14px; line-height: 1.6; -webkit-text-size-adjust: 100%; }
+  h1 { font-size: 18px; }
+  h2 { font-size: 15px; margin-top: 20px; }
+  h3 { font-size: 12px; margin: 12px 0 6px; }
+
+  /* Tables: force horizontal scroll, prevent text wrapping */
+  .data-table { font-size: 11px; white-space: nowrap; }
+  .data-table th, .data-table td { padding: 6px 8px; }
+  .table-wrap { margin: 0 -10px; padding: 0 10px; }
+
+  /* Cards */
+  .card { padding: 10px; border-radius: 4px; }
+  .signal-box { padding: 10px 12px; font-size: 12px; }
+  .analysis-block { padding: 10px 12px; font-size: 13px; }
+
+  /* Charts smaller on phone */
+  .chart-inline { height: 140px; }
+  .chart-small { height: 110px; }
+
+  /* Heatmap: 3-4 columns on phone instead of 7 */
+  .heatmap-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .heatmap-cell { padding: 6px 4px; font-size: 11px; }
+
+  /* Recommendation cards */
+  .rec-grid { grid-template-columns: 1fr !important; }
+  .rec-card { margin-bottom: 8px; }
+
+  /* Score bars */
+  .score-row .label { width: 60px; font-size: 11px; }
+  .score-row .val { font-size: 11px; }
+
+  /* Key changes list */
+  .key-changes ul { padding-left: 16px; }
+  .key-changes li { font-size: 13px; margin-bottom: 4px; }
+
+  /* Meta info */
+  .meta { font-size: 11px; }
+  .report-footer { font-size: 10px; }
+
+  /* Progress bar touch-friendly */
+  .progress-track { height: 8px; }
+}
+
+/* ===== Overflow ===== */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ============================================================ -->
+  <!-- HEADER                                                       -->
+  <!-- ============================================================ -->
+  <div class="report-header">
+    <h1>加密货币每日情报简报</h1>
+    <div class="meta">{{report_date}} | {{report_session}} | {{report_timestamp}}</div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 0: KEY CHANGES SUMMARY                               -->
+  <!-- ============================================================ -->
+  {{alerts_summary_html}}
+
+  <div class="key-changes">
+    {{key_changes_html}}
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 1: 市场概览 (BTC 视角)                               -->
+  <!-- ============================================================ -->
+  <h2>一、市场概览（BTC 视角）</h2>
+
+  <!-- BTC Core Metrics Table -->
+  <h3>BTC 核心指标</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>指标</th>
+            <th>当前值</th>
+            <th>24h 变化</th>
+            <th>7d 变化</th>
+            <th>信号</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>价格</td>
+            <td><strong>{{btc_price}}</strong></td>
+            <td>{{btc_24h_change}}</td>
+            <td>{{btc_7d_change}}</td>
+            <td>{{btc_price_signal}}</td>
+          </tr>
+          <tr>
+            <td>恐惧贪婪指数</td>
+            <td><strong>{{fgi_value}}</strong></td>
+            <td colspan="2">{{fgi_label}}</td>
+            <td>{{fgi_signal}}</td>
+          </tr>
+          <tr>
+            <td>BTC 主导率</td>
+            <td><strong>{{btc_dominance}}%</strong></td>
+            <td>{{btc_dominance_change}}</td>
+            <td>--</td>
+            <td>{{btc_dominance_signal}}</td>
+          </tr>
+          <tr>
+            <td>山寨季指数</td>
+            <td><strong>{{altseason_index}}/100</strong></td>
+            <td colspan="2">{{altseason_label}}</td>
+            <td>{{altseason_signal}}</td>
+          </tr>
+          <tr>
+            <td>ETF 净流入 (周)</td>
+            <td><strong>{{etf_weekly_net}}</strong></td>
+            <td colspan="2">--</td>
+            <td>{{etf_signal}}</td>
+          </tr>
+          <tr>
+            <td>距 ATH</td>
+            <td><strong>{{btc_ath_change}}%</strong></td>
+            <td colspan="2">ATH ${{btc_ath}}</td>
+            <td>--</td>
+          </tr>
+          <tr>
+            <td>市场评分</td>
+            <td><strong>{{market_score_total}}/20</strong></td>
+            <td colspan="2">{{market_phase}}</td>
+            <td>--</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- FGI mini progress bar -->
+    <div style="margin-top:10px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:3px;">
+        <span>Extreme Fear</span><span>Fear</span><span>Neutral</span><span>Greed</span><span>Extreme Greed</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fgi" style="width:{{fgi_value}}%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BTC 7d Sparkline -->
+  <h3>BTC 7 日价格走势</h3>
+  <div class="card">
+    <div class="chart-inline">
+      <canvas id="chartSparkline"></canvas>
+    </div>
+  </div>
+
+  <!-- ETF Flow -->
+  <h3>ETF 资金流向</h3>
+  <div class="card">
+    <div class="chart-small">
+      <canvas id="chartETF"></canvas>
+    </div>
+    <div class="etf-text-summary">{{etf_flow_text}}</div>
+    <div class="analysis-block" style="margin-top:10px;">
+      {{etf_flow_narrative}}
+    </div>
+  </div>
+
+  <!-- BTC On-chain Indicators Table -->
+  <h3>BTC 链上指标</h3>
+  <div class="card">
+    <div class="table-wrap">
+      {{onchain_table_html}}
+    </div>
+  </div>
+
+  <!-- On-chain Signal Summary -->
+  <div class="signal-box">
+    <h4 style="margin:0 0 6px;text-transform:none;letter-spacing:0;font-size:14px;color:var(--text);">综合链上信号判读</h4>
+    {{onchain_signal_summary}}
+  </div>
+
+  <!-- Macro Calendar -->
+  <h3>宏观日历</h3>
+  <div class="card">
+    <div class="table-wrap">
+      {{macro_calendar_html}}
+    </div>
+  </div>
+
+  <!-- BTC Technical -->
+  <h3>BTC 技术面关键位</h3>
+  <div class="card">
+    <table class="data-table compact">
+      <tbody>
+        <tr><td style="width:100px;font-weight:600;">关键支撑</td><td>{{btc_support_text}}</td></tr>
+        <tr><td style="font-weight:600;">关键阻力</td><td>{{btc_resistance_text}}</td></tr>
+        <tr><td style="font-weight:600;">趋势判断</td><td>{{btc_trend_text}}</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Altcoin Impact -->
+  <h3>对山寨的影响判断</h3>
+  <div class="analysis-block">
+    {{altcoin_impact_analysis}}
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ============================================================ -->
+  <!-- SECTION 2: 跨链生态对比                                      -->
+  <!-- ============================================================ -->
+  <h2>二、跨链生态对比</h2>
+
+  <!-- TVL Comparison -->
+  <h3>TVL 对比</h3>
+  <div class="card">
+    <div class="chart-small">
+      <canvas id="chartTVL"></canvas>
+    </div>
+    <div class="table-wrap" style="margin-top:8px;">
+      {{tvl_table_html}}
+    </div>
+  </div>
+
+  <!-- Stablecoin Supply -->
+  <h3>稳定币供应</h3>
+  <div class="card">
+    <div class="table-wrap">
+      {{stablecoin_table_html}}
+    </div>
+  </div>
+
+  <!-- Protocol Revenue -->
+  <h3>协议收入与资本效率</h3>
+  <div class="card">
+    <div class="table-wrap">
+      {{protocol_revenue_table_html}}
+    </div>
+  </div>
+
+  <!-- Developer Activity -->
+  <h3>开发者活跃度（4 周 Commits）</h3>
+  <div class="card">
+    <div class="chart-small">
+      <canvas id="chartDev"></canvas>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ============================================================ -->
+  <!-- SECTION 3-N: 各币种详情                                      -->
+  <!-- ============================================================ -->
+  <h2>三、各币种详情</h2>
+
+  {{coin_sections_html}}
+
+  <hr class="section-divider">
+
+  <!-- ============================================================ -->
+  <!-- SECTION: 历史趋势对比                                        -->
+  <!-- ============================================================ -->
+  <h2>四、历史趋势对比</h2>
+
+  <!-- 7d Heatmap -->
+  <h3>7 日变化热力图</h3>
+  <div class="card">
+    {{heatmap_html}}
+  </div>
+
+  <!-- FGI + Market Score History -->
+  <h3>FGI + 市场评分历史</h3>
+  <div class="card">
+    <div class="chart-inline">
+      <canvas id="chartHistory"></canvas>
+    </div>
+  </div>
+
+  <!-- Consecutive Signals -->
+  <h3>连续信号追踪</h3>
+  <div class="card">
+    {{consecutive_signals_html}}
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ============================================================ -->
+  <!-- SECTION: 操作建议                                            -->
+  <!-- ============================================================ -->
+  <h2>五、操作建议</h2>
+
+  <!-- Market Phase Assessment (4-dimension score) -->
+  <h3>市场阶段评估</h3>
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;flex-wrap:wrap;">
+      <span style="font-size:13px;color:var(--text-secondary);">综合评分</span>
+      <span style="font-size:22px;font-weight:700;">{{market_score_total}}<span style="font-size:14px;color:var(--text-secondary);">/20</span></span>
+      <span style="font-size:14px;font-weight:600;">{{market_phase}}</span>
+    </div>
+    <div class="score-row">
+      <span class="label">BTC 趋势</span>
+      <div class="score-track"><div class="score-fill" id="bar-btc-trend"></div></div>
+      <span class="val">{{score_btc_trend}}</span>
+    </div>
+    <div class="score-row">
+      <span class="label">资金面</span>
+      <div class="score-track"><div class="score-fill" id="bar-funding"></div></div>
+      <span class="val">{{score_funding}}</span>
+    </div>
+    <div class="score-row">
+      <span class="label">市场情绪</span>
+      <div class="score-track"><div class="score-fill" id="bar-sentiment"></div></div>
+      <span class="val">{{score_sentiment}}</span>
+    </div>
+    <div class="score-row">
+      <span class="label">宏观环境</span>
+      <div class="score-track"><div class="score-fill" id="bar-macro"></div></div>
+      <span class="val">{{score_macro}}</span>
+    </div>
+  </div>
+
+  <!-- Signal Panel -->
+  <h3>信号面板</h3>
+  <div class="card">
+    <div class="table-wrap">
+      {{signal_panel_html}}
+    </div>
+  </div>
+
+  <!-- Coin Recommendations -->
+  <h3>各币种建议</h3>
+  {{recommendations_html}}
+
+  <!-- Action Checklist -->
+  <h3>行动清单</h3>
+  <div class="card">
+    {{action_items_html}}
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER                                                       -->
+  <!-- ============================================================ -->
+  <div class="report-footer">
+    Generated by Crypto Monitor | Data: CoinGecko, DeFiLlama, Alternative.me
+  </div>
+
+</div><!-- /.container -->
+
+<!-- ============================================================ -->
+<!-- SCRIPTS                                                       -->
+<!-- ============================================================ -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ---------- Chart.js Defaults ---------- */
+  Chart.defaults.color = '#8b949e';
+  Chart.defaults.borderColor = '#21262d';
+  Chart.defaults.font.family = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+  Chart.defaults.font.size = 11;
+
+  /* ---------- Score Bars ---------- */
+  function colorBar(id, rawScore) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var v = parseFloat(rawScore);
+    if (isNaN(v)) return;
+    el.style.width = (v / 5 * 100) + '%';
+    el.style.background = v <= 2 ? 'var(--red)' : v <= 3.5 ? 'var(--orange)' : 'var(--green)';
+  }
+  colorBar('bar-btc-trend', '{{score_btc_trend}}');
+  colorBar('bar-funding',   '{{score_funding}}');
+  colorBar('bar-sentiment', '{{score_sentiment}}');
+  colorBar('bar-macro',     '{{score_macro}}');
+
+  /* ---------- BTC 7d Sparkline ---------- */
+  (function () {
+    var data = {{btc_sparkline_data}};  /* DATA_PLACEHOLDER */
+    if (!Array.isArray(data) || data.length === 0) return;
+    var support = parseFloat('{{btc_support}}');
+    var resistance = parseFloat('{{btc_resistance}}');
+    var labels = data.map(function (_, i) { return i; });
+    var datasets = [{
+      data: data,
+      fill: true,
+      borderColor: '#58a6ff',
+      backgroundColor: 'rgba(88,166,255,.08)',
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.3
+    }];
+    if (!isNaN(support)) {
+      datasets.push({
+        data: Array(data.length).fill(support),
+        borderColor: 'rgba(63,185,80,.5)',
+        borderWidth: 1,
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false,
+        label: 'Support $' + support.toLocaleString()
+      });
+    }
+    if (!isNaN(resistance)) {
+      datasets.push({
+        data: Array(data.length).fill(resistance),
+        borderColor: 'rgba(248,81,73,.5)',
+        borderWidth: 1,
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false,
+        label: 'Resistance $' + resistance.toLocaleString()
+      });
+    }
+    new Chart(document.getElementById('chartSparkline'), {
+      type: 'line',
+      data: { labels: labels, datasets: datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: 'top', labels: { boxWidth: 10, padding: 10, font: { size: 11 } } }
+        },
+        scales: {
+          x: { display: false },
+          y: {
+            grid: { color: '#21262d' },
+            ticks: { callback: function (v) { return '$' + v.toLocaleString(); }, font: { size: 10 } }
+          }
+        }
+      }
+    });
+  })();
+
+  /* ---------- ETF Bar Chart ---------- */
+  (function () {
+    var labels = {{etf_chart_labels}};  /* DATA_PLACEHOLDER */
+    var values = {{etf_chart_data}};    /* DATA_PLACEHOLDER */
+    if (!Array.isArray(labels) || labels.length === 0) return;
+    var colors = values.map(function (v) { return v >= 0 ? 'rgba(63,185,80,.7)' : 'rgba(248,81,73,.7)'; });
+    new Chart(document.getElementById('chartETF'), {
+      type: 'bar',
+      data: { labels: labels, datasets: [{ data: values, backgroundColor: colors, borderRadius: 3 }] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { grid: { color: '#21262d' }, ticks: { callback: function (v) { return '$' + v + 'M'; }, font: { size: 10 } } },
+          x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+        }
+      }
+    });
+  })();
+
+  /* ---------- TVL Horizontal Bar ---------- */
+  (function () {
+    var labels = {{tvl_chart_labels}};  /* DATA_PLACEHOLDER */
+    var data = {{tvl_chart_data}};      /* DATA_PLACEHOLDER */
+    if (!Array.isArray(labels) || labels.length === 0) return;
+    new Chart(document.getElementById('chartTVL'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: ['#f7931a','#627eea','#14f195','#375bd2','#28a0f0','#836ef9'],
+          borderRadius: 4
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: '#21262d' }, ticks: { callback: function (v) { return '$' + v + 'B'; }, font: { size: 10 } } },
+          y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+  })();
+
+  /* ---------- Developer Activity Bar ---------- */
+  (function () {
+    var labels = {{dev_chart_labels}};  /* DATA_PLACEHOLDER */
+    var data = {{dev_chart_data}};      /* DATA_PLACEHOLDER */
+    if (!Array.isArray(labels) || labels.length === 0) return;
+    new Chart(document.getElementById('chartDev'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{ data: data, backgroundColor: 'rgba(88,166,255,.6)', borderRadius: 4 }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { grid: { color: '#21262d' }, beginAtZero: true, ticks: { font: { size: 10 } } },
+          x: { grid: { display: false }, ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+  })();
+
+  /* ---------- History Dual-Axis Line ---------- */
+  (function () {
+    var dates = {{history_dates}};    /* DATA_PLACEHOLDER */
+    var fgi = {{history_fgi}};        /* DATA_PLACEHOLDER */
+    var scores = {{history_scores}};  /* DATA_PLACEHOLDER */
+    if (!Array.isArray(dates) || dates.length === 0) return;
+    new Chart(document.getElementById('chartHistory'), {
+      type: 'line',
+      data: {
+        labels: dates,
+        datasets: [
+          {
+            label: 'Fear & Greed',
+            data: fgi,
+            yAxisID: 'yFGI',
+            borderColor: '#d29922',
+            backgroundColor: 'rgba(210,153,34,.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2,
+            borderWidth: 2
+          },
+          {
+            label: 'Market Score',
+            data: scores,
+            yAxisID: 'yScore',
+            borderColor: '#58a6ff',
+            backgroundColor: 'transparent',
+            fill: false,
+            tension: 0.3,
+            pointRadius: 2,
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } }
+        },
+        scales: {
+          yFGI: {
+            position: 'left',
+            min: 0, max: 100,
+            grid: { color: '#21262d' },
+            title: { display: true, text: 'FGI', font: { size: 11 } },
+            ticks: { font: { size: 10 } }
+          },
+          yScore: {
+            position: 'right',
+            min: 0, max: 20,
+            grid: { drawOnChartArea: false },
+            title: { display: true, text: 'Score /20', font: { size: 11 } },
+            ticks: { font: { size: 10 } }
+          },
+          x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+        }
+      }
+    });
+  })();
+
+});
+</script>
+</body>
+</html>

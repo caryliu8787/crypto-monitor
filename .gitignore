@@ -1,0 +1,24 @@
+# Data snapshots (keep latest, ignore old history)
+data/history/*
+!data/history/.gitkeep
+
+# Reports — HTML pushed for GitHub Pages, others ignored
+reports/*.md
+reports/latest-alert.txt
+
+# Sensitive config (contains bot tokens)
+config/output.json
+
+# Brainstorm session files
+.superpowers/
+
+# Claude local settings
+.claude/
+
+# OS files
+.DS_Store
+
+# Editor files
+*.swp
+*.swo
+*~

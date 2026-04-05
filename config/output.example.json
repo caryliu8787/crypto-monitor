@@ -1,0 +1,39 @@
+{
+  "_comment": "Copy this to output.json and fill in your tokens. output.json is gitignored.",
+
+  "formats": {
+    "markdown": {
+      "enabled": true,
+      "path": "reports/",
+      "filename_pattern": "YYYY-MM-DD_{session}.md"
+    },
+    "html_dashboard": {
+      "enabled": true,
+      "path": "reports/",
+      "filename_pattern": "YYYY-MM-DD_{session}.html",
+      "template": "templates/dashboard.html"
+    },
+    "json_snapshot": {
+      "enabled": true,
+      "latest_path": "data/latest.json",
+      "history_path": "data/history/",
+      "history_retention_days": 30
+    },
+    "alert_summary": {
+      "enabled": true,
+      "path": "reports/latest-alert.txt"
+    },
+    "telegram": {
+      "enabled": false,
+      "bot_token": "YOUR_BOT_TOKEN",
+      "chat_id": "YOUR_CHAT_ID",
+      "send_screenshot": false,
+      "send_summary": true
+    },
+    "notion": {
+      "enabled": false,
+      "database_id": "",
+      "parent_page_id": ""
+    }
+  }
+}
