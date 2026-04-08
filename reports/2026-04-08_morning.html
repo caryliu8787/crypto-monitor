@@ -120,7 +120,6 @@ p, li { font-size: 14px; color: var(--text); }
 .section-divider { border: none; border-top: 1px solid var(--border); margin: 32px 0 8px; }
 .report-footer { text-align: center; font-size: 11px; color: var(--text-muted); padding: 24px 0; border-top: 1px solid var(--border); margin-top: 40px; }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
 @media (max-width: 768px) {
   .container { padding: 20px 16px 32px; }
@@ -130,6 +129,7 @@ p, li { font-size: 14px; color: var(--text); }
   .chart-inline { height: 160px; }
   .chart-small { height: 130px; }
 }
+
 @media (max-width: 480px) {
   .container { padding: 12px 10px 24px; }
   body { font-size: 14px; line-height: 1.6; -webkit-text-size-adjust: 100%; }
@@ -142,13 +142,12 @@ p, li { font-size: 14px; color: var(--text); }
   .chart-inline { height: 140px; }
   .chart-small { height: 110px; }
   .heatmap-grid { grid-template-columns: repeat(3, 1fr) !important; }
-  .rec-card { margin-bottom: 8px; }
   .score-row .label { width: 60px; font-size: 11px; }
   .key-changes li { font-size: 13px; }
-  .meta { font-size: 11px; }
-  .report-footer { font-size: 10px; }
   .progress-track { height: 8px; }
 }
+
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 </style>
 </head>
 <body>
@@ -156,45 +155,50 @@ p, li { font-size: 14px; color: var(--text); }
 
   <div class="report-header">
     <h1>加密货币每日情报简报</h1>
-    <div class="meta">2026-04-08 | 晨报 08:00 UTC+8 | April</div>
+    <div class="meta">2026-04-08 | Morning (08:00 UTC+8) | 市场评分 9/20 中性</div>
   </div>
 
   <!-- ALERTS -->
-  <div class="alert-box warning">
-    <strong>WARNING</strong> | 全线反弹：BTC +5.3%、ETH +7.3%、SOL +8.2%、LINK +7.1%、ARB +8.9%、MON +16.0%（vs 上期）<br>
-    <strong>WARNING</strong> | ARB 解锁倒计时 8 天：2026-04-16 解锁 92.65M ARB (2.01%)<br>
-    <strong>WARNING</strong> | BTC 主导率 58.5% (+2.4%)，FGI 极度恐惧 47+ 天，避险信号明确
+  <div class="alert-box">
+    <strong>CRITICAL:</strong> Drift Protocol $285M 漏洞攻击（4月1日），疑似朝鲜黑客所为，Solana 生态安全警示
   </div>
-  <div class="alert-box info">
-    <strong>INFO</strong> | BTC 触及 $72,379 接近阻力 $72K-75K | FOMC 4/28 大概率维持利率 | 30d 波动率升至 68%
+
+  <div class="alert-box warning">
+    <strong>WARNING:</strong><br>
+    - FGI 17 极度恐惧，持续 47+ 天<br>
+    - ARB 解锁 4/16（92.65M ARB, 2.01%），剩余 8 天<br>
+    - MON 解锁 4/24，剩余 16 天<br>
+    - BTC 主导率 58.5% 持续上升，山寨承压<br>
+    - 关税宏观风险：Section 122 全球 15%
   </div>
 
   <div class="key-changes">
     <ul>
-      <li>BTC 从 $68,339 反弹至 $71,948 (+5.28%)，测试 $72K 关键阻力</li>
-      <li>FGI 从 11 回升至 17，仍处极度恐惧但边际改善</li>
+      <li>全市场技术性反弹，多数币种 24h +4%-12%</li>
+      <li>BTC 测试 $72K 关键阻力位</li>
+      <li>ETH/BTC 从多年低点 0.028 开始回升，早期轮动信号</li>
+      <li>ETF 资金转正 +$22.34M（前周 -$296M）</li>
       <li>链上五大底部信号同时闪烁（历史仅出现 3 次）</li>
-      <li>鲸鱼 30 天累积 27 万 BTC，交易所储备 7 年新低</li>
-      <li>Drift Protocol 遭 $2.85 亿攻击（Solana 生态）</li>
-      <li>LINK ETF 已上线 NYSE Arca，JPMorgan 运行 CCIP 结算试点</li>
     </ul>
   </div>
 
-  <!-- SECTION 1 -->
+  <!-- SECTION 1: 市场概览 -->
   <h2>一、市场概览（BTC 视角）</h2>
 
   <h3>BTC 核心指标</h3>
   <div class="card">
     <div class="table-wrap">
       <table class="data-table">
-        <thead><tr><th>指标</th><th>当前值</th><th>24h 变化</th><th>7d 变化</th><th>信号</th></tr></thead>
+        <thead>
+          <tr><th>指标</th><th>当前值</th><th>24h 变化</th><th>7d 变化</th><th>信号</th></tr>
+        </thead>
         <tbody>
-          <tr><td>价格</td><td><strong>$71,948</strong></td><td class="up">+4.44%</td><td class="up">+5.54%</td><td>反弹测试阻力</td></tr>
-          <tr><td>恐惧贪婪指数</td><td><strong>17</strong></td><td colspan="2">Extreme Fear（47+ 天）</td><td class="down">极度恐惧</td></tr>
-          <tr><td>BTC 主导率</td><td><strong>58.5%</strong></td><td class="up">+2.4%</td><td>--</td><td class="warn">BTC 主导</td></tr>
-          <tr><td>山寨季指数</td><td><strong>34/100</strong></td><td colspan="2">Bitcoin Season</td><td class="warn">山寨承压</td></tr>
-          <tr><td>ETF 净流入 (周)</td><td><strong>$22.34M</strong></td><td colspan="2">前周 -$296M 大幅改善</td><td class="neutral">微弱流入</td></tr>
-          <tr><td>距 ATH</td><td><strong>-42.91%</strong></td><td colspan="2">ATH $126,080</td><td>--</td></tr>
+          <tr><td>价格</td><td><strong>$71,788</strong></td><td class="up">+4.09%</td><td class="up">+4.55%</td><td>反弹测试阻力</td></tr>
+          <tr><td>恐惧贪婪指数</td><td><strong>17</strong></td><td colspan="2">极度恐惧 (47+ 天)</td><td class="down">极度恐惧</td></tr>
+          <tr><td>BTC 主导率</td><td><strong>58.5%</strong></td><td>持平</td><td>--</td><td class="warn">Bitcoin Season</td></tr>
+          <tr><td>山寨季指数</td><td><strong>34/100</strong></td><td colspan="2">非山寨季</td><td class="neutral">BTC 主导</td></tr>
+          <tr><td>ETF 净流入 (周)</td><td><strong>+$22.34M</strong></td><td colspan="2">前周 -$296M</td><td class="up">转正</td></tr>
+          <tr><td>距 ATH</td><td><strong>-43.08%</strong></td><td colspan="2">ATH $126,080</td><td>--</td></tr>
           <tr><td>市场评分</td><td><strong>9/20</strong></td><td colspan="2">中性</td><td>--</td></tr>
         </tbody>
       </table>
@@ -209,7 +213,7 @@ p, li { font-size: 14px; color: var(--text); }
     </div>
   </div>
 
-  <!-- BTC Sparkline -->
+  <!-- BTC 7d Sparkline -->
   <h3>BTC 7 日价格走势</h3>
   <div class="card">
     <div class="chart-inline">
@@ -223,60 +227,59 @@ p, li { font-size: 14px; color: var(--text); }
     <div class="chart-small">
       <canvas id="chartETF"></canvas>
     </div>
-    <div class="etf-text-summary">4 月累计净流入 ~$69.6M | 累计 AUM ~$56B (159 万 BTC) | 3 月净流入 $13.2 亿结束四月流出</div>
+    <div class="etf-text-summary">4月累计: +$69.6M | 周净流入: +$22.34M | 累计 AUM: ~$56B | Q1 净流出 ~$500M，3月反弹 $1.32B</div>
     <div class="analysis-block" style="margin-top:10px;">
-      ETF 流向从 3 月底的大幅流出（-$296M/周）转为微弱流入（$22.34M/周），改善明显但力度偏弱。BlackRock IBIT Q1 吸入 $84 亿，机构参与度保持。需关注 4 月后续是否能维持正流入趋势。
+      ETF 资金从 3 月底开始重新转正，结束前周 $296M 净流出。BlackRock IBIT Q1 吸引 $84 亿流入，ETF 总持仓达 159 万 BTC。机构兴趣回暖但力度温和，需观察是否维持 $200-300M 日均水平。
     </div>
   </div>
 
-  <!-- On-chain -->
+  <!-- BTC On-chain -->
   <h3>BTC 链上指标</h3>
   <div class="card">
     <div class="table-wrap">
       <table class="data-table">
         <thead><tr><th>指标</th><th>数值</th><th>信号</th><th>含义</th></tr></thead>
         <tbody>
-          <tr><td>MVRV Z-Score</td><td><strong>1.2</strong></td><td class="neutral">中性偏低</td><td class="meaning">远低于过热线 3.5</td></tr>
-          <tr><td>aSOPR</td><td><strong>0.97-0.99</strong></td><td class="down">亏损卖出</td><td class="meaning">STH SOPR 0.92-0.96</td></tr>
-          <tr><td>交易所储备</td><td><strong>221 万 BTC</strong></td><td class="up">7 年新低</td><td class="meaning">供应仅占 5.88%</td></tr>
-          <tr><td>鲸鱼累积</td><td><strong>30d +27 万</strong></td><td class="up">强积累</td><td class="meaning">2140+ 钱包</td></tr>
-          <tr><td>资金费率</td><td><strong>~0.006%</strong></td><td class="neutral">中性</td><td class="meaning">多空平衡</td></tr>
-          <tr><td>未平仓合约</td><td><strong>~$380 亿</strong></td><td class="neutral">稳定</td><td class="meaning">杠杆适中</td></tr>
-          <tr><td>期权 MaxPain</td><td><strong>~$69,000</strong></td><td>--</td><td class="meaning">价格高于 MaxPain</td></tr>
+          <tr><td>MVRV Z-Score</td><td><strong>1.2</strong></td><td class="neutral">中性偏冷</td><td class="meaning">>3.5 超买, <1 超卖</td></tr>
+          <tr><td>aSOPR</td><td><strong>0.97-0.99</strong></td><td class="down">亏损卖出</td><td class="meaning"><1 持有者在亏损中出售</td></tr>
+          <tr><td>交易所储备</td><td><strong>2.31M BTC</strong></td><td class="up">6年新低 ↓</td><td class="meaning">下降=积累信号</td></tr>
+          <tr><td>鲸鱼累积</td><td><strong>270K/30d</strong></td><td class="up">强积累</td><td class="meaning">大户持续买入</td></tr>
+          <tr><td>资金费率</td><td><strong>+0.006%</strong></td><td class="neutral">中性</td><td class="meaning">多空平衡</td></tr>
+          <tr><td>未平仓合约</td><td><strong>~$38B</strong></td><td class="neutral">--</td><td class="meaning">杠杆适中</td></tr>
+          <tr><td>期权最大痛点</td><td><strong>$69,000</strong></td><td>--</td><td class="meaning">本周到期锚定价</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <div class="signal-box">
+  <div class="signal-box neutral">
     <h4 style="margin:0 0 6px;text-transform:none;letter-spacing:0;font-size:14px;color:var(--text);">综合链上信号判读</h4>
-    五大底部信号同时闪烁：MVRV Z 1.2、aSOPR &lt;1、实现利润降 96%、哈希率降 22%、交易所储备 7 年低。历史仅出现 3 次（2015末/2018末/2022中），每次 18 月内涨 300%+。鲸鱼极度恐惧中大量吸筹，短期持有者持续亏损。<strong>中长期看多信号强烈，但短期宏观压力未解。</strong>
+    五大底部指标同时闪烁：MVRV Z-Score 1.2、aSOPR <1.0、已实现利润从峰值下降 96%、算力下降 22%、交易所储备 7 年低点。<strong>历史上仅出现 3 次（2015底、2018底、2022中），每次 18 个月内涨幅 300%+。</strong> 鲸鱼 30 天累积 27 万 BTC，供应紧缩信号明确。短期资金费率中性，杠杆水平适中，无过热迹象。
   </div>
 
-  <!-- Macro -->
+  <!-- Macro Calendar -->
   <h3>宏观日历</h3>
   <div class="card">
     <div class="table-wrap">
       <table class="macro-table">
         <thead><tr><th>日期</th><th>事件</th><th>预期影响</th><th>状态</th></tr></thead>
         <tbody>
-          <tr><td>04-16</td><td>ARB 解锁 92.65M</td><td class="warn">ARB 抛压</td><td>8 天后</td></tr>
-          <tr><td>04-24</td><td>MON 代币解锁</td><td class="warn">MON 抛压</td><td>16 天后</td></tr>
-          <tr><td>04-28</td><td>FOMC 利率决议</td><td class="warn">高波动</td><td>92%+ 维持</td></tr>
-          <tr><td>持续</td><td>美国 15% 关税</td><td class="down">宏观压力</td><td>7/24 到期</td></tr>
+          <tr><td>4/10</td><td>美国 CPI 数据发布</td><td class="warn">高 - 影响降息预期</td><td>即将发布</td></tr>
+          <tr><td>4/28</td><td>FOMC 会议</td><td class="warn">高 - 94.8% 概率维持不变</td><td>20天后</td></tr>
         </tbody>
       </table>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">利率 3.50-3.75% | 暂停 15+ 个月 | 2026不降息概率 35.9% (Polymarket) | IMF 预测 EOY 3.4%</p>
     </div>
   </div>
 
-  <!-- Technical -->
+  <!-- BTC Technical -->
   <h3>BTC 技术面关键位</h3>
   <div class="card">
     <table class="data-table compact">
       <tbody>
-        <tr><td style="width:100px;font-weight:600;">关键支撑</td><td>$66,300 - $67,500</td></tr>
-        <tr><td style="font-weight:600;">关键阻力</td><td>$72,000 - $75,000</td></tr>
-        <tr><td style="font-weight:600;">趋势判断</td><td>区间震荡中反弹尝试，$67.8K 低点反弹至 $72K 阻力区，需确认突破</td></tr>
+        <tr><td style="width:100px;font-weight:600;">关键支撑</td><td><span class="up">$67,000</span> (7日 SMA + 前期低点)</td></tr>
+        <tr><td style="font-weight:600;">关键阻力</td><td><span class="down">$72,000</span> (38.2% Fibonacci 回撤 $71,780)</td></tr>
+        <tr><td style="font-weight:600;">趋势判断</td><td>区间震荡反弹，双底形态突破 $68,120 后看涨，正在测试 $72K 阻力</td></tr>
       </tbody>
     </table>
   </div>
@@ -284,13 +287,13 @@ p, li { font-size: 14px; color: var(--text); }
   <!-- Altcoin Impact -->
   <h3>对山寨的影响判断</h3>
   <div class="analysis-block">
-    BTC 主导率 58.5%（+2.4%），山寨季指数 34，FGI 极度恐惧 47+ 天。今日全线反弹更像超跌修复而非趋势反转。资金费率中性、ETF 流入微弱。
-    <div class="conclusion">结论：观望不动。等 BTC 站稳 $72K + FGI >25 + 山寨季指数 >50 再考虑加仓山寨。</div>
+    BTC 主导率 58.5% 高位 + FGI 17 极度恐惧 + 山寨季指数 34 = <strong>Bitcoin Season 持续</strong>。全市场出现技术性反弹（多数币种 24h +4-12%），更可能是超卖反弹而非趋势反转。ETH/BTC 从多年低点 0.028 回升是值得关注的早期轮动信号。
+    <div class="conclusion">结论：观望为主，不宜激进加仓山寨。等 BTC 确认突破 $72K + FGI 回升 25+ 再考虑。</div>
   </div>
 
   <hr class="section-divider">
 
-  <!-- SECTION 2 -->
+  <!-- SECTION 2: 跨链生态 -->
   <h2>二、跨链生态对比</h2>
 
   <h3>TVL 对比</h3>
@@ -300,13 +303,13 @@ p, li { font-size: 14px; color: var(--text); }
     </div>
     <div class="table-wrap" style="margin-top:8px;">
       <table class="data-table compact">
-        <thead><tr><th>链</th><th>TVL</th><th>vs 上期</th><th>占比</th></tr></thead>
+        <thead><tr><th>链</th><th>TVL</th><th>较上期</th><th>占比</th></tr></thead>
         <tbody>
-          <tr><td>Ethereum</td><td>$54.07B</td><td class="up">+2.8%</td><td>87.17%</td></tr>
-          <tr><td>Solana</td><td>$5.61B</td><td class="up">+2.3%</td><td>9.05%</td></tr>
-          <tr><td>Arbitrum</td><td>$1.95B</td><td class="up">+2.4%</td><td>3.14%</td></tr>
-          <tr><td>Monad</td><td>$380.5M</td><td class="up">+5.7%</td><td>0.61%</td></tr>
-          <tr><td>Plume</td><td>$14.49M</td><td class="up">+1.7%</td><td>0.02%</td></tr>
+          <tr><td>Ethereum</td><td>$54.99B</td><td class="up">+1.7%</td><td>87.4%</td></tr>
+          <tr><td>Solana</td><td>$5.67B</td><td class="up">+1.1%</td><td>9.0%</td></tr>
+          <tr><td>Arbitrum</td><td>$1.97B</td><td class="up">+0.9%</td><td>3.1%</td></tr>
+          <tr><td>Monad</td><td>$394.4M</td><td class="up">+3.6%</td><td>0.6%</td></tr>
+          <tr><td>Plume</td><td>$14.49M</td><td class="neutral">持平</td><td>0.02%</td></tr>
         </tbody>
       </table>
     </div>
@@ -316,13 +319,13 @@ p, li { font-size: 14px; color: var(--text); }
   <div class="card">
     <div class="table-wrap">
       <table class="data-table compact">
-        <thead><tr><th>链</th><th>稳定币</th><th>vs 上期</th></tr></thead>
+        <thead><tr><th>链</th><th>稳定币供应</th></tr></thead>
         <tbody>
-          <tr><td>Ethereum</td><td>$164.59B</td><td class="up">+0.3%</td></tr>
-          <tr><td>Solana</td><td>$14.78B</td><td class="up">+0.4%</td></tr>
-          <tr><td>Arbitrum</td><td>$3.69B</td><td class="up">+1.3%</td></tr>
-          <tr><td>Monad</td><td>$453.2M</td><td class="down">-0.4%</td></tr>
-          <tr><td>Plume</td><td>$211.3M</td><td class="up">+1.0%</td></tr>
+          <tr><td>Ethereum</td><td>~$164.5B</td></tr>
+          <tr><td>Solana</td><td>>$17B</td></tr>
+          <tr><td>Arbitrum</td><td>~$3.69B</td></tr>
+          <tr><td>Monad</td><td>~$453M</td></tr>
+          <tr><td>Plume</td><td>~$211M</td></tr>
         </tbody>
       </table>
     </div>
@@ -337,24 +340,24 @@ p, li { font-size: 14px; color: var(--text); }
 
   <hr class="section-divider">
 
-  <!-- SECTION 3: COINS -->
+  <!-- SECTION 3: 各币种详情 -->
   <h2>三、各币种详情</h2>
 
   <!-- ETH -->
   <h3>Ethereum (ETH)</h3>
   <div class="card">
     <table class="data-table compact">
-      <thead><tr><th>指标</th><th>数值</th><th>变化</th></tr></thead>
+      <thead><tr><th>指标</th><th>当前值</th><th>24h</th><th>备注</th></tr></thead>
       <tbody>
-        <tr><td>价格</td><td><strong>$2,242.14</strong></td><td class="up">+6.29% (24h) | +7.32% vs 上期</td></tr>
-        <tr><td>ETH/BTC</td><td>0.0312</td><td class="up">从 0.028 低点回升</td></tr>
-        <tr><td>TVL</td><td>$54.07B</td><td class="up">+2.8%</td></tr>
-        <tr><td>L2 总 TVL</td><td>~$38.2B</td><td>--</td></tr>
-        <tr><td>质押率</td><td>28%</td><td>--</td></tr>
+        <tr><td>价格</td><td><strong>$2,256</strong></td><td class="up">+6.59%</td><td>--</td></tr>
+        <tr><td>ETH/BTC</td><td>0.0312</td><td class="up">从 0.028 回升</td><td>早期轮动信号</td></tr>
+        <tr><td>TVL</td><td>$54.99B</td><td class="up">+1.7%</td><td>--</td></tr>
+        <tr><td>L2 TVL</td><td>~$38.2B</td><td>--</td><td>--</td></tr>
+        <tr><td>质押率</td><td>28%</td><td>--</td><td>--</td></tr>
       </tbody>
     </table>
-    <div class="analysis-block" style="margin-top:10px;">
-      <strong>重要事件:</strong> EF 单日质押 45K ETH（目标 70K ETH）| Glamsterdam 升级 6 月 | ETH/BTC 从多年低点回升 | BlackRock 质押 ETH ETF
+    <div style="margin-top:10px;font-size:13px;color:var(--text-secondary);line-height:1.6;">
+      <strong>事件:</strong> EF 完成 70K ETH 质押（$93M）| Glamsterdam 升级目标 6月 | BlackRock/Fidelity 申请含质押 ETH ETF（~3.5-4% APY）
     </div>
   </div>
 
@@ -362,113 +365,115 @@ p, li { font-size: 14px; color: var(--text); }
   <h3>Solana (SOL)</h3>
   <div class="card">
     <table class="data-table compact">
-      <thead><tr><th>指标</th><th>数值</th><th>变化</th></tr></thead>
+      <thead><tr><th>指标</th><th>当前值</th><th>24h</th><th>备注</th></tr></thead>
       <tbody>
-        <tr><td>价格</td><td><strong>$85.68</strong></td><td class="up">+6.97% (24h) | +8.15% vs 上期</td></tr>
-        <tr><td>DEX 周量</td><td>$87.8B</td><td>--</td></tr>
-        <tr><td>TVL</td><td>$5.61B</td><td class="up">+2.3%</td></tr>
-        <tr><td>Firedancer</td><td>600K+ TPS</td><td>207 验证器</td></tr>
+        <tr><td>价格</td><td><strong>$84.82</strong></td><td class="up">+5.88%</td><td>--</td></tr>
+        <tr><td>TVL</td><td>$5.67B</td><td class="up">+1.1%</td><td>--</td></tr>
+        <tr><td>Firedancer</td><td>1M+ TPS</td><td>--</td><td>主网运行</td></tr>
+        <tr><td>稳定币</td><td>>$17B</td><td>--</td><td>--</td></tr>
       </tbody>
     </table>
-    <div class="analysis-block" style="margin-top:10px;">
-      <strong>重要事件:</strong> Drift Protocol $2.85 亿攻击（Solana 史上第二大）| DEX 量持续领先 | SOL ETF 总资产超 $10 亿
+    <div class="alert-box" style="margin-top:10px;">
+      <strong>Drift Protocol $285M 漏洞攻击</strong>（4/1）— 2026 最大 DeFi 黑客事件，疑似朝鲜黑客。利用 durable nonces 绕过多签，6 个月社会工程渗透。Solana Foundation 宣布安全架构大检修。
+    </div>
+    <div style="margin-top:8px;font-size:13px;color:var(--text-secondary);">
+      SEC 将 SOL 分类为数字商品 | Western Union USDPT 稳定币 H1 2026 | Firedancer 完整部署 H2 2026
     </div>
   </div>
 
   <!-- LINK -->
-  <h3>Chainlink (LINK) - 深度跟踪</h3>
+  <h3>Chainlink (LINK) 深度跟踪</h3>
   <div class="card">
     <table class="data-table compact">
       <thead><tr><th>指标</th><th>数值</th><th>意义</th></tr></thead>
       <tbody>
-        <tr><td>价格</td><td><strong>$9.30</strong> <span class="up">+5.62%</span></td><td>--</td></tr>
-        <tr><td>质押 TVL</td><td>92M LINK (~$817M)</td><td>锁定 8.7% 流通</td></tr>
-        <tr><td>Reserve 累积</td><td>279 万 LINK</td><td>持续买压</td></tr>
-        <tr><td>CCIP 月量</td><td>$180 亿 (+62% YoY)</td><td>跨链增长核心</td></tr>
-        <tr><td>ADI 代币化</td><td>$2400 亿</td><td>机构 RWA</td></tr>
+        <tr><td>价格</td><td><strong>$9.25</strong> <span class="up">(+4.77%)</span></td><td>--</td></tr>
+        <tr><td>质押 TVL</td><td>45M LINK (8.7%)</td><td>供应锁定</td></tr>
+        <tr><td>Reserve</td><td>~2.79M LINK</td><td>独特买压</td></tr>
+        <tr><td>CCIP 月量</td><td>~$18B</td><td>跨链核心</td></tr>
+        <tr><td>CCIP 累计</td><td>$28T+</td><td>行业领先</td></tr>
+        <tr><td>30d 收入</td><td>~$4.55M</td><td>协议营收</td></tr>
       </tbody>
     </table>
-    <div style="margin-top:12px;font-size:13px;">
+    <div style="margin-top:10px;font-size:13px;line-height:1.7;">
       <strong>催化剂:</strong><br>
-      &#9989; LINK ETF 上线 NYSE Arca (GLNK, CLNK)<br>
-      &#128260; CCIP v1.5 计划 2026 上线<br>
-      &#128260; 质押 v0.3 → 200M+ LINK<br>
-      &#128260; JPMorgan/UBS 运行实时 CCIP 结算试点
+      ✅ LINK ETF 获批 (GLNK, CLNK)<br>
+      🔄 CCIP v1.5 主网 — 计划 2026<br>
+      🔄 质押 v0.3 → 200M+ LINK — 2026 底<br>
+      🔄 SVR 采纳 — 暂无更新<br><br>
+      <strong>新合作:</strong> Mastercard + Coinbase 集成 | Lido 采用 CCIP (wstETH CCT) | JPMorgan 结算试验 | SBI 合作
     </div>
   </div>
 
   <!-- ARB -->
-  <h3>Arbitrum (ARB) - 深度跟踪</h3>
+  <h3>Arbitrum (ARB) 深度跟踪</h3>
   <div class="card">
     <table class="data-table compact">
       <thead><tr><th>指标</th><th>数值</th><th>意义</th></tr></thead>
       <tbody>
-        <tr><td>价格</td><td><strong>$0.1021</strong> <span class="up">+8.96%</span></td><td>周期高点 -96%</td></tr>
-        <tr><td>TVL</td><td>$1.95B</td><td>L2 领先</td></tr>
-        <tr><td>稳定币</td><td>$3.69B</td><td>生态流动性</td></tr>
-        <tr><td>下次解锁</td><td class="warn">04-16 (8天) 92.65M ARB</td><td>2.01% 抛压</td></tr>
-        <tr><td>已解锁</td><td>60.41%</td><td>2027-03 完全解锁</td></tr>
+        <tr><td>价格</td><td><strong>$0.1037</strong> <span class="up">(+9.09%)</span></td><td>超卖反弹</td></tr>
+        <tr><td>TVL</td><td>$1.97B</td><td>L2 领先</td></tr>
+        <tr><td>30d 费用</td><td>~$387K</td><td>--</td></tr>
+        <tr><td>下次解锁</td><td class="warn">4/16 (92.65M ARB, 2.01%)</td><td>⚠️ 8 天后</td></tr>
+        <tr><td>已解锁</td><td>60.41%</td><td>--</td></tr>
       </tbody>
     </table>
-    <div style="margin-top:12px;font-size:13px;">
-      <strong>催化剂:</strong><br>
-      &#128260; 费用分享机制（动态费用模型测试中）<br>
-      &#128260; Stylus 采纳率<br>
-      &#128260; RWA 活动增长（机构化趋势确认）<br>
-      &#128260; BoLD 争议协议
+    <div style="margin-top:10px;font-size:13px;line-height:1.7;">
+      <strong>催化剂:</strong> 费用分享 🔄 | Stylus 采纳 🔄 | RWA 增长 🔄 | BoLD 协议 🔄<br>
+      <strong>风险:</strong> 4/16 解锁 ~$9.6M，低迷市场中可能带来短期抛压
     </div>
   </div>
 
   <!-- MON -->
-  <h3>Monad (MON) - 观察仓</h3>
+  <h3>Monad (MON) 观察仓</h3>
   <div class="card">
     <table class="data-table compact">
       <thead><tr><th>指标</th><th>数值</th><th>意义</th></tr></thead>
       <tbody>
-        <tr><td>价格</td><td><strong>$0.0305</strong> <span class="up">+12.33%</span></td><td>FDV $2.2B (峰值 -53%)</td></tr>
-        <tr><td>TVL</td><td>$380.5M (+5.7%)</td><td>4 月达里程碑</td></tr>
-        <tr><td>周费用</td><td class="down">~$2,000</td><td>有机需求极低</td></tr>
-        <tr><td>解锁</td><td class="warn">04-24 (16天)</td><td>抛压风险</td></tr>
+        <tr><td>价格</td><td><strong>$0.03053</strong> <span class="up">(+10.84%)</span></td><td>超卖反弹</td></tr>
+        <tr><td>TVL</td><td>$394.4M</td><td>快速增长</td></tr>
+        <tr><td>日费用</td><td class="down"><$3,000</td><td>有机需求极低</td></tr>
+        <tr><td>FDV</td><td>$2.2B (-53%)</td><td>从峰值腰斩</td></tr>
+        <tr><td>解锁</td><td class="warn">4/24</td><td>16 天后</td></tr>
       </tbody>
     </table>
-    <div class="alert-box warning" style="margin-top:10px;">
-      <strong>风险:</strong> 鬼链信号 - 周费用仅 $2K，TVL 增长可能由激励驱动。FDV 持续压缩。50%+ 代币锁定中，2026 解锁预计带来持续抛压。
+    <div style="margin-top:10px;font-size:13px;color:var(--text-secondary);">
+      Uniswap/Curve/Morpho 已部署 | TVL 2月以来 +55% | 费用/TVL 比率极低，资本效率差
     </div>
   </div>
 
   <!-- PLUME -->
-  <h3>Plume Network (PLUME) - 观察仓</h3>
+  <h3>Plume Network (PLUME) 观察仓</h3>
   <div class="card">
     <table class="data-table compact">
       <thead><tr><th>指标</th><th>数值</th><th>意义</th></tr></thead>
       <tbody>
-        <tr><td>价格</td><td><strong>$0.009090</strong> <span class="neutral">+0.22%</span></td><td>未参与反弹</td></tr>
-        <tr><td>TVL</td><td>$14.49M</td><td>采纳度低</td></tr>
-        <tr><td>RWA 资产</td><td>$6.45 亿</td><td>代币化规模</td></tr>
-        <tr><td>RWA 持有者</td><td>28 万</td><td>--</td></tr>
+        <tr><td>价格</td><td><strong>$0.00909</strong> <span class="neutral">(+0.22%)</span></td><td>横盘</td></tr>
+        <tr><td>TVL</td><td>$14.49M</td><td>--</td></tr>
+        <tr><td>RWA 资产</td><td>$6.45 亿</td><td>采纳度</td></tr>
+        <tr><td>RWA 持有者</td><td>280,000</td><td>用户基础</td></tr>
       </tbody>
     </table>
-    <div style="margin-top:10px;font-size:13px;">
-      &#9989; WisdomTree 14 只代币化基金 | Apollo $50M 部署 | KRW1 集成<br>
-      &#128260; TVL 需突破 | 机构 RWA 产品建设中 (BlackRock, Franklin Templeton)
+    <div style="margin-top:10px;font-size:13px;color:var(--text-secondary);">
+      WisdomTree 14 支代币化基金 | Apollo $50M 信贷策略 | 200+ 项目 | 市值极小 $50.7M
     </div>
   </div>
 
   <hr class="section-divider">
 
-  <!-- SECTION 4: HISTORY -->
+  <!-- SECTION 4: 历史趋势 -->
   <h2>四、历史趋势对比</h2>
 
   <h3>7 日变化热力图</h3>
   <div class="card">
     <div class="heatmap-grid" style="grid-template-columns: repeat(7, 1fr);">
-      <div class="heatmap-cell" style="background:rgba(63,185,80,0.25);color:var(--green);">BTC<br>+5.54%</div>
-      <div class="heatmap-cell" style="background:rgba(63,185,80,0.20);color:var(--green);">ETH<br>+7.32%</div>
-      <div class="heatmap-cell" style="background:rgba(63,185,80,0.25);color:var(--green);">SOL<br>+8.15%</div>
-      <div class="heatmap-cell" style="background:rgba(63,185,80,0.25);color:var(--green);">LINK<br>+7.14%</div>
-      <div class="heatmap-cell" style="background:rgba(63,185,80,0.30);color:var(--green);">ARB<br>+8.85%</div>
-      <div class="heatmap-cell" style="background:rgba(63,185,80,0.40);color:var(--green);">MON<br>+16.0%</div>
-      <div class="heatmap-cell" style="background:rgba(139,148,158,0.15);color:var(--text-secondary);">PLUME<br>+0.22%</div>
+      <div class="heatmap-cell" style="background:rgba(63,185,80,0.3);">BTC<br><span class="up">+4.55%</span></div>
+      <div class="heatmap-cell" style="background:rgba(63,185,80,0.3);">ETH<br><span class="up">+6.59%</span></div>
+      <div class="heatmap-cell" style="background:rgba(63,185,80,0.3);">SOL<br><span class="up">+5.88%</span></div>
+      <div class="heatmap-cell" style="background:rgba(63,185,80,0.2);">LINK<br><span class="up">+4.77%</span></div>
+      <div class="heatmap-cell" style="background:rgba(63,185,80,0.4);">ARB<br><span class="up">+9.09%</span></div>
+      <div class="heatmap-cell" style="background:rgba(63,185,80,0.5);">MON<br><span class="up">+10.84%</span></div>
+      <div class="heatmap-cell" style="background:rgba(139,148,158,0.15);">PLUME<br><span class="neutral">+0.22%</span></div>
     </div>
   </div>
 
@@ -481,18 +486,18 @@ p, li { font-size: 14px; color: var(--text); }
 
   <h3>连续信号追踪</h3>
   <div class="card">
-    <ul style="font-size:13px;padding-left:18px;line-height:1.8;">
-      <li>FGI 极度恐惧已连续 <strong>47+ 天</strong>（2022 年底以来最长）</li>
-      <li>BTC 交易所储备持续创 <strong>7 年新低</strong></li>
-      <li>鲸鱼连续 <strong>30 天</strong>净买入 27 万 BTC</li>
-      <li>BTC 距 ATH <strong>-42.9%</strong>，深度回调持续</li>
-      <li>全线反弹为近 <strong>2 周</strong>最强单日表现</li>
-    </ul>
+    <div style="font-size:13px;line-height:1.8;">
+      - FGI 连续 47+ 天处于恐惧区间（<25）<br>
+      - BTC 主导率维持 58.5% 高位<br>
+      - 交易所储备持续下降至 6 年新低<br>
+      - 鲸鱼 30 天累积 270K BTC<br>
+      - aSOPR 持续 <1.0
+    </div>
   </div>
 
   <hr class="section-divider">
 
-  <!-- SECTION 5: RECOMMENDATIONS -->
+  <!-- SECTION 5: 操作建议 -->
   <h2>五、操作建议</h2>
 
   <h3>市场阶段评估</h3>
@@ -500,7 +505,7 @@ p, li { font-size: 14px; color: var(--text); }
     <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;flex-wrap:wrap;">
       <span style="font-size:13px;color:var(--text-secondary);">综合评分</span>
       <span style="font-size:22px;font-weight:700;">9<span style="font-size:14px;color:var(--text-secondary);">/20</span></span>
-      <span style="font-size:14px;font-weight:600;color:var(--orange);">中性</span>
+      <span style="font-size:14px;font-weight:600;">中性</span>
     </div>
     <div class="score-row">
       <span class="label">BTC 趋势</span>
@@ -524,46 +529,92 @@ p, li { font-size: 14px; color: var(--text); }
     </div>
   </div>
 
+  <h3>信号面板</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table compact">
+        <thead><tr><th>信号</th><th>状态</th><th>方向</th></tr></thead>
+        <tbody>
+          <tr><td>链上底部信号</td><td class="up">5/5 同时闪烁</td><td>看涨（中长期）</td></tr>
+          <tr><td>鲸鱼行为</td><td class="up">强积累 270K BTC</td><td>看涨</td></tr>
+          <tr><td>交易所储备</td><td class="up">6年新低 ↓</td><td>看涨</td></tr>
+          <tr><td>ETF 资金流</td><td class="neutral">温和转正</td><td>中性偏多</td></tr>
+          <tr><td>FGI 情绪</td><td class="down">17 极度恐惧</td><td>逆向看涨（中长期）</td></tr>
+          <tr><td>资金费率</td><td class="neutral">+0.006%</td><td>中性</td></tr>
+          <tr><td>宏观政策</td><td class="down">利率维持高位</td><td>看空</td></tr>
+          <tr><td>关税风险</td><td class="down">Section 122 15%</td><td>看空</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <h3>各币种建议</h3>
 
+  <div class="rec-card buy">
+    <div class="rec-header">
+      <span class="rec-coin">BTC</span>
+      <span class="rec-action buy">持有/逢低加仓</span>
+    </div>
+    <div class="rec-body">链上底部信号密集（5/5），鲸鱼强积累，交易所储备 6 年低点。极度恐惧通常是中长期买入机会。<br>风险: $72K 阻力、宏观不确定性 | 时间框架: 中长期</div>
+  </div>
+
   <div class="rec-card hold">
-    <div class="rec-header"><span class="rec-coin">BTC</span><span class="rec-action hold">持有/观望</span></div>
-    <div class="rec-body">链上底部信号强烈但宏观风险未解，$72K 阻力关键，突破确认后可加仓。中期视角。</div>
+    <div class="rec-header">
+      <span class="rec-coin">ETH</span>
+      <span class="rec-action hold">持有/观望</span>
+    </div>
+    <div class="rec-body">ETH/BTC 从多年低点回升是早期轮动信号。Glamsterdam（6月）、质押 ETF 是中期催化剂。<br>风险: ETH/BTC 回升不可持续 | 时间框架: 中期</div>
   </div>
+
   <div class="rec-card hold">
-    <div class="rec-header"><span class="rec-coin">ETH</span><span class="rec-action hold">持有/观望</span></div>
-    <div class="rec-body">ETH/BTC 从多年低点回升，EF 质押利好，Glamsterdam 升级 6 月。需确认趋势。</div>
+    <div class="rec-header">
+      <span class="rec-coin">SOL</span>
+      <span class="rec-action hold">持有/谨慎</span>
+    </div>
+    <div class="rec-body">Firedancer 1M TPS、SEC 商品分类、Western Union USDPT 是正面催化剂。<br>风险: Drift $285M 漏洞打击生态信誉 | 时间框架: 中期</div>
   </div>
+
+  <div class="rec-card buy">
+    <div class="rec-header">
+      <span class="rec-coin">LINK</span>
+      <span class="rec-action buy">持有/逢低加仓</span>
+    </div>
+    <div class="rec-body">ETF 获批，CCIP 扩展（Mastercard、Coinbase、Lido），合作伙伴阵容业界最强。Reserve 独特买压。<br>风险: 市场情绪压制价格 | 时间框架: 中长期</div>
+  </div>
+
   <div class="rec-card hold">
-    <div class="rec-header"><span class="rec-coin">SOL</span><span class="rec-action hold">谨慎持有</span></div>
-    <div class="rec-body">DEX 生态强劲但 Drift $2.85 亿攻击影响信心，关注后续安全审计。短-中期。</div>
+    <div class="rec-header">
+      <span class="rec-coin">ARB</span>
+      <span class="rec-action hold">持有/观望</span>
+    </div>
+    <div class="rec-body">L2 领先地位，TVL 稳定。<br>风险: 4/16 解锁 92.65M ARB（8天后），催化剂进展缓慢 | 时间框架: 中期</div>
   </div>
-  <div class="rec-card hold">
-    <div class="rec-header"><span class="rec-coin">LINK</span><span class="rec-action hold">持有</span></div>
-    <div class="rec-body">基本面最强：CCIP $180 亿月量 +62% YoY、ETF 上线、JPMorgan 试点。$9.30 远低于基本面估值。中-长期。</div>
-  </div>
-  <div class="rec-card hold">
-    <div class="rec-header"><span class="rec-coin">ARB</span><span class="rec-action hold">谨慎持有</span></div>
-    <div class="rec-body">4/16 解锁 92.65M ARB 临近，短期抛压。L2 生态健康但代币经济学承压。短期。</div>
-  </div>
-  <div class="rec-card sell">
-    <div class="rec-header"><span class="rec-coin">MON</span><span class="rec-action sell">减仓/观望</span></div>
-    <div class="rec-body">TVL 增长但周费用仅 $2K，鬼链风险高，FDV 压缩，4/24 解锁。短期。</div>
-  </div>
+
   <div class="rec-card watch">
-    <div class="rec-header"><span class="rec-coin">PLUME</span><span class="rec-action watch">观望</span></div>
-    <div class="rec-body">RWA 机构合作亮眼但链上 TVL 极低，价格未参与反弹。需更多有机增长信号。长期。</div>
+    <div class="rec-header">
+      <span class="rec-coin">MON</span>
+      <span class="rec-action watch">观望/谨慎</span>
+    </div>
+    <div class="rec-body">TVL 快速增长（$394M），但费用极低（<$3K/天）、FDV 腰斩、4/24 解锁。<br>风险: 有机需求不足 | 时间框架: 短期规避</div>
+  </div>
+
+  <div class="rec-card watch">
+    <div class="rec-header">
+      <span class="rec-coin">PLUME</span>
+      <span class="rec-action watch">观望</span>
+    </div>
+    <div class="rec-body">RWA 赛道叙事强，WisdomTree/Apollo 背书。<br>风险: 市值极小、TVL 低、缺乏动能 | 时间框架: 长期主题</div>
   </div>
 
   <h3>行动清单</h3>
   <div class="card">
-    <div class="checklist-item">关注 BTC 是否站稳 $72K 以上，确认突破再行动</div>
-    <div class="checklist-item">ARB 4/16 解锁前评估仓位，考虑降低敞口</div>
-    <div class="checklist-item">MON 4/24 解锁前评估，鬼链风险叠加解锁需谨慎</div>
-    <div class="checklist-item">监控 FGI 是否脱离极度恐惧区 (>25)</div>
-    <div class="checklist-item">FOMC 4/28 前保持低杠杆</div>
-    <div class="checklist-item">关注 LINK CCIP v1.5 进展，逢低可考虑增持</div>
-    <div class="checklist-item">跟踪 Solana Drift 攻击后续及安全审计响应</div>
+    <div class="checklist-item">关注 BTC 是否日收于 $72K 上方确认突破</div>
+    <div class="checklist-item">4/10 CPI 数据发布前减少杠杆</div>
+    <div class="checklist-item">4/16 ARB 解锁前评估是否减仓</div>
+    <div class="checklist-item">4/24 MON 解锁前评估持仓</div>
+    <div class="checklist-item">监控 ETH/BTC 比率持续回升（确认轮动）</div>
+    <div class="checklist-item">跟踪 Drift 事件后 Solana 安全改进</div>
+    <div class="checklist-item">关注 LINK CCIP v1.5 主网时间表</div>
   </div>
 
   <div class="report-footer">
@@ -580,7 +631,6 @@ document.addEventListener('DOMContentLoaded', function () {
   Chart.defaults.font.family = "system-ui, -apple-system, 'Segoe UI', sans-serif";
   Chart.defaults.font.size = 11;
 
-  /* Score Bars */
   function colorBar(id, rawScore) {
     var el = document.getElementById(id);
     if (!el) return;
@@ -596,8 +646,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* BTC 7d Sparkline */
   (function () {
-    var data = [67722,67800,67650,67500,67321,67400,67600,67800,68000,67900,67700,67500,67600,67800,68100,68300,68500,68200,68000,67800,68000,68200,68400,68600,68800,68500,68300,68100,68300,68500,68700,68900,69100,68800,68600,68400,68600,68800,69000,69200,69400,69100,68900,68700,68900,69100,69300,69500,68339,68200,68400,68600,68800,69000,68700,68500,68300,68500,68800,69100,69400,69700,69500,69300,69100,69300,69600,69900,67805,68000,68300,68600,68900,69200,69500,69800,70100,70400,70200,70000,69800,70100,70400,70700,71000,71300,71600,71900,72000,72100,71800,71600,71400,71200,71400,71700,71948];
-    if (!Array.isArray(data) || data.length === 0) return;
+    var data = [66211,66500,66800,67100,67400,67200,67000,67300,67600,67900,68200,68500,68100,67800,68000,68300,68600,68900,69200,69500,69100,68800,69000,69300,69600,69900,70200,70500,70100,69800,70000,70300,70600,70900,71200,71500,71100,70800,71000,71300,71600,71788];
     var support = 67000;
     var resistance = 72000;
     var labels = data.map(function (_, i) { return i; });
@@ -608,7 +657,8 @@ document.addEventListener('DOMContentLoaded', function () {
       backgroundColor: 'rgba(88,166,255,.08)',
       borderWidth: 2,
       pointRadius: 0,
-      tension: 0.3
+      tension: 0.3,
+      label: 'BTC Price'
     }];
     datasets.push({
       data: Array(data.length).fill(support),
@@ -634,15 +684,10 @@ document.addEventListener('DOMContentLoaded', function () {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-          legend: { display: true, position: 'top', labels: { boxWidth: 10, padding: 10, font: { size: 11 } } }
-        },
+        plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 10, padding: 10, font: { size: 11 } } } },
         scales: {
           x: { display: false },
-          y: {
-            grid: { color: '#21262d' },
-            ticks: { callback: function (v) { return '$' + v.toLocaleString(); }, font: { size: 10 } }
-          }
+          y: { grid: { color: '#21262d' }, ticks: { callback: function (v) { return '$' + v.toLocaleString(); }, font: { size: 10 } } }
         }
       }
     });
@@ -650,8 +695,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* ETF Bar Chart */
   (function () {
-    var labels = ['3/24','3/25','3/26','3/27','3/28','3/31','4/1','4/2','4/3','4/4','4/7'];
-    var values = [-50,-30,-171,40,60,15,10,-5,8,12,22];
+    var labels = ["3/30","3/31","4/1","4/2","4/3","4/4","4/7"];
+    var values = [-50,12,8,35,-15,20,22.34];
     var colors = values.map(function (v) { return v >= 0 ? 'rgba(63,185,80,.7)' : 'rgba(248,81,73,.7)'; });
     new Chart(document.getElementById('chartETF'), {
       type: 'bar',
@@ -670,17 +715,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* TVL Horizontal Bar */
   (function () {
-    var labels = ['Ethereum','Solana','Arbitrum','Monad','Plume'];
-    var data = [54.07,5.61,1.95,0.38,0.01];
+    var labels = ["Ethereum","Solana","Arbitrum","Monad","Plume"];
+    var data = [54.99,5.67,1.97,0.394,0.014];
     new Chart(document.getElementById('chartTVL'), {
       type: 'bar',
       data: {
         labels: labels,
-        datasets: [{
-          data: data,
-          backgroundColor: ['#627eea','#14f195','#28a0f0','#836ef9','#bc8cff'],
-          borderRadius: 4
-        }]
+        datasets: [{ data: data, backgroundColor: ['#627eea','#14f195','#28a0f0','#836ef9','#bc8cff'], borderRadius: 4 }]
       },
       options: {
         indexAxis: 'y',
@@ -697,8 +738,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* Developer Activity */
   (function () {
-    var labels = ['BTC','ETH','SOL','LINK','ARB'];
-    var data = [108,250,180,95,120];
+    var labels = ["BTC"];
+    var data = [108];
     new Chart(document.getElementById('chartDev'), {
       type: 'bar',
       data: {
@@ -717,10 +758,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   })();
 
-  /* History Chart */
+  /* FGI + Market Score History */
   (function () {
-    var dates = ['4/5 AM','4/5 PM','4/6 PM','4/7 AM','4/7 PM','4/8 AM'];
-    var fgi = [12,11,10,11,11,17];
+    var dates = ["4/3","4/4","4/5","4/6","4/7","4/8"];
+    var fgi = [20,19,18,17,17,17];
     var scores = [9,9,9,9,9,9];
     new Chart(document.getElementById('chartHistory'), {
       type: 'line',
@@ -754,24 +795,10 @@ document.addEventListener('DOMContentLoaded', function () {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'top', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } }
-        },
+        plugins: { legend: { position: 'top', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } } },
         scales: {
-          yFGI: {
-            position: 'left',
-            min: 0, max: 100,
-            grid: { color: '#21262d' },
-            title: { display: true, text: 'FGI', font: { size: 11 } },
-            ticks: { font: { size: 10 } }
-          },
-          yScore: {
-            position: 'right',
-            min: 0, max: 20,
-            grid: { drawOnChartArea: false },
-            title: { display: true, text: 'Score /20', font: { size: 11 } },
-            ticks: { font: { size: 10 } }
-          },
+          yFGI: { position: 'left', min: 0, max: 100, grid: { color: '#21262d' }, title: { display: true, text: 'FGI', font: { size: 11 } }, ticks: { font: { size: 10 } } },
+          yScore: { position: 'right', min: 0, max: 20, grid: { drawOnChartArea: false }, title: { display: true, text: 'Score /20', font: { size: 11 } }, ticks: { font: { size: 10 } } },
           x: { grid: { display: false }, ticks: { font: { size: 10 } } }
         }
       }
