@@ -6,8 +6,7 @@ data/history/*
 reports/*.md
 reports/latest-alert.txt
 
-# Sensitive config (contains bot tokens)
-config/output.json
+# Sensitive tokens now in env vars, output.json is safe to track
 
 # Brainstorm session files
 .superpowers/
