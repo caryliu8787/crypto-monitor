@@ -8,10 +8,10 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-# Parse config
+# Parse config — env vars take priority over config file
 CONFIG="config/output.json"
-BOT_TOKEN=$(python3 -c "import json; print(json.load(open('$CONFIG'))['formats']['telegram']['bot_token'])")
-CHAT_ID=$(python3 -c "import json; print(json.load(open('$CONFIG'))['formats']['telegram']['chat_id'])")
+BOT_TOKEN="${TELEGRAM_BOT_TOKEN:-$(python3 -c "import json; print(json.load(open('$CONFIG'))['formats']['telegram'].get('bot_token',''))")}"
+CHAT_ID="${TELEGRAM_CHAT_ID:-$(python3 -c "import json; print(json.load(open('$CONFIG'))['formats']['telegram'].get('chat_id',''))")}"
 
 if [ -z "$BOT_TOKEN" ] || [ "$BOT_TOKEN" = "" ]; then
   echo "Error: telegram.bot_token not configured"
@@ -50,6 +50,7 @@ else
 fi
 
 # Step 2: Generate Telegram message from latest.json
+export DATE SESSION PAGES_URL
 MESSAGE=$(python3 << 'PYEOF'
 import json, sys, os
 
@@ -154,7 +155,6 @@ PYEOF
 )
 
 # Step 3: Send to Telegram
-export DATE SESSION PAGES_URL
 echo "Sending to Telegram..."
 RESPONSE=$(curl -s -X POST "${API}/sendMessage" \
   -d "chat_id=${CHAT_ID}" \
