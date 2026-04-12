@@ -5,7 +5,7 @@
     {
       "id": "p0_p1_major_drop",
       "description": "P0/P1 币种 24h 大幅下跌",
-      "coins": ["btc", "eth", "sol", "link"],
+      "coins": ["link", "eth", "monad", "btc"],
       "condition": "24h_change < -5%",
       "severity": "critical",
       "message_template": "{{ticker}} 24h 跌幅 {{change}}%，触发重大下跌告警"
@@ -13,7 +13,7 @@
     {
       "id": "p0_p1_major_pump",
       "description": "P0/P1 币种 24h 大幅上涨",
-      "coins": ["btc", "eth", "sol", "link"],
+      "coins": ["link", "eth", "monad", "btc"],
       "condition": "24h_change > +10%",
       "severity": "warning",
       "message_template": "{{ticker}} 24h 涨幅 {{change}}%，关注是否过热"
@@ -37,7 +37,7 @@
     {
       "id": "altcoin_divergence",
       "description": "持仓山寨币波动幅度超过 BTC 的 3 倍",
-      "coins": ["eth", "sol", "link", "arb", "monad"],
+      "coins": ["link", "eth", "monad"],
       "condition": "abs(coin_24h_change) > 3 * abs(btc_24h_change)",
       "severity": "warning",
       "message_template": "{{ticker}} 24h 波动 {{change}}% 显著偏离 BTC（{{btc_change}}%）"
@@ -45,7 +45,7 @@
     {
       "id": "report_delta_large",
       "description": "与上期报告相比价格变化超过阈值",
-      "coins": ["btc", "eth", "sol", "link", "arb", "monad"],
+      "coins": ["link", "eth", "monad", "btc"],
       "condition": "abs(price_vs_last_report) > 5%",
       "severity": "warning",
       "message_template": "{{ticker}} 自上期报告以来变动 {{delta}}%"
@@ -129,7 +129,7 @@
     {
       "id": "large_unlock_imminent",
       "description": "大额代币解锁在 7 天内",
-      "coins": ["link", "arb", "monad", "plume"],
+      "coins": ["monad", "arb"],
       "condition": "next_unlock_date within 7 days",
       "severity": "warning",
       "message_template": "{{ticker}} 将于 {{date}} 解锁 {{amount}}，注意抛压"
@@ -137,7 +137,7 @@
     {
       "id": "tvl_weekly_drop",
       "description": "TVL 周跌幅超过 15%",
-      "coins": ["eth", "sol", "arb", "monad", "plume"],
+      "coins": ["eth", "monad"],
       "condition": "tvl_7d_change < -15%",
       "severity": "warning",
       "message_template": "{{ticker}} TVL 周跌 {{change}}%，生态资金外流"
@@ -152,13 +152,6 @@
   ],
 
   "cross_coin_alerts": [
-    {
-      "id": "altseason_signal",
-      "description": "山寨季信号：BTC 主导率下降 + 山寨季指数高",
-      "condition": "btc_dominance_7d_change < -2% AND altseason_index > 75",
-      "severity": "info",
-      "message_template": "山寨季信号触发：BTC 主导率 {{dominance}}%（周降 {{dom_change}}%），山寨季指数 {{index}}"
-    },
     {
       "id": "risk_off_signal",
       "description": "避险信号：BTC 主导率上升 + 恐惧情绪",
