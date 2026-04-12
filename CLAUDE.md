@@ -150,7 +150,8 @@ WebSearch 仅用于定性信息（新闻/事件/合作）。数值必须来自 P
 | HTML | `reports/YYYY-MM-DD_{session}.html` | 可视化报告 |
 | JSON 快照 | `data/latest.json` | 结构化数据（旧的归档到 `data/history/`）|
 | 告警摘要 | `reports/latest-alert.txt` | 单行摘要 |
-| Telegram | `bash scripts/telegram-push.sh` | 推送摘要+链接 |
+
+**注意：不要在 Phase 6 中调用 `telegram-push.sh`。** Telegram 推送和 git push 由外部 `scripts/run-report.sh` 统一负责，Claude 进程只负责生成文件。
 
 **`data/latest.json` 结构：**
 ```json
