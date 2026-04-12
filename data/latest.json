@@ -1,17 +1,319 @@
 {
-  "timestamp": "2026-04-12T08:00:00+08:00",
-  "session": "morning",
-  "coins": {
-    "btc": {"price":73062,"change_24h":0.22,"change_7d":8.42,"change_30d":4.12,"dominance":57.5,"fear_greed":16,"fear_greed_label":"Extreme Fear","altseason_index":30,"etf_daily_flow":334630000,"etf_weekly_flow":533620000,"etf_april_total":400000000,"etf_cumulative":65500000000,"mvrv_zscore":1.2,"mvrv_ratio":2.1,"sopr_7d":1.08,"exchange_reserves":2210000,"exchange_reserves_trend":"declining_9yr_low","exchange_reserves_30d_change":-48200,"whale_monthly_accumulation":270000,"whale_wallets_1000plus":2140,"funding_rate":0.005,"open_interest":53870000000,"options_max_pain":72000,"options_expiry_date":"2026-04-24","options_notional":8000000000,"key_support":68200,"key_resistance":73595,"trend_direction":"range_bound_bullish_tilt","ath":126080,"ath_change":-42.05,"market_cap":1460000000000,"dev_commits_4w":108,"high_24h":73721,"low_24h":72626},
-    "eth": {"price":2285.51,"change_24h":1.89,"eth_btc_ratio":0.0313,"tvl":55526120005,"stablecoin_supply":165432061159,"l2_total_tvl":8300000000,"staking_rate":0.29,"staking_eth":35800000,"gas_avg_usd":0.15,"market_cap":275800000000,"glamsterdam_upgrade_target":"H1 2026","glamsterdam_risk":"may_slip_Q3_Q4","epbs_devnet":"in_progress","blackrock_ethb_live":true},
-    "sol": {"price":84.94,"change_24h":0.19,"tvl":5834246074,"stablecoin_supply":16183271519,"firedancer_coverage":0.25,"firedancer_tps":600000,"firedancer_target_tps":1000000,"alpenglow_finality_ms":150,"alpenglow_vote_approval":0.9827,"usdc_supply":18000000000,"usdc_april_mint":3250000000,"q1_transactions":10000000000,"market_cap":48800000000},
-    "link": {"price":9.07,"change_24h":-0.21,"staking_tvl_link":45000000,"staking_tvl_usd":405900000,"staking_apy":0.0432,"reserve_accumulated_link":3064151,"reserve_latest_add":131656,"ccip_monthly_volume":18000000000,"ccip_yoy_growth":0.62,"ccip_cumulative_value":28000000000000,"adi_tokenized_assets":240000000000,"revenue_30d":4550000,"new_integrations":18,"new_chains":22,"etf_approved":true,"etf_grayscale":"GLNK","etf_bitwise":"CLNK","etf_consecutive_inflow_weeks":13,"aave_v4_exclusive_oracle":true,"lido_ccip_wsteth":true,"coinbase_ccip_bridge":true,"jpmorgan_settlement_trial":true,"mastercard_integration":true,"market_cap":6590000000},
-    "arb": {"price":0.1156,"change_24h":-0.68,"tvl":1958587542,"stablecoin_supply":3761671749,"fees_30d":383444,"revenue_24h":12686,"next_unlock_date":"2026-04-16","next_unlock_amount":"92.65M ARB","next_unlock_pct":0.93,"supply_unlocked_pct":60.41,"dao_treasury":150000000,"fee_sharing_proposal":"50pct_surplus_sequencer_fees","market_cap":698100000},
-    "monad": {"price":0.0356,"change_24h":1.08,"tvl":378121176,"stablecoin_supply":456695606,"daily_fee_revenue":3000,"fdv":2200000000,"fdv_peak":4700000000,"bridged_tvl":654420000,"next_unlock_date":"2026-04-24","major_unlock_cliff":"2026-11","nyse_partnership":true,"securitize_partnership":true,"ecosystem_projects":300,"market_cap":385400000},
-    "plume": {"price":0.00975,"change_24h":2.53,"tvl":11338352,"stablecoin_supply":208546979,"rwa_assets":645000000,"rwa_holders":280000,"wisdomtree_pilot":true,"krw1_integration":true,"nest_protocol_live":true,"ath":0.2475,"ath_change":-96.06,"market_cap":50700000}
+  "timestamp": "2026-04-12T20:00:00+08:00",
+  "session": "evening",
+  "alpha_signals": [
+    {
+      "coin": "MON",
+      "level": "red",
+      "title": "Monad 代币分配概览更新",
+      "detail": "Monad Foundation 于 4/10 发布截至 3/31 的最新代币分配概览，尚无任何媒体报道。可能包含解锁/分配条款调整。",
+      "source_type": "official_announcement",
+      "source_url": "https://www.monad.xyz/announcements"
+    },
+    {
+      "coin": "MON",
+      "level": "red",
+      "title": "专用设备补贴计划",
+      "detail": "4/8 公告：Monad Foundation 将为 TVL ≥$2.5M 的协议团队补贴专用签名设备，覆盖多签、国库和关键操作。",
+      "source_type": "official_announcement",
+      "source_url": "https://www.monad.xyz/announcements"
+    },
+    {
+      "coin": "ETH",
+      "level": "yellow",
+      "title": "Glamsterdam devnet 即将启动",
+      "detail": "核心开发者在 ACDE #234（4/9）后信号 devnet 将于 4/13-19 周启动。主网目标 6 月（有 Q3/Q4 滑移风险）。",
+      "source_type": "developer",
+      "source_url": "https://github.com/ethereum/pm"
+    },
+    {
+      "coin": "LINK",
+      "level": "yellow",
+      "title": "DTCC 获 SEC 免行动函，H2 2026 启动代币化",
+      "detail": "DTCC 子公司 DTC 获 SEC 批准，将于 H2 2026 对 Russell 1000 股票、主要 ETF 和美国国债进行链上代币化，使用 Chainlink 数据馈送 + CCIP。",
+      "source_type": "regulatory",
+      "source_url": "https://bitcoinethereumnews.com/tech/dtcc-gains-sec-approval-for-chainlink-powered-u-s-securities-tokenization/"
+    },
+    {
+      "coin": "LINK",
+      "level": "yellow",
+      "title": "JPMorgan + UBS LIVE CCIP 结算试点",
+      "detail": "从 PoC 升级为实际交易路由。JPMorgan AUM $3.7T，UBS AUM $5T+。仅专业媒体覆盖。",
+      "source_type": "partnership",
+      "source_url": "https://www.openpr.com/news/4466313/jpmorgan-and-ubs-test-live-ccip-settlement-pilots-targeting"
+    },
+    {
+      "coin": "LINK",
+      "level": "yellow",
+      "title": "SWIFT 40 家银行区块链账本 2026 年中上线",
+      "detail": "SWIFT Hyperledger Besu 兼容链，Chainlink 集成，目标 40+ 银行参与。",
+      "source_type": "partnership",
+      "source_url": "https://coinpaprika.com/news/swift-blockchain-ledger-40-banks-2026/"
+    },
+    {
+      "coin": "LINK",
+      "level": "yellow",
+      "title": "Aave CRE/Robot 治理提案",
+      "detail": "活跃 Aave 论坛提案：将 Chainlink CRE 集成到 Aave Robot，实现 18 条链上的自动化治理操作。",
+      "source_type": "governance",
+      "source_url": "https://governance.aave.com/t/integration-of-chainlink-cre-into-aave-robot/24366"
+    },
+    {
+      "coin": "ETH",
+      "level": "yellow",
+      "title": "BlackRock ETHB 添加 Galaxy Digital 验证者",
+      "detail": "4/8，ETHB AUM 突破 $435M。上线仅 1 个月，Galaxy Digital 加入验证者阵容。",
+      "source_type": "institutional",
+      "source_url": "https://blockonomi.com/blackrock-adds-galaxy-digital-to-ethb-validator-lineup/"
+    },
+    {
+      "coin": "ETH",
+      "level": "yellow",
+      "title": "Lido Fast Swaps 上线（CoWSwap 集成）",
+      "detail": "4/9，用户可通过 CoWSwap 即时退出 stETH，无需等待验证者退出队列。",
+      "source_type": "ecosystem",
+      "source_url": "https://www.cryptowisser.com/news/integrated-fast-swaps-are-live-on-lido"
+    },
+    {
+      "coin": "ETH",
+      "level": "yellow",
+      "title": "以太坊基金会质押 70,000 ETH",
+      "detail": "EF 完成 $143M 质押承诺，从定期卖出转向赚取收益（~$3.9-5.4M/年），结构性减少 EF 抛压。",
+      "source_type": "institutional",
+      "source_url": "https://coinmarketcap.com/cmc-ai/ethereum/latest-updates/"
+    },
+    {
+      "coin": "LINK",
+      "level": "yellow",
+      "title": "Aave SVR 扩展至 Arbitrum + Base",
+      "detail": "DAO 近乎全票通过。SVR 已在 Ethereum 上回收 $16.7M+ 非毒性 MEV。收入分成 Aave 65%/Chainlink 35%。",
+      "source_type": "partnership",
+      "source_url": "https://www.cryptowisser.com/news/aave-adopts-chainlink-svr-on-arbitrum-and-base"
+    },
+    {
+      "coin": "LINK",
+      "level": "yellow",
+      "title": "Reserve 累积 YoY 增长 377%",
+      "detail": "Reserve 持仓达 ~1.77M LINK，鲸鱼钱包（≥1K LINK）达 25,420 个创 2026 新高。交易所月净流出 ~2M LINK。",
+      "source_type": "on_chain",
+      "source_url": "https://coinfomania.com/chainlink-whale-wallets-rise-to-125-as-accumulation-grows/"
+    },
+    {
+      "coin": "BTC",
+      "level": "green",
+      "title": "CPI 3.3% 超预期，降息预期归零",
+      "detail": "4/11 发布，主流媒体已广泛报道。BTC 反弹至 $72K+，通胀对冲叙事。",
+      "source_type": "macro",
+      "source_url": null
+    },
+    {
+      "coin": "SOL",
+      "level": "green",
+      "title": "Drift Protocol $280M+ 被盗",
+      "detail": "社会工程攻击，SOL 周跌 ~13%。Solana Foundation 推出 STRIDE + SIRN 响应。",
+      "source_type": "security",
+      "source_url": "https://www.theblock.co/post/396493/solana-foundation-stride"
+    }
+  ],
+  "holdings": {
+    "link": {
+      "price": 8.79,
+      "change_24h": -2.56,
+      "market_cap": 6389836362,
+      "staking_tvl_link": 45000000,
+      "staking_tvl_usd": 395550000,
+      "staking_apy": 0.0432,
+      "reserve_accumulated_link": 1770000,
+      "ccip_monthly_volume": 18000000000,
+      "ccip_yoy_growth": 0.62,
+      "adi_tokenized_assets": 240000000000,
+      "revenue_30d": 4550000,
+      "new_integrations": 18,
+      "new_chains": 22,
+      "etf_approved": true,
+      "etf_combined_aum": 88000000,
+      "catalysts": [
+        {"id": "dtcc_tokenization", "description": "DTCC 代币化 H2 2026", "status": "progressing", "detail": "SEC 免行动函已获批，Russell 1000/ETF/国债代币化"},
+        {"id": "swift_40_banks", "description": "SWIFT 40 行上线", "status": "progressing", "detail": "目标 2026 年中实盘，Chainlink 集成"},
+        {"id": "jpm_ubs_live", "description": "JPMorgan/UBS 实盘试点", "status": "progressing", "detail": "从 PoC 升级为 LIVE 结算"},
+        {"id": "ccip_v15", "description": "CCIP v1.5 主网", "status": "pending", "detail": "自助代币发行、zkRollup 支持"},
+        {"id": "aave_cre", "description": "Aave CRE 集成", "status": "active_proposal", "detail": "治理提案活跃中，18 链自动化"},
+        {"id": "aave_svr_multichain", "description": "Aave SVR 多链", "status": "completed", "detail": "已扩展至 Arbitrum + Base"},
+        {"id": "etf_flows", "description": "ETF (GLNK/CLNK)", "status": "stable", "detail": "合计 AUM ~$88M，流入平稳"},
+        {"id": "staking_v03", "description": "Staking v0.3", "status": "live", "detail": "费用基础收益转型进行中"}
+      ]
+    },
+    "eth": {
+      "price": 2204.11,
+      "change_24h": -1.86,
+      "eth_btc_ratio": 0.0308,
+      "market_cap": 266151738267,
+      "tvl": 54187125218,
+      "stablecoin_supply": 165420123470,
+      "staking_rate": 0.312,
+      "staking_eth": 35800000,
+      "gas_avg_usd": 0.15,
+      "daily_revenue": 50343,
+      "glamsterdam_upgrade_target": "June 2026",
+      "glamsterdam_risk": "may_slip_Q3_Q4",
+      "glamsterdam_devnet": "launching_week_of_apr_13",
+      "epbs_devnet": "devnet_5_in_progress",
+      "blackrock_ethb_aum": 435000000,
+      "blackrock_ethb_validator_galaxy": true,
+      "lido_fast_swaps": true,
+      "ef_staked_eth": 70000,
+      "catalysts": [
+        {"id": "glamsterdam_devnet", "description": "Glamsterdam devnet", "status": "imminent", "detail": "下周（4/13-19）启动，ACDE #234 确认"},
+        {"id": "epbs", "description": "ePBS (EIP-7732)", "status": "in_progress", "detail": "Devnet-5 进行中"},
+        {"id": "ef_staking", "description": "EF 质押 70K ETH", "status": "completed", "detail": "$143M 质押，减少 EF 抛压"},
+        {"id": "ethb", "description": "BlackRock ETHB", "status": "growing", "detail": "AUM $435M+，Galaxy Digital 验证者加入"},
+        {"id": "lido_fast_swaps", "description": "Lido Fast Swaps", "status": "live", "detail": "4/9 上线 CoWSwap 集成"},
+        {"id": "ether_machine_spac", "description": "Ether Machine SPAC 终止", "status": "terminated", "detail": "$1.6B 合并因市场条件终止（4/11）"}
+      ]
+    },
+    "monad": {
+      "price": 0.03356,
+      "change_24h": -4.99,
+      "market_cap": 362840732,
+      "tvl": 370539007,
+      "stablecoin_supply": 456128563,
+      "daily_fee_revenue": 3000,
+      "fdv": 2200000000,
+      "validators": 200,
+      "ecosystem_projects": 300,
+      "catalysts": [
+        {"id": "token_allocation_update", "description": "代币分配更新", "status": "new", "detail": "4/10 发布新版概览（截至 3/31），内容待分析"},
+        {"id": "device_subsidy", "description": "专用设备补贴", "status": "launched", "detail": "4/8 启动，TVL ≥$2.5M 团队可申请"},
+        {"id": "apr24_unlock", "description": "4/24 解锁", "status": "upcoming", "detail": "Category Labs Treasury，具体量未公开"},
+        {"id": "nov_unlock_cliff", "description": "11 月解锁悬崖", "status": "upcoming", "detail": "主要供应冲击"},
+        {"id": "momentum_wave2", "description": "Momentum Wave 2", "status": "planned", "detail": "Q2 2026 计划中"},
+        {"id": "nyse_securitize", "description": "NYSE/Securitize 合作", "status": "unverified", "detail": "多家二手媒体报道，无官方主源确认"},
+        {"id": "ponder_acquisition", "description": "Ponder 收购", "status": "reported", "detail": "开发者工具项目收购"}
+      ]
+    }
   },
-  "market_score": {"btc_trend":3,"funding":4,"sentiment":1,"macro":2,"total":10},
-  "alerts_triggered": ["arb_unlock_4_days","eth_divergence_8.6x","mon_divergence_4.9x","arb_divergence_3.1x","fgi_extreme_fear_16","sec_roundtable_apr16","link_18_new_integrations"],
-  "macro": {"next_fomc":"2026-04-28","fed_rate":"3.50-3.75%","fomc_hold_probability":97.9,"march_cpi_expected":3.3,"oil_surge_pct":50,"sec_roundtable":"2026-04-16","btc_options_expiry":"2026-04-24","trump_meme_gala":"2026-04-25","genius_act_deadline":"2026-07-18"},
-  "cross_chain_tvl": {"total":63708413149,"ethereum":55526120005,"solana":5834246074,"arbitrum":1958587542,"monad":378121176,"plume":11338352}
+  "market_context": {
+    "btc": {
+      "price": 71481,
+      "change_24h": -2.01,
+      "market_cap": 1430873646201,
+      "dominance": 57.5,
+      "fear_greed": 16,
+      "fear_greed_label": "Extreme Fear",
+      "etf_daily_flow": null,
+      "etf_apr10_flow": 358100000,
+      "etf_total_holdings_btc": 721090,
+      "mvrv_zscore": null,
+      "mvrv_ratio": null,
+      "sopr_7d": null,
+      "exchange_reserves": 2210000,
+      "exchange_reserves_trend": "7yr_low",
+      "whale_monthly_accumulation": 270000,
+      "funding_rate": null,
+      "funding_rate_direction": "persistently_negative",
+      "open_interest": 25000000000,
+      "key_support": 68200,
+      "key_resistance": 73595,
+      "trend_direction": "range_bound_bullish_tilt",
+      "high_7d": 73539,
+      "low_7d": 66795
+    },
+    "macro": {
+      "next_fomc": "2026-04-28",
+      "fed_rate": "4.25-4.50%",
+      "fomc_hold_probability": 94.8,
+      "cpi_apr11": 3.3,
+      "sec_roundtable": "2026-04-16",
+      "btc_options_expiry": "2026-04-24",
+      "trump_meme_gala": "2026-04-25",
+      "genius_act_deadline": "2026-07-18",
+      "arb_unlock": "2026-04-16",
+      "monad_unlock": "2026-04-24"
+    }
+  },
+  "watchlist": {
+    "sol": {
+      "price": 82.20,
+      "change_24h": -2.39,
+      "market_cap": 47246158295,
+      "tvl": 5725624500,
+      "headline": "Firedancer 上线+$1M 审计赏金；Drift $280M 被盗；STRIDE 响应发布",
+      "firedancer_status": "mainnet_live_audit",
+      "alpenglow_target": "Q3 2026",
+      "drift_exploit": 280000000,
+      "stride_launched": true
+    },
+    "arb": {
+      "price": 0.1114,
+      "change_24h": -2.68,
+      "market_cap": 672992276,
+      "tvl": 1920208023,
+      "headline": "4/16 解锁 92.65M ARB（2.01%）；无新费用分享提案；DAO 常规运营",
+      "next_unlock_date": "2026-04-16",
+      "next_unlock_amount": "92.65M ARB",
+      "next_unlock_pct": 2.01,
+      "fee_sharing_update": "no_new_proposal"
+    },
+    "plume": {
+      "price": 0.00975,
+      "change_24h": null,
+      "market_cap": 50700000,
+      "tvl": 11609876,
+      "headline": "WisdomTree 薪资代币化试点（4/1）；180+ 项目；RWA 3-5x 增长预期",
+      "wisdomtree_payroll": true,
+      "projects_count": 180,
+      "rwa_growth_forecast": "3-5x in 2026"
+    }
+  },
+  "market_score": {
+    "btc_trend": 3,
+    "funding": 3,
+    "sentiment": 1,
+    "macro": 2,
+    "total": 9
+  },
+  "alerts_triggered": [
+    "mon_delta_morning_-5.73%",
+    "arb_unlock_4_days",
+    "funding_persistently_negative_squeeze_risk",
+    "fgi_extreme_fear_16",
+    "sec_roundtable_apr16",
+    "sol_drift_exploit_280m"
+  ],
+  "cross_chain_tvl": {
+    "total": 62215106624,
+    "ethereum": 54187125218,
+    "solana": 5725624500,
+    "arbitrum": 1920208023,
+    "monad": 370539007,
+    "plume": 11609876
+  },
+  "_sources": {
+    "btc_price": "coingecko_api",
+    "eth_price": "coingecko_api",
+    "link_price": "coingecko_api",
+    "sol_price": "coingecko_api",
+    "arb_price": "coingecko_api",
+    "mon_price": "coingecko_api",
+    "plume_price": null,
+    "fear_greed": "alternative_me_api",
+    "tvl_all": "defillama_api",
+    "stablecoin_supply": "defillama_api",
+    "link_revenue": "defillama_api",
+    "eth_revenue": "defillama_api",
+    "sparkline": "coingecko_api",
+    "etf_flows": null,
+    "mvrv": null,
+    "exchange_reserves": "websearch_qualitative",
+    "whale_accumulation": "websearch_qualitative",
+    "funding_rate": "websearch_qualitative",
+    "open_interest": "websearch_qualitative"
+  },
+  "_freshness": {
+    "mvrv_zscore": {"value": null, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 1, "note": "API returned 404"},
+    "sopr_7d": {"value": null, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 1, "note": "no API source"},
+    "fear_greed": {"value": 16, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 2},
+    "exchange_reserves": {"value": 2210000, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 2, "note": "qualitative confirmation only"},
+    "whale_monthly_accumulation": {"value": 270000, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 2, "note": "qualitative confirmation only"}
+  }
 }
