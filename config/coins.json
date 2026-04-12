@@ -4,36 +4,57 @@
       "id": "btc",
       "name": "Bitcoin",
       "ticker": "BTC",
-      "priority": "P0",
+      "priority": "context",
       "enabled": true,
-      "role": "系统性风险锚",
-      "role_detail": "全市场风向标，决定山寨币走势基调",
+      "role": "市场环境锚",
+      "role_detail": "不持仓，作为市场环境背景判断山寨走势",
       "template": "market-overview",
-      "search_focus": ["price", "etf_flows", "whale_activity", "macro_correlation", "dominance", "on_chain", "derivatives", "technical"],
-      "metrics": {
-        "core": ["price", "24h_change", "7d_change", "fear_greed_index", "dominance", "altseason_index"],
-        "etf": ["daily_net_flow", "weekly_net_flow", "cumulative_aum", "top_fund_flows"],
-        "on_chain": ["mvrv_ratio", "sopr", "exchange_reserves", "exchange_reserves_change", "active_addresses"],
-        "derivatives": ["funding_rate", "open_interest", "options_max_pain", "long_short_ratio"],
-        "technical": ["key_support", "key_resistance", "trend_direction"]
-      },
+      "search_focus": ["etf_flows", "whale_activity", "on_chain", "derivatives", "macro"],
+      "search_volume": "4-5",
       "data_sources": {
-        "defillama_slug": null,
         "coingecko_id": "bitcoin",
         "webfetch_urls": {
           "etf_flows": "https://farside.co.uk/btc/",
           "etf_flows_backup": "https://sosovalue.com/assets/etf/us-btc-spot",
-          "fear_greed": "https://alternative.me/crypto/fear-and-greed-index/",
-          "funding_rate": "https://www.coinglass.com/FundingRate"
+          "fear_greed": "https://alternative.me/crypto/fear-and-greed-index/"
         },
         "api_endpoints": {
           "funding_rate": "https://open-api.coinglass.com/public/v2/funding",
           "open_interest": "https://open-api.coinglass.com/public/v2/open_interest",
           "long_short": "https://open-api.coinglass.com/public/v2/long_short"
+        },
+        "page_scraping": {
+          "mvrv": "https://www.coinglass.com/pro/i/mvrv",
+          "exchange_reserves": "https://cryptoquant.com/asset/btc/chart/exchange-flows/exchange-reserve"
         }
       },
-      "custom_searches": [],
-      "notes": "BTC 数据必须最先采集，山寨分析依赖 BTC 状态判断"
+      "notes": "BTC 搜索量压缩至 4-5 条，仅采集市场环境数据"
+    },
+    {
+      "id": "link",
+      "name": "Chainlink",
+      "ticker": "LINK",
+      "priority": "P0",
+      "enabled": true,
+      "role": "第一仓位",
+      "role_detail": "Oracle 基础设施 + CCIP 跨链 + 质押收益，Reserve 累积是独特买压",
+      "template": "coin-holding",
+      "search_focus": ["partnerships", "ccip_volume", "staking_tvl", "reserve_accumulation", "etf_flows", "governance"],
+      "search_volume": "8-10",
+      "data_sources": {
+        "defillama_slug": "chainlink",
+        "coingecko_id": "chainlink"
+      },
+      "alpha_sources": {
+        "github": "https://github.com/smartcontractkit",
+        "blog": "https://blog.chain.link",
+        "ccip_contracts": "搜索 Etherscan 近 24h 新部署的 CCIP 相关合约",
+        "reserve_contract": "搜索 Chainlink Reserve 合约最近买入事件",
+        "partnerships": ["Aave", "Coinbase", "Swift", "DTCC", "JPMorgan", "Mastercard", "Lido", "GMX"],
+        "etf_tracking": ["GLNK Grayscale", "CLNK Bitwise"],
+        "governance": "Chainlink community forum + Snapshot"
+      },
+      "notes": "第一仓位，获得最大搜索量。一手信源全扫：GitHub、链上合约、官方 blog、治理提案、合作方公告"
     },
     {
       "id": "eth",
@@ -41,85 +62,61 @@
       "ticker": "ETH",
       "priority": "P0",
       "enabled": true,
-      "role": "生态基础层",
-      "role_detail": "DeFi/L2 基础设施，ETH/BTC 比率反映生态信心",
-      "template": "coin-standard",
-      "search_focus": ["price", "l2_data", "staking_rate", "upgrade_progress", "eth_btc_ratio", "gas_fees"],
-      "metrics": {
-        "core": ["price", "24h_change", "7d_change", "eth_btc_ratio"],
-        "ecosystem": ["l2_total_tvl", "staking_rate", "gas_fees_gwei", "blob_fees"],
-        "defi": ["tvl", "dex_24h_volume", "lending_tvl"]
-      },
+      "role": "第二仓位",
+      "role_detail": "DeFi/L2 基础设施，Glamsterdam 升级是核心催化剂",
+      "template": "coin-holding",
+      "search_focus": ["upgrade_progress", "l2_data", "staking_rate", "eth_btc_ratio", "ecosystem"],
+      "search_volume": "6-8",
       "data_sources": {
         "defillama_slug": "ethereum",
-        "coingecko_id": "ethereum",
-        "l2beat_tracked": true,
-        "webfetch_urls": {
-          "tvl": "https://defillama.com/chain/Ethereum",
-          "gas": "https://etherscan.io/gastracker"
-        }
+        "coingecko_id": "ethereum"
       },
-      "custom_searches": [],
-      "notes": "ETH/BTC 比率是判断 ETH 相对强弱的核心指标"
+      "alpha_sources": {
+        "github": "https://github.com/ethereum/pm",
+        "blog": "https://blog.ethereum.org",
+        "allcoredevs": "AllCoreDevs 会议纪要（GitHub ethereum/pm）",
+        "eip_tracker": "EIP 状态变更（Glamsterdam 相关 EIP-7732/EIP-7928）",
+        "partnerships": ["BlackRock", "Lido", "Coinbase", "Uniswap"]
+      },
+      "notes": "第二仓位。重点跟踪 Glamsterdam 升级进度和 ETH/BTC 比率"
+    },
+    {
+      "id": "monad",
+      "name": "Monad",
+      "ticker": "MON",
+      "priority": "P1",
+      "enabled": true,
+      "role": "第三仓位",
+      "role_detail": "高性能 EVM L1，关注生态建设和解锁风险",
+      "template": "coin-holding",
+      "search_focus": ["ecosystem_growth", "tvl", "partnerships", "unlock_schedule"],
+      "search_volume": "6-8",
+      "data_sources": {
+        "defillama_slug": "monad",
+        "coingecko_id": "monad"
+      },
+      "alpha_sources": {
+        "blog": "https://monad.xyz/blog",
+        "partnerships": ["NYSE", "Securitize", "Uniswap", "Curve"],
+        "ecosystem": "新 DApp 部署、TVL 变化、开发者活动"
+      },
+      "notes": "第三仓位。关注生态有机需求 vs 激励驱动（日费用是关键指标），11 月解锁悬崖"
     },
     {
       "id": "sol",
       "name": "Solana",
       "ticker": "SOL",
-      "priority": "P1",
+      "priority": "P2",
       "enabled": true,
-      "role": "高性能L1标杆",
-      "role_detail": "DEX 交易量和生态活跃度领先，Firedancer 是关键催化剂",
-      "template": "coin-standard",
-      "search_focus": ["price", "dex_volume", "ecosystem_activity", "firedancer"],
-      "metrics": {
-        "core": ["price", "24h_change", "7d_change"],
-        "ecosystem": ["dex_24h_volume", "tvl", "active_addresses", "tps"],
-        "defi": ["tvl", "dex_volume_share"]
-      },
+      "role": "观察仓",
+      "role_detail": "高性能 L1 标杆，观察 Firedancer 和生态活跃度",
+      "template": "coin-holding",
+      "search_volume": "2-3",
       "data_sources": {
         "defillama_slug": "solana",
-        "coingecko_id": "solana",
-        "webfetch_urls": {
-          "tvl": "https://defillama.com/chain/Solana"
-        }
+        "coingecko_id": "solana"
       },
-      "custom_searches": [
-        "Solana Firedancer validator client update"
-      ],
-      "notes": "关注 DEX 交易量是否持续领先 Ethereum L1"
-    },
-    {
-      "id": "link",
-      "name": "Chainlink",
-      "ticker": "LINK",
-      "priority": "P1",
-      "enabled": true,
-      "role": "核心持仓",
-      "role_detail": "Oracle 基础设施 + CCIP 跨链 + 质押收益，Reserve 累积是独特买压",
-      "template": "coin-deep-track",
-      "search_focus": ["price", "partnerships", "ccip_volume", "staking_tvl", "reserve_accumulation"],
-      "metrics": {
-        "core": ["price", "24h_change", "7d_change"],
-        "specific": ["staking_tvl_link", "reserve_accumulated_link", "ccip_transaction_volume", "ccip_chains_supported"],
-        "catalysts": [
-          {"id": "link_etf", "description": "LINK ETF 申请/审批进展", "status": "pending"},
-          {"id": "ccip_v15", "description": "CCIP v1.5 主网上线", "status": "pending"},
-          {"id": "staking_v03", "description": "质押 v0.3 扩展至 200M+ LINK", "status": "pending"},
-          {"id": "svr_adoption", "description": "SVR (Smart Value Recapture) 采纳", "status": "pending"}
-        ]
-      },
-      "data_sources": {
-        "defillama_slug": "chainlink",
-        "coingecko_id": "chainlink",
-        "webfetch_urls": {}
-      },
-      "custom_searches": [
-        "Chainlink CCIP cross-chain transaction volume",
-        "Chainlink Reserve token accumulation",
-        "Chainlink new partnerships integrations"
-      ],
-      "notes": "Reserve 累积是独特的买压指标，每期必须跟踪。质押 TVL 反映供应锁定程度"
+      "notes": "观察仓，报告中仅一行摘要"
     },
     {
       "id": "arb",
@@ -127,64 +124,18 @@
       "ticker": "ARB",
       "priority": "P2",
       "enabled": true,
-      "role": "核心持仓",
-      "role_detail": "以太坊最大 L2，费用分享和 Stylus 是关键催化剂",
-      "template": "coin-deep-track",
-      "search_focus": ["price", "tvl", "fee_revenue", "unlock_schedule", "dao_proposals"],
-      "metrics": {
-        "core": ["price", "24h_change", "7d_change"],
-        "specific": ["tvl", "stablecoin_supply", "daily_transactions", "sequencer_revenue", "next_unlock_date", "next_unlock_amount"],
-        "catalysts": [
-          {"id": "fee_sharing", "description": "费用分享机制提案通过", "status": "pending"},
-          {"id": "stylus_adoption", "description": "Stylus (Rust/C++ 合约) 采纳率增长", "status": "pending"},
-          {"id": "rwa_growth", "description": "RWA (真实资产) 活动增长", "status": "pending"},
-          {"id": "arb_bold", "description": "BoLD 争议协议上线", "status": "pending"}
-        ]
-      },
+      "role": "观察仓",
+      "role_detail": "以太坊最大 L2，观察费用分享提案和解锁",
+      "template": "coin-holding",
+      "search_volume": "2-3",
       "data_sources": {
         "defillama_slug": "arbitrum",
         "coingecko_id": "arbitrum",
         "webfetch_urls": {
-          "tvl": "https://defillama.com/chain/Arbitrum",
           "unlocks": "https://token.unlocks.app/arbitrum"
         }
       },
-      "custom_searches": [
-        "Arbitrum DAO governance proposal",
-        "Arbitrum token unlock schedule"
-      ],
-      "notes": "解锁进度是核心风险因素，每期必查"
-    },
-    {
-      "id": "monad",
-      "name": "Monad",
-      "ticker": "MON",
-      "priority": "P2",
-      "enabled": true,
-      "role": "观察仓",
-      "role_detail": "高性能 EVM L1 新秀，关注早期生态建设和解锁风险",
-      "template": "coin-watchlist",
-      "search_focus": ["price", "tvl", "ecosystem_growth", "development_updates", "unlock_schedule"],
-      "metrics": {
-        "core": ["price", "24h_change", "7d_change"],
-        "specific": ["tvl", "weekly_on_chain_fees", "active_addresses", "next_unlock_date", "next_unlock_amount"],
-        "catalysts": [
-          {"id": "ecosystem_dapps", "description": "新 DApp 上线数量增长", "status": "pending"},
-          {"id": "defi_tvl_growth", "description": "DeFi TVL 突破关键里程碑", "status": "pending"}
-        ]
-      },
-      "data_sources": {
-        "defillama_slug": "monad",
-        "coingecko_id": "monad",
-        "webfetch_urls": {
-          "tvl": "https://defillama.com/chain/Monad"
-        }
-      },
-      "custom_searches": [
-        "Monad ecosystem new projects dApps",
-        "Monad token unlock vesting schedule"
-      ],
-      "notes": "观察仓，重点关注解锁风险和早期生态有机需求"
+      "notes": "观察仓，报告中仅一行摘要。注意解锁日期"
     },
     {
       "id": "plume",
@@ -193,30 +144,14 @@
       "priority": "P2",
       "enabled": true,
       "role": "观察仓",
-      "role_detail": "RWA 专注链，将真实世界资产代币化上链，关注 RWA 生态采纳和合作",
-      "template": "coin-watchlist",
-      "search_focus": ["price", "tvl", "rwa_ecosystem", "partnerships", "development_updates"],
-      "metrics": {
-        "core": ["price", "24h_change", "7d_change"],
-        "specific": ["tvl", "rwa_assets_tokenized", "active_addresses", "next_unlock_date", "next_unlock_amount"],
-        "catalysts": [
-          {"id": "rwa_partnerships", "description": "新 RWA 合作伙伴/资产类别接入", "status": "pending"},
-          {"id": "tvl_growth", "description": "TVL 突破关键里程碑", "status": "pending"},
-          {"id": "institutional_adoption", "description": "机构级 RWA 产品上线", "status": "pending"}
-        ]
-      },
+      "role_detail": "RWA 专注链，观察真实世界资产代币化进展",
+      "template": "coin-holding",
+      "search_volume": "2-3",
       "data_sources": {
         "defillama_slug": "plume",
-        "coingecko_id": "plume-network",
-        "webfetch_urls": {
-          "tvl": "https://defillama.com/chain/Plume"
-        }
+        "coingecko_id": "plume-network"
       },
-      "custom_searches": [
-        "Plume Network RWA ecosystem projects",
-        "Plume token unlock vesting schedule"
-      ],
-      "notes": "RWA 赛道观察仓，关注真实世界资产代币化进展和机构采纳"
+      "notes": "观察仓，报告中仅一行摘要"
     }
   ]
 }
