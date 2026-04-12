@@ -22,17 +22,42 @@
 |------|------|------|
 | CoinGecko | `/api/v3/simple/price?ids={所有币}&vs_currencies=usd&include_24hr_change=true&include_7d_change=true&include_market_cap=true` | 全币种价格/变化/市值 |
 | CoinGecko | `/api/v3/coins/bitcoin?sparkline=true&developer_data=true` | BTC sparkline(168点)/ATH/GitHub |
+| CoinGlass | `open-api.coinglass.com/public/v2/funding` | 资金费率（全交易所） |
+| CoinGlass | `open-api.coinglass.com/public/v2/open_interest` | 未平仓合约 |
+| CoinGlass | `open-api.coinglass.com/public/v2/long_short` | 多空比 |
+| Blockchain.com | `api.blockchain.info/charts/estimated-transaction-volume?timespan=7days&format=json` | BTC 交易量 |
 | DeFiLlama | `/v2/chains` | 全链 TVL |
 | DeFiLlama | `/overview/fees` | 协议费用/收入 |
 | DeFiLlama | `/summary/fees/{protocol}?dataType=dailyRevenue` | LINK/ARB 收入明细 |
 | DeFiLlama | `stablecoins.llama.fi/stablecoinchains` | 各链稳定币供应 |
 | Alternative.me | `/fng/` | Fear & Greed Index |
 
-**WebFetch 页面抓取（API 不覆盖的）：** ETF 流向 (`farside.co.uk/btc/`)、代币解锁 (`token.unlocks.app/`)
+**WebFetch 页面抓取（API 不覆盖的，按优先级尝试）：**
 
-**WebSearch 兜底（付费 API 降级）：** MVRV/SOPR/交易所储备、资金费率/OI/多空比、鲸鱼转账、期权 MaxPain、技术面支撑阻力、新闻/合作等定性信息
+| 数据 | 主源 | 备用源 |
+|------|------|--------|
+| ETF 流向 | `farside.co.uk/btc/` | `sosovalue.com/assets/etf/us-btc-spot` |
+| 代币解锁 | `token.unlocks.app/` | — |
 
-失败处理：WebFetch 失败 → WebSearch 补充。都失败 → 标记「数据暂缺」。
+**WebSearch 仅限定性信息（参见「数据真实性」规则）：** 新闻/合作/路线图进展、MVRV/SOPR 趋势方向（但数值必须来自 API 或页面原文）、鲸鱼转账事件、期权 MaxPain、技术面支撑阻力位、宏观事件
+
+**降级链路（每个数据字段按此顺序尝试）：**
+1. 免费 API JSON → 取返回值
+2. 页面抓取（主源 → 备用源）→ 从 HTML 原文提取数字
+3. 都失败 → 字段写 `null`，报告写「数据暂缺」
+4. **禁止**：从 WebSearch 结果中提取数值填入 JSON
+
+**数据来源标注：** `data/latest.json` 中增加 `_sources` 对象，记录关键字段的数据来源。格式：
+```json
+"_sources": {
+  "btc_price": "coingecko_api",
+  "btc_sparkline": "coingecko_api",
+  "etf_daily_flow": "farside_page",
+  "mvrv_zscore": null,
+  "funding_rate": "coinglass_api"
+}
+```
+来源值为: `coingecko_api` | `coinglass_api` | `blockchain_api` | `defillama_api` | `alternative_api` | `farside_page` | `sosovalue_page` | `token_unlocks_page` | `null`（未获取）。禁止出现 `websearch` 作为数值字段的来源。
 
 ---
 
@@ -87,11 +112,25 @@
 
 ---
 
+## 数据真实性（硬规则，不可违反）
+
+1. **数值型字段（价格、sparkline 序列、ETF 流向金额、链上指标数值、TVL、费用等）必须且只能来自 API JSON 返回值或页面原文中可直接提取的数字。** 禁止从 WebSearch 摘要中推断、估算、外推或编造任何数值。
+2. **WebSearch 仅可用于定性信息：** 新闻事件、合作公告、趋势判断、路线图进展等文字描述。不可用于填充 `data/latest.json` 中的数值字段。
+3. **数据缺失时的处理：**
+   - `data/latest.json` 中该字段写 `null`
+   - Markdown 报告中该指标写「数据暂缺」
+   - HTML 图表：placeholder 用空数组 `[]`，前端自动显示「数据暂缺」提示
+4. **sparkline 数据必须来自 CoinGecko `/coins/bitcoin?sparkline=true` 返回的 `sparkline_in_7d.price` 数组原值。** 如果 API 调用失败，`{{btc_sparkline_data}}` 填 `[]`，不可手工构造价格序列。
+5. **ETF 流向数据必须来自 farside.co.uk 页面抓取的原始表格数值。** 如果页面无法访问或解析失败，相关字段写 `null`，不可从搜索结果拼凑。
+6. **与上期数据对比时，如果某字段上期为 `null` 或本期为 `null`，则跳过该字段的 delta 计算**，不可用默认值替代。
+
+---
+
 ## 错误处理
 
 | 场景 | 处理 |
 |------|------|
-| WebFetch 失败 | WebSearch 兜底 |
+| WebFetch 失败 | WebSearch 补充定性信息；数值字段标 `null` / 「数据暂缺」 |
 | WebSearch 无结果 | 标记「数据暂缺」|
 | config 损坏 | 停止，写 `reports/YYYY-MM-DD_error.md` |
 | 历史数据缺失 | 跳过对比 |
@@ -101,9 +140,15 @@
 
 ## 调度
 
-```
-CronCreate(cron: "57 7 * * *", prompt: "执行加密货币情报监控，Phase 0-6 完整执行，morning 报告。", durable: true, recurring: true)
-CronCreate(cron: "3 20 * * *", prompt: "执行加密货币情报监控，Phase 0-6 完整执行，evening 报告。", durable: true, recurring: true)
-```
+由 macOS launchd 驱动，plist 位于 `~/Library/LaunchAgents/com.crypto-monitor.{morning,evening}.plist`。
+plist 调用 `scripts/run-report.sh {session}`，该脚本负责：
+1. 日志轮转（按日期命名 `logs/YYYY-MM-DD_{session}.log`，7 天自动清理）
+2. 杀残留进程 + 等待网络
+3. 调用 `claude -p` 生成报告
+4. 验证产出文件（HTML + MD 存在且非空）
+5. 成功 → 调用 `telegram-push.sh` 推送
+6. 失败 → 发送 Telegram 告警（包含失败原因和日志路径）
 
-> 7 天自动过期，需重建。备用：macOS launchd 调用 `claude -p "..."`
+系统时区为 Asia/Shanghai (UTC+8)，plist 中 Hour 直接使用本地时间。
+- 晨报：08:00 UTC+8
+- 晚报：20:00 UTC+8

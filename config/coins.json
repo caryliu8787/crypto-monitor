@@ -22,8 +22,14 @@
         "coingecko_id": "bitcoin",
         "webfetch_urls": {
           "etf_flows": "https://farside.co.uk/btc/",
+          "etf_flows_backup": "https://sosovalue.com/assets/etf/us-btc-spot",
           "fear_greed": "https://alternative.me/crypto/fear-and-greed-index/",
           "funding_rate": "https://www.coinglass.com/FundingRate"
+        },
+        "api_endpoints": {
+          "funding_rate": "https://open-api.coinglass.com/public/v2/funding",
+          "open_interest": "https://open-api.coinglass.com/public/v2/open_interest",
+          "long_short": "https://open-api.coinglass.com/public/v2/long_short"
         }
       },
       "custom_searches": [],

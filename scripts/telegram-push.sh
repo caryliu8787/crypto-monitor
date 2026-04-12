@@ -32,8 +32,18 @@ PAGES_URL="https://caryliu8787.github.io/crypto-monitor/reports/${DATE}_${SESSIO
 if [ -f "$HTML_FILE" ]; then
   echo "Pushing report to GitHub..."
   git add "$HTML_FILE" data/latest.json 2>/dev/null
-  git commit -m "Report: ${DATE} ${SESSION}" --allow-empty 2>/dev/null || true
-  git push origin main 2>&1 | tail -1
+  # Only commit if there are staged changes (avoid duplicate commits)
+  if ! git diff --cached --quiet 2>/dev/null; then
+    git commit -m "Report: ${DATE} ${SESSION}"
+  else
+    echo "No new changes to commit (already committed by Claude)."
+  fi
+  # Only push if local is ahead of remote
+  if [ "$(git rev-list --count origin/main..HEAD 2>/dev/null)" -gt 0 ]; then
+    git push origin main 2>&1 | tail -1
+  else
+    echo "Already up to date with remote."
+  fi
   echo "Waiting for GitHub Pages deploy..."
   for i in $(seq 1 12); do
     sleep 10

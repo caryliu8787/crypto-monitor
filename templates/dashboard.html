@@ -256,6 +256,19 @@ p, li {
   max-height: 100%;
 }
 
+.no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 80px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
 /* ===== ETF Text Summary ===== */
 .etf-text-summary {
   font-size: 13px;
@@ -609,6 +622,7 @@ p, li {
   <div class="card">
     <div class="chart-inline">
       <canvas id="chartSparkline"></canvas>
+      <div id="noDataSparkline" class="no-data" style="display:none;">数据暂缺 — CoinGecko sparkline API 未返回有效数据</div>
     </div>
   </div>
 
@@ -617,6 +631,7 @@ p, li {
   <div class="card">
     <div class="chart-small">
       <canvas id="chartETF"></canvas>
+      <div id="noDataETF" class="no-data" style="display:none;">数据暂缺 — ETF 流向数据未获取</div>
     </div>
     <div class="etf-text-summary">{{etf_flow_text}}</div>
     <div class="analysis-block" style="margin-top:10px;">
@@ -835,7 +850,11 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ---------- BTC 7d Sparkline ---------- */
   (function () {
     var data = {{btc_sparkline_data}};  /* DATA_PLACEHOLDER */
-    if (!Array.isArray(data) || data.length === 0) return;
+    if (!Array.isArray(data) || data.length === 0) {
+      document.getElementById('chartSparkline').style.display = 'none';
+      document.getElementById('noDataSparkline').style.display = 'flex';
+      return;
+    }
     var support = parseFloat('{{btc_support}}');
     var resistance = parseFloat('{{btc_resistance}}');
     var labels = data.map(function (_, i) { return i; });
@@ -894,7 +913,11 @@ document.addEventListener('DOMContentLoaded', function () {
   (function () {
     var labels = {{etf_chart_labels}};  /* DATA_PLACEHOLDER */
     var values = {{etf_chart_data}};    /* DATA_PLACEHOLDER */
-    if (!Array.isArray(labels) || labels.length === 0) return;
+    if (!Array.isArray(labels) || labels.length === 0) {
+      document.getElementById('chartETF').style.display = 'none';
+      document.getElementById('noDataETF').style.display = 'flex';
+      return;
+    }
     var colors = values.map(function (v) { return v >= 0 ? 'rgba(63,185,80,.7)' : 'rgba(248,81,73,.7)'; });
     new Chart(document.getElementById('chartETF'), {
       type: 'bar',
