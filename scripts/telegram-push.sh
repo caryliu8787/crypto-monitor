@@ -5,7 +5,7 @@
 # 1. Git push HTML report to GitHub (triggers GitHub Pages update)
 # 2. Send report URL to Telegram (click to open in mobile browser)
 
-set -euo pipefail
+set -uo pipefail
 cd "$(dirname "$0")/.."
 
 # Parse config — env vars take priority over config file
@@ -74,8 +74,33 @@ except:
     print("data/latest.json not found")
     sys.exit(1)
 
-c = d.get("coins", {})
-btc = c.get("btc", {})
+# Support both old (coins.*) and new (holdings/market_context/watchlist) structure
+if "holdings" in d:
+    # New alpha-first structure
+    holdings = d.get("holdings", {})
+    btc = d.get("market_context", {}).get("btc", {})
+    watchlist = d.get("watchlist", {})
+    coins_data = [
+        ("BTC", btc),
+        ("LINK", holdings.get("link", {})),
+        ("ETH", holdings.get("eth", {})),
+        ("MON", holdings.get("monad", {})),
+        ("SOL", watchlist.get("sol", {})),
+        ("ARB", watchlist.get("arb", {})),
+        ("PLUME", watchlist.get("plume", {}))
+    ]
+    arb = watchlist.get("arb", {})
+else:
+    # Legacy structure
+    c = d.get("coins", {})
+    btc = c.get("btc", {})
+    coins_data = [
+        ("BTC", c.get("btc",{})), ("ETH", c.get("eth",{})), ("SOL", c.get("sol",{})),
+        ("LINK", c.get("link",{})), ("ARB", c.get("arb",{})),
+        ("MON", c.get("monad",{})), ("PLUME", c.get("plume",{}))
+    ]
+    arb = c.get("arb", {})
+
 score = d.get("market_score", {})
 
 def pct(v):
@@ -103,11 +128,6 @@ for name, val in dims:
     score_lines += f"{name} {bar} {val}/5\n"
 
 # Prices
-coins_data = [
-    ("BTC", c.get("btc",{})), ("ETH", c.get("eth",{})), ("SOL", c.get("sol",{})),
-    ("LINK", c.get("link",{})), ("ARB", c.get("arb",{})),
-    ("MON", c.get("monad",{})), ("PLUME", c.get("plume",{}))
-]
 price_lines = ""
 for name, coin in coins_data:
     p = coin.get("price")
@@ -117,33 +137,48 @@ for name, coin in coins_data:
 
 # Key metrics
 mvrv = btc.get("mvrv_zscore", "—")
-sopr = btc.get("sopr_sth", "—")
 reserves = btc.get("exchange_reserves")
 reserves_str = f"{reserves/1e6:.2f}M" if reserves else "—"
 funding = btc.get("funding_rate", "—")
+oi = btc.get("open_interest", 0) or 0
 support = btc.get("key_support")
 resistance = btc.get("key_resistance")
+
+# Alpha signals summary
+alpha = d.get("alpha_signals", [])
+alpha_str = ""
+if alpha:
+    red = [s for s in alpha if s.get("level") == "red"]
+    yellow = [s for s in alpha if s.get("level") == "yellow"]
+    if red:
+        alpha_str += f"🔴 首发 x{len(red)}: " + " | ".join(s.get("title","") for s in red[:3]) + "\n"
+    if yellow:
+        alpha_str += f"🟡 早期 x{len(yellow)}: " + " | ".join(s.get("title","") for s in yellow[:3]) + "\n"
 
 # Alerts
 alerts = d.get("alerts_triggered", [])
 alert_str = ""
 if alerts:
-    for a in alerts:
+    for a in alerts[:5]:
         alert_str += f"  ⚡ {a}\n"
 
 # Build message
-msg = f"""<b>📊 加密货币每日情报</b>
+msg = f"""<b>📊 加密货币 Alpha 情报</b>
 <code>{date} {session}</code>
 
 <b>FGI {fgi}</b> {btc.get('fear_greed_label','')} | 评分 <b>{total}/20</b> {phase}
-BTC主导率 {btc.get('dominance','—')}% | 山寨季 {btc.get('altseason_index','—')}/100
+BTC主导率 {btc.get('dominance','—')}%
 
-{score_lines}
-<b>━ 价格 ━</b>
+{score_lines}"""
+
+if alpha_str:
+    msg += f"<b>━ Alpha ━</b>\n{alpha_str}\n"
+
+msg += f"""<b>━ 价格 ━</b>
 {price_lines}
 <b>━ BTC 链上 ━</b>
-MVRV {mvrv} | SOPR {sopr} | 储备 {reserves_str}
-费率 {funding}% | OI ${btc.get('open_interest',0)/1e9:.1f}B"""
+MVRV {mvrv} | 储备 {reserves_str}
+费率 {funding}% | OI ${oi/1e9:.1f}B"""
 
 if support and resistance:
     msg += f"\n支撑 ${support:,} | 阻力 ${resistance:,}"
@@ -151,8 +186,6 @@ if support and resistance:
 if alert_str:
     msg += f"\n\n<b>━ 告警 ━</b>\n{alert_str}"
 
-# ARB unlock
-arb = c.get("arb", {})
 if arb.get("next_unlock_date"):
     msg += f"\n⚠️ ARB 解锁 {arb['next_unlock_date']}: {arb.get('next_unlock_amount','—')}"
 
