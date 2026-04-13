@@ -1,81 +1,16 @@
 {
-  "timestamp": "2026-04-13T08:00:00+08:00",
-  "session": "morning",
-  "alpha_signals": [
-    {
-      "coin": "LINK",
-      "level": "red",
-      "title": "CRE CLI v1.10.0 发布：企业级密钥管理",
-      "detail": "4/9 发布 Chainlink Runtime Environment CLI v1.10.0，新增组织级 secrets 管理、依赖刷新和关键 EVM Bindings 修复。CRE 工具链向企业生产就绪迈进。",
-      "source_type": "developer",
-      "source_url": "https://github.com/smartcontractkit/cre-cli/releases"
-    },
-    {
-      "coin": "ETH",
-      "level": "red",
-      "title": "Hegota 升级选定 FOCIL + EIP-7954 快速纳入 Glamsterdam",
-      "detail": "EF Checkpoint #9（4/10）：Glamsterdam 之后的 Hegota 升级选定 FOCIL（EIP-7805）为共识层主功能；EIP-7954（合约大小上限提升）快速纳入 Glamsterdam；目标 gas limit 基线 60M。",
-      "source_type": "developer",
-      "source_url": "https://blog.ethereum.org/2026/04/10/checkpoint-9"
-    },
-    {
-      "coin": "ETH",
-      "level": "yellow",
-      "title": "Reth 2.0 发布：1.7 Gigagas/s 吞吐",
-      "detail": "4/8 Paradigm 发布 Reth 2.0 执行客户端，实现 1.7 Gigagas/s 吞吐，磁盘占用 ~240GB。增强客户端多样性和 Glamsterdam 测试能力。",
-      "source_type": "developer",
-      "source_url": "https://www.cryptointegrat.com/p/ethereum-news-april-9-2026"
-    },
-    {
-      "coin": "ETH",
-      "level": "yellow",
-      "title": "MetaMask 上线 264 种代币化股票/ETF（Ondo Finance）",
-      "detail": "4/8 MetaMask 通过 Ondo Finance 在 Ethereum 和 BNB Chain 上支持 264 种代币化资产（股票、ETF）交易。主流钱包级 RWA 接入。",
-      "source_type": "ecosystem",
-      "source_url": "https://www.cryptointegrat.com/p/ethereum-news-april-9-2026"
-    },
-    {
-      "coin": "LINK",
-      "level": "yellow",
-      "title": "GLNK 零净流出日记录 + AUM ~$75M",
-      "detail": "Grayscale GLNK 自 2025/12 上市以来零净流出日，累计净流入 ~$99M，净资产 ~$73-75M（差异为 LINK 价格下跌而非赎回）。反驳 ETF 表现不佳叙事。",
-      "source_type": "institutional",
-      "source_url": "https://etfs.grayscale.com/glnk"
-    },
-    {
-      "coin": "BTC",
-      "level": "yellow",
-      "title": "Morgan Stanley 推出 MSBT ETF（14bps 费率）",
-      "detail": "4/8 Morgan Stanley 上线 BTC 现货 ETF（MSBT），管理费 0.14%，为市场最低之一。BTC ETF 总 AUM 突破 $150B。",
-      "source_type": "institutional",
-      "source_url": null
-    },
-    {
-      "coin": "ETH",
-      "level": "green",
-      "title": "BlackRock ETHB 单日净流入 $90.9M（4/9）",
-      "detail": "ETHB 4/9 净流入 41,075 ETH（~$90.94M），日成交量 $500M，总持仓 223,786 ETH。显著超过已知 $435M AUM。",
-      "source_type": "institutional",
-      "source_url": "https://themarketperiodical.com/2026/04/10/ethereum-price-eyes-8000-as-activity-peaks-blackrock-etf-launch/"
-    },
-    {
-      "coin": "MON",
-      "level": "green",
-      "title": "NYSE/Securitize 合作获多家媒体确认",
-      "detail": "此前为「未验证」状态。现 ainvest、CoinEdition、CoinCentral、The Block 等多家媒体已确认 Monad 与 NYSE/Securitize 的 24/7 代币化证券平台合作。MON 曾因此暴涨 15-25%。",
-      "source_type": "partnership",
-      "source_url": "https://www.ainvest.com/news/monad-token-surges-15-percent-nyse-securitize-strategic-alliances-2604/"
-    }
-  ],
+  "timestamp": "2026-04-13T20:00:00+08:00",
+  "session": "evening",
+  "alpha_signals": [],
   "holdings": {
     "link": {
-      "price": 8.74,
-      "change_24h": -3.66,
-      "market_cap": 6352260970,
+      "price": 8.73,
+      "change_24h": -0.63,
+      "market_cap": 6348893305,
       "staking_tvl_link": 45000000,
-      "staking_tvl_usd": 393300000,
+      "staking_tvl_usd": 392850000,
       "staking_apy": 0.0432,
-      "reserve_accumulated_link": 1770000,
+      "reserve_accumulated_link": 1774216,
       "ccip_monthly_volume": 18000000000,
       "ccip_yoy_growth": 0.62,
       "adi_tokenized_assets": 240000000000,
@@ -94,25 +29,25 @@
         {"id": "ccip_v15", "description": "CCIP v1.5 主网", "status": "pending", "detail": "自助代币发行、zkRollup 支持"},
         {"id": "aave_cre", "description": "Aave CRE 集成", "status": "active_proposal", "detail": "治理提案活跃中，18 链自动化"},
         {"id": "aave_svr_multichain", "description": "Aave SVR 多链", "status": "completed", "detail": "已扩展至 Arbitrum + Base"},
-        {"id": "etf_flows", "description": "ETF (GLNK/CLNK)", "status": "accumulating", "detail": "GLNK 零净流出日，累计流入 ~$99M"},
+        {"id": "etf_flows", "description": "ETF (GLNK/CLNK)", "status": "accumulating", "detail": "GLNK 零净流出日，累计流入 ~$99M；CLNK 于 1/14 上线 NYSE Arca"},
         {"id": "staking_v03", "description": "Staking v0.3", "status": "live", "detail": "费用基础收益转型进行中"},
         {"id": "cre_cli_v110", "description": "CRE CLI v1.10.0", "status": "released", "detail": "4/9 发布，企业级密钥管理 + 依赖刷新"}
       ]
     },
     "eth": {
-      "price": 2189.80,
-      "change_24h": -4.19,
-      "eth_btc_ratio": 0.03096,
-      "market_cap": 264544626756,
-      "tvl": 54010722028,
-      "stablecoin_supply": 166139341961,
+      "price": 2187.70,
+      "change_24h": -0.72,
+      "eth_btc_ratio": 0.03084,
+      "market_cap": 264184991316,
+      "tvl": 53462082037,
+      "stablecoin_supply": 165243989469,
       "staking_rate": 0.312,
-      "staking_eth": 35800000,
+      "staking_eth": 36080000,
       "gas_avg_usd": 0.15,
       "daily_revenue": 36499,
       "glamsterdam_upgrade_target": "June 2026",
       "glamsterdam_risk": "may_slip_Q3_Q4",
-      "glamsterdam_devnet": "launching_week_of_apr_13",
+      "glamsterdam_devnet": "launching_this_week_apr_13",
       "epbs_devnet": "devnet_5_in_progress",
       "blackrock_ethb_aum": 500000000,
       "blackrock_ethb_holdings_eth": 223786,
@@ -122,8 +57,8 @@
       "reth_2_0_gigagas": 1.7,
       "metamask_ondo_tokenized_assets": 264,
       "catalysts": [
-        {"id": "glamsterdam_devnet", "description": "Glamsterdam devnet", "status": "imminent", "detail": "本周（4/13-19）启动，EIP-7954 合约大小上限提升快速纳入"},
-        {"id": "epbs", "description": "ePBS (EIP-7732)", "status": "in_progress", "detail": "Devnet-5 进行中，进度比预期慢"},
+        {"id": "glamsterdam_devnet", "description": "Glamsterdam devnet", "status": "launching", "detail": "本周（4/13-19）启动确认，ePBS 需先稳定；EIP-7954 快速纳入"},
+        {"id": "epbs", "description": "ePBS (EIP-7732)", "status": "in_progress", "detail": "Devnet-5 进行中，实现比预期复杂，'partial blocks' 两方协调是难点"},
         {"id": "ef_staking", "description": "EF 质押 70K ETH", "status": "completed", "detail": "$143M 质押，减少 EF 抛压"},
         {"id": "ethb", "description": "BlackRock ETHB", "status": "accelerating", "detail": "4/9 单日净流入 $90.9M，总持仓 223,786 ETH"},
         {"id": "lido_fast_swaps", "description": "Lido Fast Swaps", "status": "live", "detail": "4/9 上线 CoWSwap 集成"},
@@ -134,22 +69,24 @@
       ]
     },
     "monad": {
-      "price": 0.03271,
-      "change_24h": -8.04,
-      "market_cap": 354277673,
-      "tvl": 369814008,
-      "stablecoin_supply": 456517011,
+      "price": 0.03345,
+      "change_24h": -0.34,
+      "market_cap": 394768591,
+      "tvl": 360708638,
+      "stablecoin_supply": 458604669,
       "daily_fee_revenue": 3000,
       "fdv": 2200000000,
       "validators": 200,
       "ecosystem_projects": 300,
       "neverland_tvl": 40790000,
       "neverland_borrowed": 103820000,
+      "dex_volume_growth": "3.2x",
+      "lending_volume_growth": "5.5x",
       "catalysts": [
         {"id": "token_allocation_update", "description": "代币分配更新", "status": "new", "detail": "4/10 发布新版概览（截至 3/31），内容待分析"},
         {"id": "device_subsidy", "description": "专用设备补贴", "status": "launched", "detail": "4/8 启动，TVL ≥$2.5M 团队可申请"},
         {"id": "apr24_unlock", "description": "4/24 解锁", "status": "upcoming", "detail": "Category Labs Treasury，11 天后，具体量未公开"},
-        {"id": "nov_unlock_cliff", "description": "11 月解锁悬崖", "status": "upcoming", "detail": "主要供应冲击"},
+        {"id": "nov_unlock_cliff", "description": "11 月解锁悬崖", "status": "upcoming", "detail": "11/24 解锁 16.8B MON，主要供应冲击"},
         {"id": "momentum_wave2", "description": "Momentum Wave 2", "status": "planned", "detail": "Q2 2026 计划中"},
         {"id": "nyse_securitize", "description": "NYSE/Securitize 合作", "status": "confirmed", "detail": "多家主流媒体确认 24/7 代币化证券平台合作"},
         {"id": "ponder_acquisition", "description": "Ponder 收购", "status": "reported", "detail": "开发者工具项目收购"}
@@ -158,15 +95,16 @@
   },
   "market_context": {
     "btc": {
-      "price": 70707,
-      "change_24h": -3.22,
-      "market_cap": 1415861769818,
-      "dominance": 57.5,
+      "price": 70933,
+      "change_24h": -0.68,
+      "market_cap": 1420066391187,
+      "dominance": 57.1,
       "fear_greed": 12,
       "fear_greed_label": "Extreme Fear",
       "etf_daily_flow": null,
       "etf_apr_mtd_flow": 69600000,
-      "etf_total_aum": 150000000000,
+      "etf_single_day_high_apr6": 471000000,
+      "etf_total_aum": 128000000000,
       "morgan_stanley_msbt": true,
       "mvrv_zscore": null,
       "mvrv_ratio": null,
@@ -174,48 +112,55 @@
       "exchange_reserves": 2210000,
       "exchange_reserves_trend": "7yr_low",
       "whale_monthly_accumulation": 270000,
-      "funding_rate": null,
-      "funding_rate_direction": "persistently_negative",
+      "whale_addresses_count": 2140,
+      "funding_rate": -0.011,
+      "funding_rate_direction": "deep_negative",
       "open_interest": 25000000000,
       "key_support": 70500,
       "key_resistance": 75000,
-      "trend_direction": "range_bound_bearish_tilt",
+      "trend_direction": "range_bound_stabilizing",
       "high_7d": 73539,
       "low_7d": 67332,
+      "volume_24h": 28462845502,
       "strait_of_hormuz_oil_shock": true
     },
     "macro": {
       "next_fomc": "2026-04-28",
       "fed_rate": "4.25-4.50%",
       "fomc_hold_probability": 94.8,
-      "cpi_apr11": 3.3,
+      "cpi_mar": 3.3,
+      "cpi_core_mar": 2.6,
+      "cpi_energy_spike": "10.9% monthly",
       "sec_roundtable": "2026-04-16",
       "btc_options_expiry": "2026-04-24",
       "trump_meme_gala": "2026-04-25",
       "genius_act_deadline": "2026-07-18",
       "arb_unlock": "2026-04-16",
       "monad_unlock": "2026-04-24",
-      "strait_of_hormuz_conflict": "oil_up_50pct_since_feb"
+      "strait_of_hormuz_conflict": "oil_up_50pct_since_feb",
+      "imf_rate_cut_outlook": "little_room_to_cut_in_2026",
+      "tariff_passthrough": "apr_to_oct_2026_50bps_inflation"
     }
   },
   "watchlist": {
     "sol": {
-      "price": 81.50,
-      "change_24h": -4.02,
-      "market_cap": 46852314980,
-      "tvl": 5719345347,
-      "headline": "Firedancer 100+ 天运行稳定（20%+ 验证者采用）；Drift $285M 被盗资金追踪中；STRIDE 安全计划已启动",
+      "price": 81.88,
+      "change_24h": -0.41,
+      "market_cap": 47046988364,
+      "tvl": 5704611102,
+      "headline": "Firedancer 100+ 天运行稳定；Q1 100% uptime；5,500 TPS 实际吞吐；SOL ETF 4/6 净流入 $246K",
       "firedancer_status": "mainnet_100d_stable",
-      "drift_exploit": 285000000,
-      "drift_recovery": "on_chain_outreach_4_wallets",
-      "stride_launched": true
+      "firedancer_validator_adoption": "20%+",
+      "network_uptime_q1": "100%",
+      "real_world_tps": 5500,
+      "sol_etf_inflow_apr6": 246000
     },
     "arb": {
-      "price": 0.1109,
-      "change_24h": -3.91,
-      "market_cap": 669735403,
-      "tvl": 1924951582,
-      "headline": "4/16 解锁 92.65M ARB（3 天后）；费用分配机制已上线；OpCo 4/10 月度通话",
+      "price": 0.1113,
+      "change_24h": -0.001,
+      "market_cap": 672336232,
+      "tvl": 1916445570,
+      "headline": "4/16 解锁 92.65M ARB（3 天后）→ DAO Treasury；费用分配机制已上线 permissionless",
       "next_unlock_date": "2026-04-16",
       "next_unlock_amount": "92.65M ARB",
       "next_unlock_pct": 2.01,
@@ -226,11 +171,12 @@
       "change_24h": null,
       "market_cap": null,
       "tvl": 11841669,
-      "headline": "WisdomTree 薪资代币化试点运行中；180+ 项目；Nest Vaults 扩展至 Solana",
+      "stablecoin_supply": 208667018,
+      "headline": "RWA.xyz 集成上线；WisdomTree 薪资代币化试点运行中；180+ 项目",
       "wisdomtree_payroll": true,
+      "rwa_xyz_integration": true,
       "projects_count": 180,
-      "rwa_growth_forecast": "3-5x in 2026",
-      "nest_vaults_solana": true
+      "rwa_growth_forecast": "3-5x in 2026"
     }
   },
   "market_score": {
@@ -241,20 +187,19 @@
     "total": 9
   },
   "alerts_triggered": [
-    "mon_24h_drop_-8.04%_critical",
     "fgi_extreme_fear_12",
     "arb_unlock_3_days",
-    "exchange_reserves_3_sessions_stale",
-    "whale_accumulation_3_sessions_stale",
+    "exchange_reserves_4_sessions_stale",
+    "whale_accumulation_4_sessions_stale",
     "strait_of_hormuz_oil_shock_macro_risk",
-    "morgan_stanley_msbt_etf_launch"
+    "btc_funding_deep_negative_-0.011"
   ],
   "cross_chain_tvl": {
-    "total": 62036674632,
-    "ethereum": 54010722028,
-    "solana": 5719345347,
-    "arbitrum": 1924951582,
-    "monad": 369814008,
+    "total": 142208510490,
+    "ethereum": 53462082037,
+    "solana": 5704611102,
+    "arbitrum": 1916445570,
+    "monad": 360708638,
     "plume": 11841669
   },
   "_sources": {
@@ -269,21 +214,21 @@
     "tvl_all": "defillama_api",
     "stablecoin_supply": "defillama_api",
     "link_revenue": "defillama_api",
-    "eth_revenue": "defillama_api",
     "sparkline": "coingecko_api",
     "etf_flows": null,
     "etf_apr_mtd": "websearch_qualitative",
     "mvrv": null,
     "exchange_reserves": "websearch_qualitative",
     "whale_accumulation": "websearch_qualitative",
-    "funding_rate": null,
-    "open_interest": "websearch_qualitative"
+    "funding_rate": "websearch_qualitative",
+    "open_interest": "websearch_qualitative",
+    "btc_dominance": "websearch_qualitative"
   },
   "_freshness": {
-    "mvrv_zscore": {"value": null, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 2, "note": "API returned 404"},
-    "sopr_7d": {"value": null, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 2, "note": "no API source"},
-    "fear_greed": {"value": 12, "unchanged_since": "2026-04-13T08:00:00+08:00", "sessions_unchanged": 0},
-    "exchange_reserves": {"value": 2210000, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 3, "note": "⚠️ qualitative confirmation only, 3 sessions stale"},
-    "whale_monthly_accumulation": {"value": 270000, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 3, "note": "⚠️ qualitative confirmation only, 3 sessions stale"}
+    "mvrv_zscore": {"value": null, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 3, "note": "API returned 404"},
+    "sopr_7d": {"value": null, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 3, "note": "no API source"},
+    "fear_greed": {"value": 12, "unchanged_since": "2026-04-13T08:00:00+08:00", "sessions_unchanged": 1},
+    "exchange_reserves": {"value": 2210000, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 4, "note": "⚠️ qualitative confirmation only, 4 sessions stale"},
+    "whale_monthly_accumulation": {"value": 270000, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 4, "note": "⚠️ qualitative confirmation only, 4 sessions stale"}
   }
 }
