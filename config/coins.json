@@ -13,20 +13,22 @@
       "search_volume": "4-5",
       "data_sources": {
         "coingecko_id": "bitcoin",
-        "webfetch_urls": {
-          "etf_flows": "https://farside.co.uk/btc/",
-          "etf_flows_backup": "https://sosovalue.com/assets/etf/us-btc-spot",
-          "fear_greed": "https://alternative.me/crypto/fear-and-greed-index/"
-        },
         "api_endpoints": {
-          "funding_rate": "https://open-api.coinglass.com/public/v2/funding",
-          "open_interest": "https://open-api.coinglass.com/public/v2/open_interest",
-          "long_short": "https://open-api.coinglass.com/public/v2/long_short"
+          "funding_rate_and_oi": "https://api.coingecko.com/api/v3/derivatives?include_tickers=unexpired",
+          "funding_rate_and_oi_note": "筛选 symbol 含 BTC/USDT 且 market 含 Binance 的条目，取 funding_rate 和 open_interest",
+          "mvrv": "https://community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=CapMVRVCur&frequency=1d&page_size=1",
+          "mvrv_note": "取 data[0].CapMVRVCur",
+          "fear_greed": "https://api.alternative.me/fng/?limit=1",
+          "etf_flows": "需 CoinGlass API key: https://open-api.coinglass.com/api/bitcoin/etf/flow-history"
         },
-        "page_scraping": {
-          "mvrv": "https://www.coinglass.com/pro/i/mvrv",
-          "exchange_reserves": "https://cryptoquant.com/asset/btc/chart/exchange-flows/exchange-reserve"
-        }
+        "deprecated": {
+          "farside_etf": "https://farside.co.uk/btc/ — 403 since 2026-04",
+          "sosovalue_etf": "https://sosovalue.com/assets/etf/us-btc-spot — 403",
+          "coinglass_funding": "https://open-api.coinglass.com/public/v2/funding — needs API key since 2026-04",
+          "coinglass_mvrv_page": "https://www.coinglass.com/pro/i/mvrv — JS SPA, cannot scrape",
+          "cryptoquant_reserves": "https://cryptoquant.com/asset/btc/chart/exchange-flows/exchange-reserve — page scrape fails"
+        },
+        "null_fields": ["exchange_reserves", "whale_monthly_accumulation", "sopr_7d"]
       },
       "notes": "BTC 搜索量压缩至 4-5 条，仅采集市场环境数据"
     },

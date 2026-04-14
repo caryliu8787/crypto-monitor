@@ -143,16 +143,16 @@
       "fear_greed": 21,
       "fear_greed_label": "Extreme Fear",
       "etf_daily_flow": null,
-      "etf_apr9_flow": 358000000,
-      "etf_apr10_flow": 256700000,
+      "etf_apr9_flow": null,
+      "etf_apr10_flow": null,
       "etf_total_aum": 128000000000,
       "mvrv_zscore": null,
       "mvrv_ratio": null,
       "sopr_7d": null,
-      "exchange_reserves": 2210000,
-      "exchange_reserves_trend": "7yr_low",
-      "whale_monthly_accumulation": 270000,
-      "whale_addresses_count": 2140,
+      "exchange_reserves": null,
+      "exchange_reserves_trend": null,
+      "whale_monthly_accumulation": null,
+      "whale_addresses_count": null,
       "funding_rate": null,
       "funding_rate_direction": null,
       "open_interest": null,
@@ -163,8 +163,8 @@
       "low_7d": 67947,
       "volume_24h": 53323818741,
       "us_iran_ceasefire": true,
-      "oil_brent": 92.95,
-      "oil_wti": 94.79
+      "oil_brent": null,
+      "oil_wti": null
     },
     "macro": {
       "next_fomc": "2026-04-28",
@@ -260,22 +260,20 @@
     "eth_revenue": "defillama_api",
     "sparkline": "coingecko_api",
     "etf_flows": null,
-    "etf_apr9_apr10": "websearch_qualitative",
     "mvrv": null,
-    "exchange_reserves": "websearch_qualitative",
-    "whale_accumulation": "websearch_qualitative",
+    "exchange_reserves": null,
+    "whale_accumulation": null,
     "funding_rate": null,
     "open_interest": null,
     "btc_dominance": null,
-    "oil_prices": "websearch_qualitative"
+    "oil_prices": null
   },
   "_freshness": {
-    "mvrv_zscore": {"value": null, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 5, "note": "API returned 404"},
-    "sopr_7d": {"value": null, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 5, "note": "no API source"},
+    "mvrv_ratio": {"value": null, "unchanged_since": "2026-04-14T08:00:00+08:00", "sessions_unchanged": 0, "note": "CoinMetrics API now available, will populate next run"},
     "fear_greed": {"value": 21, "unchanged_since": "2026-04-14T08:00:00+08:00", "sessions_unchanged": 0},
-    "exchange_reserves": {"value": 2210000, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 5, "note": "qualitative confirmation only, 5 sessions stale"},
-    "whale_monthly_accumulation": {"value": 270000, "unchanged_since": "2026-04-12T08:00:00+08:00", "sessions_unchanged": 5, "note": "qualitative confirmation only, 5 sessions stale"},
-    "funding_rate": {"value": null, "unchanged_since": "2026-04-14T08:00:00+08:00", "sessions_unchanged": 0, "note": "CoinGlass API requires key, no free source"},
-    "eth_daily_revenue": {"value": 67337, "unchanged_since": "2026-04-14T08:00:00+08:00", "sessions_unchanged": 0, "note": "fresh from DeFiLlama API, +84.5% vs previous"}
+    "exchange_reserves": {"value": null, "unchanged_since": "2026-04-14T08:00:00+08:00", "sessions_unchanged": 0, "note": "no free API, field set to null"},
+    "whale_monthly_accumulation": {"value": null, "unchanged_since": "2026-04-14T08:00:00+08:00", "sessions_unchanged": 0, "note": "no free API, field set to null"},
+    "funding_rate": {"value": null, "unchanged_since": "2026-04-14T08:00:00+08:00", "sessions_unchanged": 0, "note": "CoinGecko derivatives API now available, will populate next run"},
+    "eth_daily_revenue": {"value": 67337, "unchanged_since": "2026-04-14T08:00:00+08:00", "sessions_unchanged": 0, "note": "fresh from DeFiLlama API"}
   }
 }

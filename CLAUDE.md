@@ -22,28 +22,43 @@
 |------|------|------|
 | CoinGecko | `/api/v3/simple/price?ids={所有币}&vs_currencies=usd&include_24hr_change=true&include_7d_change=true&include_market_cap=true` | 全币种价格/变化/市值 |
 | CoinGecko | `/api/v3/coins/bitcoin?sparkline=true&developer_data=true` | BTC sparkline(168点) |
-| CoinGlass | `open-api.coinglass.com/public/v2/funding` | 资金费率 |
-| CoinGlass | `open-api.coinglass.com/public/v2/open_interest` | 未平仓合约 |
+| CoinGecko | `/api/v3/derivatives?include_tickers=unexpired` | 资金费率 + 未平仓合约（从返回数组中筛选 BTC/USDT，取 Binance 的 `funding_rate` 和 `open_interest`） |
+| CoinMetrics | `community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=CapMVRVCur&frequency=1d&page_size=1` | MVRV 比率（`CapMVRVCur` 字段） |
 | DeFiLlama | `/v2/chains` | 全链 TVL |
 | DeFiLlama | `/overview/fees` | 协议费用/收入 |
 | DeFiLlama | `/summary/fees/{protocol}?dataType=dailyRevenue` | LINK/ETH 收入明细 |
 | DeFiLlama | `stablecoins.llama.fi/stablecoinchains` | 各链稳定币供应 |
 | Alternative.me | `/fng/` | Fear & Greed Index |
 
+> **已废弃端点（不再使用）：**
+> - ~~CoinGlass `open-api.coinglass.com/public/v2/funding`~~ — 2026-04 起需 API key
+> - ~~CoinGlass `open-api.coinglass.com/public/v2/open_interest`~~ — 同上
+> - 若未来获取 CoinGlass API key，可恢复使用新端点 `open-api.coinglass.com/api/bitcoin/etf/flow-history`（ETF 流向）
+
 **WebFetch 页面抓取（按优先级尝试）：**
 
-| 数据 | 主源 | 备用源 |
-|------|------|--------|
-| ETF 流向 | `farside.co.uk/btc/` | `sosovalue.com/assets/etf/us-btc-spot` |
-| 代币解锁 | `token.unlocks.app/` | — |
-| MVRV | `coinglass.com/pro/i/mvrv` | — |
-| 交易所储备 | `cryptoquant.com/asset/btc/chart/exchange-flows/exchange-reserve` | — |
+| 数据 | 主源 | 备用源 | 状态 |
+|------|------|--------|------|
+| 代币解锁 | `token.unlocks.app/` | — | 可用 |
+
+> **已废弃页面源（持续失败，不再尝试）：**
+> - ~~farside.co.uk/btc/~~ — Cloudflare 403（2026-04 起）
+> - ~~sosovalue.com/assets/etf/us-btc-spot~~ — 403
+> - ~~coinglass.com/pro/i/mvrv~~ — JS SPA 渲染，WebFetch 无法提取
+> - ~~cryptoquant.com 交易所储备~~ — 页面抓取失败
+
+**无免费 API 的字段（直接写 `null`）：**
+- ETF 日度流向 — 无 key 时写 `null`，报告中可用 WebSearch 做定性描述（如"ETF 连续正流入"），但 JSON 不填数字
+- 交易所储备 — 写 `null`
+- 鲸鱼月度累积 — 写 `null`
+- SOPR (7d) — 写 `null`
 
 **降级链路：**
 1. 免费 API JSON → 取返回值
 2. 页面抓取（主源 → 备用源）→ 从 HTML 原文提取数字
 3. 都失败 → 字段写 `null`，报告写「数据暂缺」
 4. **禁止**：从 WebSearch 结果中提取数值填入 JSON
+5. **WebSearch 来源的数值一律写 `null`**。即使 WebSearch 返回了看似精确的数字（如"ETF 净流入 $358M"），也不得填入 JSON 数值字段。仅可在报告正文中做定性引用。
 
 ---
 
@@ -80,11 +95,12 @@
 
 ## Phase 3: BTC 市场环境 + 观察仓简搜
 
-**BTC（context，4-5 次调用）：**
-1. WebSearch BTC + ETF flows + 今日日期
-2. WebSearch BTC + whale/on-chain + 今日日期
+**BTC（context，3-4 次调用）：**
+1. WebSearch BTC + ETF flows + 今日日期（仅定性：流入/流出趋势、重大事件）
+2. WebSearch BTC + whale/on-chain + 今日日期（仅定性：趋势描述，不填数值）
 3. WebSearch BTC + FOMC/macro + 今日日期
-4. WebSearch BTC + funding rate/OI + 今日日期
+
+> 资金费率和 OI 已由 Phase 1 的 CoinGecko derivatives API 覆盖，无需再 WebSearch。
 
 **观察仓（P2，每个 2-3 条）：**
 - SOL: Firedancer 进展 + 生态大事件
@@ -104,10 +120,14 @@ WebSearch 仅用于定性信息（新闻/事件/合作）。数值必须来自 P
 - 写入 `alpha_signals` 数组
 
 ### 4.2 新鲜度校验
-读取上期 `data/latest.json`，对链上指标逐字段比对：
-- `mvrv_zscore`, `sopr_7d`, `exchange_reserves`, `whale_monthly_accumulation`, `funding_rate`
+读取上期 `data/latest.json`，对所有数值型指标逐字段比对：
+- BTC: `mvrv_ratio`, `funding_rate`, `open_interest`, `fear_greed`
+- LINK: `revenue_30d`, `revenue_7d`, `ccip_monthly_volume`, `reserve_accumulated_link`, `etf_glnk_aum`
+- ETH: `tvl`, `daily_revenue`, `stablecoin_supply`
+- MON: `tvl`, `daily_fee_revenue`, `stablecoin_supply`
 - 连续 ≥3 session 值不变 → 写入 `_freshness`，报告中标注「⚠️ 数据已 N 期未更新」
 - **绝不**静默复读上期数据当新数据用
+- 已标记为 `null`（无 API 源）的字段不参与新鲜度校验
 
 ### 4.3 催化剂状态更新
 对比上期 `holdings.{coin}.catalysts` 状态：
@@ -178,7 +198,7 @@ WebSearch 仅用于定性信息（新闻/事件/合作）。数值必须来自 P
 2. **WebSearch 仅可用于定性信息。** 不可用于填充 `data/latest.json` 中的数值字段。
 3. **数据缺失时：** JSON 写 `null`，报告写「数据暂缺」，图表用 `[]` 显示占位提示。
 4. **sparkline 数据必须来自 CoinGecko `/coins/bitcoin?sparkline=true` 返回的原值。** 失败则填 `[]`。
-5. **ETF 流向数据必须来自 farside.co.uk 或 sosovalue.com 页面原文。** 失败则写 `null`。
+5. **ETF 流向数据**：若有 CoinGlass API key 则用 `open-api.coinglass.com/api/bitcoin/etf/flow-history`；无 key 则写 `null`。farside.co.uk 和 sosovalue.com 已废弃（持续 403）。
 6. **上期/本期有 `null` 的字段跳过 delta 计算。**
 7. **`_sources` 为必填字段**，记录每个关键指标的数据来源。禁止 `websearch` 作为数值字段来源。
 8. **Alpha 信号板没发现新信号 = 写「无新信号」。** 绝不编造或拔高旧信息。
