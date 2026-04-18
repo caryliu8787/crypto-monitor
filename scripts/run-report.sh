@@ -31,21 +31,46 @@ for i in $(seq 1 15); do
   sleep 2
 done
 
-# --- Run claude ---
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting ${SESSION} report" >> "$LOG_FILE"
+# --- Run claude with hard timeout (防止网络/睡眠导致挂死) ---
+TIMEOUT_SECS=1500  # 25 分钟。正常运行 8-12 分钟，超时即视为挂死
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting ${SESSION} report (timeout: ${TIMEOUT_SECS}s)" >> "$LOG_FILE"
 
 caffeinate -is /Users/caryliu/.local/bin/claude -p \
   "执行加密货币情报监控。读取 CLAUDE.md，Phase 0-6 完整执行，生成 ${SESSION} 报告。" \
   --allowedTools "WebSearch,WebFetch,Read,Write,Edit,Bash,Glob,Grep" \
-  >> "$LOG_FILE" 2>> "$ERR_FILE"
+  >> "$LOG_FILE" 2>> "$ERR_FILE" &
+CLAUDE_PID=$!
 
+(
+  sleep "$TIMEOUT_SECS"
+  if kill -0 "$CLAUDE_PID" 2>/dev/null; then
+    kill -TERM "$CLAUDE_PID" 2>/dev/null
+    sleep 5
+    kill -KILL "$CLAUDE_PID" 2>/dev/null
+    pkill -KILL -f "claude -p.*加密货币情报监控" 2>/dev/null
+  fi
+) &
+WATCHER_PID=$!
+
+wait "$CLAUDE_PID"
 CLAUDE_EXIT=$?
+
+kill "$WATCHER_PID" 2>/dev/null
+wait "$WATCHER_PID" 2>/dev/null
+
+TIMED_OUT=false
+if [ "$CLAUDE_EXIT" -eq 143 ] || [ "$CLAUDE_EXIT" -eq 137 ]; then
+  TIMED_OUT=true
+fi
 
 # --- Verify output ---
 FAILED=false
 FAIL_REASON=""
 
-if [ $CLAUDE_EXIT -ne 0 ]; then
+if [ "$TIMED_OUT" = true ]; then
+  FAILED=true
+  FAIL_REASON="claude 挂死被 kill (超时 ${TIMEOUT_SECS}s, 通常是网络异常或系统睡眠合盖导致)"
+elif [ $CLAUDE_EXIT -ne 0 ]; then
   FAILED=true
   FAIL_REASON="claude exited with code ${CLAUDE_EXIT}"
 elif [ ! -f "$EXPECTED_HTML" ] || [ ! -f "$EXPECTED_MD" ]; then
