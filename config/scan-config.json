@@ -1,0 +1,40 @@
+{
+  "_comment": "全市场扫描参数。控制机会发现的币池过滤、板块轮动追踪和机会评分机制。",
+
+  "universe": {
+    "min_market_cap_usd": 30000000,
+    "min_volume_24h_usd": 3000000,
+    "movers_pool_size": 250,
+    "exclude_categories": ["stablecoins", "wrapped-tokens", "liquid-staking-tokens", "bridged-tokens"],
+    "top_movers_reported": 12,
+    "new_listing_bypass": "出现在 /search/trending 或有明确 TGE/新上所背景的币可绕过市值/成交量门槛——薄流通盘新币正是值得早期发现的机会类型，不要让门槛静默排除它们"
+  },
+
+  "sector_rotation": {
+    "_comment": "追踪的 CoinGecko category id。每期与上期快照对比市值变化，连续 ≥2 期同向视为轮动信号。",
+    "categories_tracked": [
+      "layer-1",
+      "layer-2",
+      "artificial-intelligence",
+      "real-world-assets-rwa",
+      "decentralized-finance-defi",
+      "meme-token",
+      "gaming"
+    ],
+    "min_category_market_cap_usd": 500000000
+  },
+
+  "opportunity_scoring": {
+    "_comment": "4 维评分，每维 1-5 分，总分 /20。crowding 和 risk 为反向计分（越不拥挤/风险越低分越高）。",
+    "dimensions": ["catalyst_strength", "time_window", "crowding_inverse", "risk_inverse"],
+    "high_grade_threshold": 15,
+    "stale_after_sessions": 5
+  },
+
+  "call_budget": {
+    "_comment": "外部调用预算纪律（25 分钟看门狗约束）。",
+    "websearch_candidates_max": 12,
+    "websearch_events_max": 5,
+    "total_calls_target": "30-40"
+  }
+}

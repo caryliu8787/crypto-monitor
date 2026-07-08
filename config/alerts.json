@@ -1,27 +1,17 @@
 {
-  "_comment": "告警规则配置。severity: critical/warning/info。动态阈值使用百分比或相对值，不硬编码绝对价格。",
+  "_comment": "告警规则配置（机会发现导向）。severity: critical/warning/info。动态阈值使用百分比或相对值，不硬编码绝对价格和币种名单。",
 
   "price_alerts": [
     {
-      "id": "p0_p1_major_drop",
-      "description": "P0/P1 币种 24h 大幅下跌",
-      "coins": ["link", "eth", "monad", "btc"],
-      "condition": "24h_change < -5%",
-      "severity": "critical",
-      "message_template": "{{ticker}} 24h 跌幅 {{change}}%，触发重大下跌告警"
-    },
-    {
-      "id": "p0_p1_major_pump",
-      "description": "P0/P1 币种 24h 大幅上涨",
-      "coins": ["link", "eth", "monad", "btc"],
-      "condition": "24h_change > +10%",
+      "id": "large_cap_mover",
+      "description": "扫描池（top 250）内币种 24h 异动，阈值见 scan-config.json",
+      "condition": "abs(24h_change) > 15% AND market_cap > min_market_cap_usd",
       "severity": "warning",
-      "message_template": "{{ticker}} 24h 涨幅 {{change}}%，关注是否过热"
+      "message_template": "{{ticker}} 24h 变动 {{change}}%（市值 ${{mcap}}），进入异动关注"
     },
     {
       "id": "btc_support_break",
       "description": "BTC 跌破当日技术分析搜索到的关键支撑位",
-      "coins": ["btc"],
       "condition": "price < searched_key_support",
       "severity": "critical",
       "message_template": "BTC 跌破关键支撑 ${{support}}，趋势可能转弱"
@@ -29,58 +19,38 @@
     {
       "id": "btc_resistance_break",
       "description": "BTC 突破当日技术分析搜索到的关键阻力位",
-      "coins": ["btc"],
       "condition": "price > searched_key_resistance",
       "severity": "info",
       "message_template": "BTC 突破关键阻力 ${{resistance}}，趋势偏强"
-    },
-    {
-      "id": "altcoin_divergence",
-      "description": "持仓山寨币波动幅度超过 BTC 的 3 倍",
-      "coins": ["link", "eth", "monad"],
-      "condition": "abs(coin_24h_change) > 3 * abs(btc_24h_change)",
-      "severity": "warning",
-      "message_template": "{{ticker}} 24h 波动 {{change}}% 显著偏离 BTC（{{btc_change}}%）"
-    },
-    {
-      "id": "report_delta_large",
-      "description": "与上期报告相比价格变化超过阈值",
-      "coins": ["link", "eth", "monad", "btc"],
-      "condition": "abs(price_vs_last_report) > 5%",
-      "severity": "warning",
-      "message_template": "{{ticker}} 自上期报告以来变动 {{delta}}%"
     }
   ],
 
-  "on_chain_alerts": [
+  "cycle_alerts": [
     {
-      "id": "exchange_reserve_spike",
-      "description": "BTC 交易所储备 24h 增加超过 2%，可能面临抛压",
-      "coins": ["btc"],
-      "condition": "exchange_reserves_change > +2%",
-      "severity": "warning",
-      "message_template": "BTC 交易所储备增加 {{change}}%，潜在抛压信号"
-    },
-    {
+      "_comment": "周期位置信号，用作进场时机参考（当前无持仓，视角是「何时该积极找机会」）",
       "id": "mvrv_overheated",
       "description": "BTC MVRV 比率超过 3.5，市场可能过热",
-      "coins": ["btc"],
       "condition": "mvrv_ratio > 3.5",
       "severity": "warning",
-      "message_template": "BTC MVRV 比率 {{mvrv}}，市场可能过热"
+      "message_template": "BTC MVRV 比率 {{mvrv}}，市场可能过热，谨慎追高"
     },
     {
       "id": "mvrv_deep_value",
       "description": "BTC MVRV 比率低于 1.0，历史性低估区间",
-      "coins": ["btc"],
       "condition": "mvrv_ratio < 1.0",
-      "severity": "info",
-      "message_template": "BTC MVRV 比率 {{mvrv}}，进入历史性低估区间"
+      "severity": "critical",
+      "message_template": "BTC MVRV 比率 {{mvrv}}，进入历史性低估区间——周期级进场信号"
+    },
+    {
+      "id": "extreme_fear_entry",
+      "description": "恐惧贪婪指数低于 15，极端恐惧",
+      "condition": "fear_greed < 15",
+      "severity": "warning",
+      "message_template": "恐惧贪婪指数 {{fgi}}（极端恐惧），逆向布局窗口，关注机会看板高分项"
     },
     {
       "id": "funding_rate_extreme",
       "description": "资金费率极端，多空拥挤",
-      "coins": ["btc"],
       "condition": "funding_rate > 0.1% OR funding_rate < -0.05%",
       "severity": "warning",
       "message_template": "BTC 资金费率 {{rate}}%，{{direction}}拥挤"
@@ -114,7 +84,7 @@
   "ecosystem_alerts": [
     {
       "id": "major_hack",
-      "description": "持仓币种相关重大安全事件",
+      "description": "扫描池或机会名单内币种的重大安全事件",
       "condition": "detected_in_search",
       "severity": "critical",
       "message_template": "{{ticker}} 相关安全事件：{{detail}}"
@@ -127,27 +97,11 @@
       "message_template": "监管行动：{{detail}}"
     },
     {
-      "id": "large_unlock_imminent",
-      "description": "大额代币解锁在 7 天内",
-      "coins": ["monad", "arb"],
-      "condition": "next_unlock_date within 7 days",
-      "severity": "warning",
-      "message_template": "{{ticker}} 将于 {{date}} 解锁 {{amount}}，注意抛压"
-    },
-    {
       "id": "tvl_weekly_drop",
-      "description": "TVL 周跌幅超过 15%",
-      "coins": ["eth", "monad"],
+      "description": "机会名单相关链 TVL 周跌幅超过 15%（数据驱动，不限定币种）",
       "condition": "tvl_7d_change < -15%",
       "severity": "warning",
-      "message_template": "{{ticker}} TVL 周跌 {{change}}%，生态资金外流"
-    },
-    {
-      "id": "major_partnership",
-      "description": "重大合作或集成公告",
-      "condition": "detected_in_search",
-      "severity": "info",
-      "message_template": "{{ticker}} 新合作：{{detail}}"
+      "message_template": "{{chain}} TVL 周跌 {{change}}%，生态资金外流"
     }
   ],
 
@@ -157,14 +111,31 @@
       "description": "避险信号：BTC 主导率上升 + 恐惧情绪",
       "condition": "btc_dominance_7d_change > +2% AND fear_greed < 25",
       "severity": "warning",
-      "message_template": "避险信号：BTC 主导率上升至 {{dominance}}%，恐惧贪婪 {{fgi}}，山寨风险加剧"
+      "message_template": "避险信号：BTC 主导率升至 {{dominance}}%，恐惧贪婪 {{fgi}}，山寨机会环境恶化"
     },
     {
-      "id": "eth_btc_breakdown",
-      "description": "ETH/BTC 比率创 30 日新低",
-      "condition": "eth_btc_ratio < 30d_low",
+      "id": "altseason_gauge",
+      "description": "ETH/BTC 比率创 30 日新高/新低（山寨季风向标）",
+      "condition": "eth_btc_ratio > 30d_high OR eth_btc_ratio < 30d_low",
+      "severity": "info",
+      "message_template": "ETH/BTC 比率 {{ratio}} 创 30 日{{direction}}，山寨市场相对{{strength}}"
+    }
+  ],
+
+  "opportunity_alerts": [
+    {
+      "id": "new_high_grade_opportunity",
+      "description": "本期新发现的机会评分达到高分线",
+      "condition": "opportunity.status == 'new' AND opportunity.score.total >= 15",
+      "severity": "critical",
+      "message_template": "🔥 高分机会：{{coin}} — {{title}}（{{score}}/20，扩散度{{diffusion}}）"
+    },
+    {
+      "id": "event_within_48h",
+      "description": "事件日历中有事件进入 48h 窗口",
+      "condition": "event.days_away <= 2 AND event.status == 'upcoming'",
       "severity": "warning",
-      "message_template": "ETH/BTC 比率 {{ratio}} 创 30 日新低，ETH 相对弱势"
+      "message_template": "⏰ 事件临近：{{coin}} {{event_type}}（{{date}}）— {{description}}"
     }
   ]
 }

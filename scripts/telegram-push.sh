@@ -63,6 +63,7 @@ fi
 export DATE SESSION PAGES_URL
 MESSAGE=$(python3 << 'PYEOF'
 import json, sys, os
+from html import escape
 
 date = os.environ.get("DATE", "")
 session = os.environ.get("SESSION", "")
@@ -74,38 +75,12 @@ except:
     print("data/latest.json not found")
     sys.exit(1)
 
-# Support both old (coins.*) and new (holdings/market_context/watchlist) structure
-if "holdings" in d:
-    # New alpha-first structure
-    holdings = d.get("holdings", {})
-    btc = d.get("market_context", {}).get("btc", {})
-    watchlist = d.get("watchlist", {})
-    coins_data = [
-        ("BTC", btc),
-        ("LINK", holdings.get("link", {})),
-        ("ETH", holdings.get("eth", {})),
-        ("MON", holdings.get("monad", {})),
-        ("SOL", watchlist.get("sol", {})),
-        ("ARB", watchlist.get("arb", {})),
-        ("PLUME", watchlist.get("plume", {}))
-    ]
-    arb = watchlist.get("arb", {})
-else:
-    # Legacy structure
-    c = d.get("coins", {})
-    btc = c.get("btc", {})
-    coins_data = [
-        ("BTC", c.get("btc",{})), ("ETH", c.get("eth",{})), ("SOL", c.get("sol",{})),
-        ("LINK", c.get("link",{})), ("ARB", c.get("arb",{})),
-        ("MON", c.get("monad",{})), ("PLUME", c.get("plume",{}))
-    ]
-    arb = c.get("arb", {})
-
+btc = d.get("market_context", {}).get("btc", {})
 score = d.get("market_score", {})
 
 def pct(v):
     if v is None: return "—"
-    return f"+{v}%" if v >= 0 else f"{v}%"
+    return f"+{v:.1f}%" if v >= 0 else f"{v:.1f}%"
 
 def price(v):
     if v is None: return "—"
@@ -115,7 +90,7 @@ def price(v):
     return f"${v:.4f}"
 
 total = score.get("total", 0)
-phase = "强牛市" if total>=16 else "偏多" if total>=12 else "中性偏空" if total>=8 else "偏空" if total>=4 else "强熊市"
+phase = "强牛市" if total>=16 else "偏多" if total>=12 else "中性" if total>=8 else "偏空" if total>=4 else "强熊市"
 
 fgi = btc.get("fear_greed", "—")
 
@@ -124,70 +99,80 @@ dims = [("BTC趋势", score.get("btc_trend",0)), ("资金面", score.get("fundin
         ("情绪面", score.get("sentiment",0)), ("宏观面", score.get("macro",0))]
 score_lines = ""
 for name, val in dims:
-    bar = "🟩" * val + "⬜" * (5 - val)
+    val = int(val or 0)
+    bar = "🟩" * val + "⬜" * max(0, 5 - val)
     score_lines += f"{name} {bar} {val}/5\n"
 
-# Prices
-price_lines = ""
-for name, coin in coins_data:
-    p = coin.get("price")
-    ch = coin.get("change_24h")
-    if p is not None:
-        price_lines += f"<code>{name:6}</code> {price(p):>10}  {pct(ch)}\n"
+# Opportunities (top by score, exclude stale/expired)
+DIFFUSION_ICON = {"red": "🔴", "yellow": "🟡", "green": "🟢"}
+opps = [o for o in d.get("opportunities", [])
+        if o.get("status") in ("new", "tracking", "triggered")]
+opps.sort(key=lambda o: (o.get("score", {}).get("total") or 0), reverse=True)
+opp_str = ""
+for o in opps[:5]:
+    icon = DIFFUSION_ICON.get(o.get("diffusion"), "⚪")
+    s = o.get("score", {}).get("total", "—")
+    flag = "🆕" if o.get("status") == "new" else ("✅" if o.get("status") == "triggered" else "")
+    opp_str += f"{icon} {s}/20 <b>{escape(str(o.get('coin','')).upper())}</b> {escape(o.get('title',''))} {flag}\n"
+if not opp_str:
+    opp_str = "本期无新机会\n"
 
-# Key metrics
-mvrv = btc.get("mvrv_zscore", "—")
-reserves = btc.get("exchange_reserves")
-reserves_str = f"{reserves/1e6:.2f}M" if reserves else "—"
+# Top movers
+mover_str = ""
+for m in d.get("market_scan", {}).get("movers", [])[:5]:
+    sym = str(m.get("symbol", "")).upper()
+    reason = m.get("reason") or "原因未明"
+    if len(reason) > 30:
+        reason = reason[:30] + "…"
+    mover_str += f"<code>{sym:8}</code> {pct(m.get('price_change_24h'))}  {escape(reason)}\n"
+
+# Events within 7 days
+event_str = ""
+for e in d.get("events", []):
+    da = e.get("days_away")
+    if e.get("status") == "upcoming" and da is not None and da <= 7:
+        icon = "⏰" if da <= 2 else "📅"
+        event_str += f"{icon} {e.get('date','')} {escape(str(e.get('coin','')).upper())} {escape(e.get('description',''))}\n"
+
+# Cycle metrics
+mvrv = btc.get("mvrv_ratio", "—")
 funding = btc.get("funding_rate", "—")
 oi = btc.get("open_interest", 0) or 0
-support = btc.get("key_support")
-resistance = btc.get("key_resistance")
-
-# Alpha signals summary
-alpha = d.get("alpha_signals", [])
-alpha_str = ""
-if alpha:
-    red = [s for s in alpha if s.get("level") == "red"]
-    yellow = [s for s in alpha if s.get("level") == "yellow"]
-    if red:
-        alpha_str += f"🔴 首发 x{len(red)}: " + " | ".join(s.get("title","") for s in red[:3]) + "\n"
-    if yellow:
-        alpha_str += f"🟡 早期 x{len(yellow)}: " + " | ".join(s.get("title","") for s in yellow[:3]) + "\n"
+support = btc.get("support")
+resistance = btc.get("resistance")
 
 # Alerts
-alerts = d.get("alerts_triggered", [])
 alert_str = ""
-if alerts:
-    for a in alerts[:5]:
-        alert_str += f"  ⚡ {a}\n"
+for a in d.get("alerts", [])[:5]:
+    text = a.get("message", str(a)) if isinstance(a, dict) else str(a)
+    alert_str += f"  ⚡ {escape(text)}\n"
 
 # Build message
-msg = f"""<b>📊 加密货币 Alpha 情报</b>
+msg = f"""<b>🔭 加密货币机会发现</b>
 <code>{date} {session}</code>
 
 <b>FGI {fgi}</b> {btc.get('fear_greed_label','')} | 评分 <b>{total}/20</b> {phase}
-BTC主导率 {btc.get('dominance','—')}%
+BTC {price(btc.get('price_usd'))} {pct(btc.get('price_change_24h'))} | 主导率 {btc.get('dominance','—')}%
 
-{score_lines}"""
+{score_lines}
+<b>━ 机会 ━</b>
+{opp_str}"""
 
-if alpha_str:
-    msg += f"<b>━ Alpha ━</b>\n{alpha_str}\n"
+if mover_str:
+    msg += f"\n<b>━ 异动 ━</b>\n{mover_str}"
 
-msg += f"""<b>━ 价格 ━</b>
-{price_lines}
-<b>━ BTC 链上 ━</b>
-MVRV {mvrv} | 储备 {reserves_str}
-费率 {funding}% | OI ${oi/1e9:.1f}B"""
+if event_str:
+    msg += f"\n<b>━ 事件（7天内）━</b>\n{event_str}"
+
+msg += f"""
+<b>━ 周期 ━</b>
+MVRV {mvrv} | 费率 {funding}% | OI ${oi/1e9:.1f}B"""
 
 if support and resistance:
     msg += f"\n支撑 ${support:,} | 阻力 ${resistance:,}"
 
 if alert_str:
     msg += f"\n\n<b>━ 告警 ━</b>\n{alert_str}"
-
-if arb.get("next_unlock_date"):
-    msg += f"\n⚠️ ARB 解锁 {arb['next_unlock_date']}: {arb.get('next_unlock_amount','—')}"
 
 msg += f"""
 

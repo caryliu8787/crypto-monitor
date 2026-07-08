@@ -17,12 +17,29 @@ ERR_FILE="${LOG_DIR}/${DATE}_${SESSION}.err"
 EXPECTED_HTML="reports/${DATE}_${SESSION}.html"
 EXPECTED_MD="reports/${DATE}_${SESSION}.md"
 
+mkdir -p "$LOG_DIR"
+
 # --- Log rotation: clean up logs older than 7 days ---
 find "$LOG_DIR" -name "*.log" -mtime +7 -delete 2>/dev/null
 find "$LOG_DIR" -name "*.err" -mtime +7 -delete 2>/dev/null
 
+# --- Archive previous snapshot before this run overwrites it ---
+mkdir -p data/history
+if [ -s data/latest.json ]; then
+  python3 -c "
+import json, shutil, sys
+try:
+    d = json.load(open('data/latest.json'))
+    ts, sess = d.get('timestamp', 'unknown')[:10], d.get('session', 'unknown')
+    shutil.copy('data/latest.json', f'data/history/{ts}_{sess}.json')
+except Exception as e:
+    print(f'history archive skipped: {e}', file=sys.stderr)
+"
+fi
+find data/history -name "*.json" -mtime +30 -delete 2>/dev/null
+
 # --- Kill stale claude process from prior run ---
-pkill -f "claude -p.*加密货币情报监控" 2>/dev/null
+pkill -f "claude -p.*机会发现监控" 2>/dev/null
 sleep 1
 
 # --- Wait for network (up to 30s) ---
@@ -33,10 +50,11 @@ done
 
 # --- Run claude with hard timeout (防止网络/睡眠导致挂死) ---
 TIMEOUT_SECS=1500  # 25 分钟。正常运行 8-12 分钟，超时即视为挂死
+CLAUDE_BIN="${CLAUDE_BIN:-$(command -v claude 2>/dev/null || echo /opt/homebrew/bin/claude)}"
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting ${SESSION} report (timeout: ${TIMEOUT_SECS}s)" >> "$LOG_FILE"
 
-caffeinate -is /Users/caryliu/.local/bin/claude -p \
-  "执行加密货币情报监控。读取 CLAUDE.md，Phase 0-6 完整执行，生成 ${SESSION} 报告。" \
+caffeinate -is "$CLAUDE_BIN" -p \
+  "执行加密货币机会发现监控。读取 CLAUDE.md，Phase 0-6 完整执行，生成 ${SESSION} 报告。" \
   --allowedTools "WebSearch,WebFetch,Read,Write,Edit,Bash,Glob,Grep" \
   >> "$LOG_FILE" 2>> "$ERR_FILE" &
 CLAUDE_PID=$!
@@ -47,7 +65,7 @@ CLAUDE_PID=$!
     kill -TERM "$CLAUDE_PID" 2>/dev/null
     sleep 5
     kill -KILL "$CLAUDE_PID" 2>/dev/null
-    pkill -KILL -f "claude -p.*加密货币情报监控" 2>/dev/null
+    pkill -KILL -f "claude -p.*机会发现监控" 2>/dev/null
   fi
 ) &
 WATCHER_PID=$!
