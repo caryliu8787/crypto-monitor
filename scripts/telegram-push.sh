@@ -24,7 +24,7 @@ fi
 
 API="https://api.telegram.org/bot${BOT_TOKEN}"
 DATE="${1:-$(date +%Y-%m-%d)}"
-SESSION="${2:-morning}"
+SESSION="${2:-daily}"
 HTML_FILE="reports/${DATE}_${SESSION}.html"
 PAGES_URL="https://caryliu8787.github.io/crypto-monitor/reports/${DATE}_${SESSION}.html"
 

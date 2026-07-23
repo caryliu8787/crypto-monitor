@@ -4,12 +4,12 @@
 # output verification, failure alerting.
 #
 # Usage: ./scripts/run-report.sh <session>
-#   session: "morning" or "evening"
+#   session: "daily" (每天 04:00 UTC+8 运行一次)
 
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
-SESSION="${1:-morning}"
+SESSION="${1:-daily}"
 DATE=$(TZ=Asia/Shanghai date +%Y-%m-%d)
 LOG_DIR="logs"
 LOG_FILE="${LOG_DIR}/${DATE}_${SESSION}.log"

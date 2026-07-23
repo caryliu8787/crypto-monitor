@@ -1,6 +1,6 @@
 # 加密货币机会发现引擎
 
-自动化加密货币机会发现系统，每天 08:00 / 20:00 (UTC+8) 执行。当前无持仓，目标是**发现值得研究的机会**。
+自动化加密货币机会发现系统，每天 04:00 (UTC+8) 执行一次。当前无持仓，目标是**发现值得研究的机会**。
 
 **核心原则：** 机会发现优先 | 全市场扫描 + 事件驱动 | 禁止编造数据 | API 优先 | 一手信源 > 媒体报道
 
@@ -11,7 +11,7 @@
 读取 `config/scan-config.json`（币池过滤 + 板块追踪 + 评分参数 + 调用预算）、`config/alerts.json`（告警规则）、`config/watchlist.json`（用户钉住的关注币）、`config/output.json`（输出格式 + 可选 API key）。
 读取 `data/latest.json`（上期数据，用于对比、机会/事件跨期携带和新鲜度校验）。不存在则跳过对比。
 **兼容性：** 若上期数据是旧 schema（含 `holdings`/`alpha_signals`），只复用 `market_context` 内的可比字段，机会与事件从零开始建立。
-确定日期、时段（morning/evening）。
+确定日期，时段固定为 daily（历史数据中的 morning/evening 为旧调度遗留，按正常上期数据对待）。
 
 ---
 
@@ -157,7 +157,7 @@
 ```json
 {
   "timestamp": "ISO 8601",
-  "session": "morning|evening",
+  "session": "daily",
   "market_scan": {
     "movers": [{"coin_id","symbol","price_usd","price_change_24h","price_change_7d","price_change_30d","market_cap","volume_24h","reason","narrative_tag","source_url"}],
     "movers_narrative": "本期异动的定性综述",
@@ -215,8 +215,8 @@
 
 ## 调度
 
-由 macOS launchd 驱动，plist 位于 `~/Library/LaunchAgents/com.crypto-monitor.{morning,evening}.plist`。
-plist 调用 `scripts/run-report.sh {session}`，该脚本负责：
+由 macOS launchd 驱动，plist 位于 `~/Library/LaunchAgents/com.crypto-monitor.daily.plist`。
+plist 调用 `scripts/run-report.sh daily`，该脚本负责：
 1. 日志轮转（`logs/YYYY-MM-DD_{session}.log`，7 天自动清理）+ 上期快照归档到 `data/history/`（30 天清理）
 2. 杀残留进程 + 等待网络
 3. 调用 `claude -p` 生成报告（25 分钟硬超时）
@@ -225,5 +225,4 @@ plist 调用 `scripts/run-report.sh {session}`，该脚本负责：
 6. 失败 → 发送 Telegram 告警（包含失败原因和日志路径）
 
 系统时区为 Asia/Shanghai (UTC+8)，plist 中 Hour 直接使用本地时间。
-- 晨报：08:00 UTC+8
-- 晚报：20:00 UTC+8
+- 日报：04:00 UTC+8（每天一次，一天 = 一期）
