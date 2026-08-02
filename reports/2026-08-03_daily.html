@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>加密货币机会发现简报</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+/* ===== CSS Reset & Variables ===== */
+:root {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-card-hover: #1c2129;
+  --border: #21262d;
+  --border-light: #30363d;
+  --text: #c9d1d9;
+  --text-secondary: #8b949e;
+  --text-muted: #484f58;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --yellow: #e3b341;
+  --purple: #bc8cff;
+  --radius: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Layout ===== */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+/* ===== Typography ===== */
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 700;
+  border-left: 4px solid var(--accent);
+  padding-left: 12px;
+  margin: 40px 0 16px;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 24px 0 10px;
+}
+
+h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 20px 0 8px;
+}
+
+p, li {
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* ===== Inline Value Colors ===== */
+.up { color: var(--green); }
+.down { color: var(--red); }
+.warn { color: var(--orange); }
+.neutral { color: var(--text-secondary); }
+.accent { color: var(--accent); }
+
+/* ===== Header ===== */
+.report-header {
+  text-align: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.report-header .meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ===== Alert / Key Changes Box ===== */
+.alert-box {
+  border-left: 4px solid var(--red);
+  background: rgba(248, 81, 73, 0.06);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.alert-box.warning {
+  border-left-color: var(--orange);
+  background: rgba(210, 153, 34, 0.06);
+}
+
+.alert-box.info {
+  border-left-color: var(--accent);
+  background: rgba(88, 166, 255, 0.04);
+}
+
+.key-changes {
+  border-left: 4px solid var(--accent);
+  background: rgba(88, 166, 255, 0.04);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.key-changes ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.key-changes li {
+  margin-bottom: 4px;
+}
+
+/* ===== Card ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+/* ===== Tables ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+.data-table th {
+  text-align: left;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.data-table tr:hover td {
+  background: var(--bg-card-hover);
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table .meaning {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* Compact table variant */
+.data-table.compact td,
+.data-table.compact th {
+  padding: 5px 8px;
+}
+
+/* ===== Signal / Analysis Boxes ===== */
+.signal-box {
+  border-left: 4px solid var(--green);
+  background: rgba(63, 185, 80, 0.06);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 12px 0;
+}
+
+.signal-box.bearish {
+  border-left-color: var(--red);
+  background: rgba(248, 81, 73, 0.06);
+}
+
+.signal-box.neutral {
+  border-left-color: var(--orange);
+  background: rgba(210, 153, 34, 0.06);
+}
+
+.analysis-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 12px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.analysis-block .conclusion {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(88, 166, 255, 0.06);
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ===== Charts (inline, compact) ===== */
+.chart-inline {
+  position: relative;
+  height: 180px;
+  margin: 12px 0;
+}
+
+.chart-inline canvas {
+  max-height: 100%;
+}
+
+.chart-small {
+  position: relative;
+  height: 150px;
+  margin: 10px 0;
+}
+
+.chart-small canvas {
+  max-height: 100%;
+}
+
+.no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 80px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+/* ===== ETF Text Summary ===== */
+.etf-text-summary {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 8px 0 4px;
+  line-height: 1.6;
+}
+
+/* ===== Macro Calendar ===== */
+.macro-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+.macro-table th {
+  text-align: left;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 6px 8px;
+  border-bottom: 2px solid var(--border);
+}
+
+.macro-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ===== Recommendation Cards ===== */
+.rec-card {
+  border-left: 4px solid var(--text-muted);
+  background: var(--bg-card);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.rec-card.buy { border-left-color: var(--green); }
+.rec-card.hold { border-left-color: var(--yellow); }
+.rec-card.sell { border-left-color: var(--red); }
+.rec-card.watch { border-left-color: var(--purple); }
+
+.rec-card .rec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.rec-card .rec-coin {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.rec-card .rec-action {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+.rec-card .rec-action.buy { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+.rec-card .rec-action.hold { background: rgba(227, 179, 65, 0.15); color: var(--yellow); }
+.rec-card .rec-action.sell { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+.rec-card .rec-action.watch { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+
+.rec-card .rec-body {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== Checklist ===== */
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 13px;
+}
+
+.checklist-item::before {
+  content: "\2610";
+  font-size: 15px;
+  line-height: 1.2;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.checklist-item.done::before {
+  content: "\2611";
+  color: var(--green);
+}
+
+/* ===== Score Bars (4-dimension) ===== */
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.score-row .label {
+  width: 90px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.score-track {
+  flex: 1;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.score-row .val {
+  width: 30px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== Progress Bar (FGI) ===== */
+.progress-track {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fgi {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--red) 0%, var(--orange) 25%, var(--yellow) 50%, var(--green) 100%);
+}
+
+/* ===== Heatmap ===== */
+.heatmap-grid {
+  display: grid;
+  gap: 4px;
+}
+
+.heatmap-cell {
+  border-radius: 4px;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ===== Divider ===== */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0 8px;
+}
+
+/* ===== Footer ===== */
+.report-footer {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* ===== Grid Helpers ===== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .container { padding: 20px 16px 32px; }
+  h1 { font-size: 20px; }
+  h2 { font-size: 16px; padding-left: 10px; border-left-width: 3px; }
+  h3 { font-size: 13px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .chart-inline { height: 160px; }
+  .chart-small { height: 130px; }
+  .rec-card { padding: 12px; }
+  .rec-grid { grid-template-columns: 1fr !important; }
+  .watchlist-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 12px 10px 24px; }
+  body { font-size: 14px; line-height: 1.6; -webkit-text-size-adjust: 100%; }
+  h1 { font-size: 18px; }
+  h2 { font-size: 15px; margin-top: 20px; }
+  h3 { font-size: 12px; margin: 12px 0 6px; }
+
+  /* Tables: force horizontal scroll, prevent text wrapping */
+  .data-table { font-size: 11px; white-space: nowrap; }
+  .data-table th, .data-table td { padding: 6px 8px; }
+  .table-wrap { margin: 0 -10px; padding: 0 10px; }
+
+  /* Cards */
+  .card { padding: 10px; border-radius: 4px; }
+  .signal-box { padding: 10px 12px; font-size: 12px; }
+  .analysis-block { padding: 10px 12px; font-size: 13px; }
+
+  /* Charts smaller on phone */
+  .chart-inline { height: 140px; }
+  .chart-small { height: 110px; }
+
+  /* Heatmap: 3-4 columns on phone instead of 7 */
+  .heatmap-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .heatmap-cell { padding: 6px 4px; font-size: 11px; }
+
+  /* Recommendation cards */
+  .rec-grid { grid-template-columns: 1fr !important; }
+  .rec-card { margin-bottom: 8px; }
+
+  /* Score bars */
+  .score-row .label { width: 60px; font-size: 11px; }
+  .score-row .val { font-size: 11px; }
+
+  /* Key changes list */
+  .key-changes ul { padding-left: 16px; }
+  .key-changes li { font-size: 13px; margin-bottom: 4px; }
+
+  /* Meta info */
+  .meta { font-size: 11px; }
+  .report-footer { font-size: 10px; }
+
+  /* Progress bar touch-friendly */
+  .progress-track { height: 8px; }
+
+  /* Watchlist */
+  .watchlist-row { grid-template-columns: 1fr; }
+}
+
+/* ===== Overflow ===== */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== Alpha Signal Cards ===== */
+.alpha-card {
+  border-left: 3px solid var(--border);
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  background: var(--bg-card);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 13px;
+}
+.alpha-card.red    { border-left-color: #f85149; }
+.alpha-card.yellow { border-left-color: #e3b341; }
+.alpha-card.green  { border-left-color: #3fb950; }
+.alpha-card.gray   { border-left-color: var(--text-muted); }
+.alpha-card .coin-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 6px;
+}
+.alpha-card.red .coin-tag    { background: rgba(248,81,73,.15); color: #f85149; }
+.alpha-card.yellow .coin-tag { background: rgba(227,179,65,.15); color: #e3b341; }
+.alpha-card.green .coin-tag  { background: rgba(63,185,80,.15); color: #3fb950; }
+.alpha-card.gray .coin-tag   { background: rgba(72,79,88,.2); color: var(--text-muted); }
+.alpha-card .source { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+/* ===== Watchlist Row ===== */
+.watchlist-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.watchlist-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 13px;
+}
+.watchlist-item .ticker { font-weight: 700; color: var(--accent); }
+
+/* ===== Freshness Warning ===== */
+.freshness-warn { color: var(--orange); font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="report-header">
+    <h1>加密货币机会发现</h1>
+    <div class="meta">2026-08-03 | daily | 2026-08-03 04:00 UTC+8</div>
+  </div>
+
+  <!-- ALERTS (顶部告警，无告警时为空字符串) -->
+  <div class="alert-box warning"><strong>⚠️ 本期告警（5）</strong><ul style="margin:6px 0 0;padding-left:18px;"><li><strong>[large_cap_mover]</strong> BEAT(Audiera) 24h 变动 -31.5%（市值 $1.041B），进入异动关注——⚡解锁逼空后的 sell-the-news：8/1 解锁约 2,125 万枚（媒体口径约 $67.8M、约 6.9% 流通），当日不跌反涨 19.4% 至约 $4.93，两日后回吐至 $3.38；换手 3.7%，为本期市值最大的异动标的</li><li><strong>[large_cap_mover]</strong> BTW(Bitway) 24h 变动 -28.0%（市值 $176.9M），进入异动关注——连续第 3 期入榜但方向反转（上期 +19.8%），检索无可核验催化剂，仍原因未明；7d 仍 +9.5%、30d +32.1%</li><li><strong>[large_cap_mover]</strong> PIEVERSE 24h 变动 +17.0%（市值 $221.0M），进入异动关注——上所预期驱动（媒体称即将登陆 Upbit/MEXC/BingX，⚠️无确认日期）；⚠️8/14 解锁占总供应 1.7%、约当前市值 6%，构成「利好模糊、利空明确」结构</li><li><strong>[large_cap_mover]</strong> M(MANTIS) 24h 变动 +66.7%（市值 $128.7M），进入异动关注——⚠️24h 成交仅 $383.6K（换手 0.30%），连续第 3 期以极薄成交拉抬，不具可交易性，未纳入异动榜</li><li><strong>[event_within_48h]</strong> ⏰ 事件临近：PROVE unlock（2026-08-05，2 天后）— Succinct Contributors（Team &amp; Future Core）解锁，为 8 月绝对值最大的 cliff 之一（tokenomist 上期列示 $35.56M）</li></ul></div>
+<div class="alert-box info"><strong>ℹ️ 状态更新（4）</strong><ul style="margin:6px 0 0;padding-left:18px;"><li><strong>[btc_support_break]</strong> ✅ 告警解除：BTC 重新站上上期跌破的支撑 $62,527（收 $63,395，+1.48%），连续 2 期的 btc_support_break 状态终止；新 7 日区间 $62,457-$65,439，阻力位 $65,439 已连续 3 期未被突破</li><li><strong>[altseason_gauge]</strong> ETH/BTC 比率 0.029664 自 0.029387 回升 +0.9%，结束连续 2 期走弱——⚠️未创 30 日新高或新低，不构成 altseason_gauge 的触发条件，仅作方向记录</li><li><strong>[data_integrity]</strong> ⚠️ CoinGecko RWA 板块市值自 $64.63B 骤降至 $40.83B（-36.8%），但前 5 大成分涨跌幅全部在 ±5% 内（FIGR_HELOC -3.1%、LINK +4.2%、XLM +2.4%、ONDO +1.9%、QNT -1.2%）——判定为成分/口径变更而非行情，本期不计入板块轮动信号，trend_sessions 归零重建基线；同源的 tokenized-treasuries -26.6%、tokenized-products -14.0% 亦同步异常</li><li><strong>[opportunity_lifecycle]</strong> 本期 1 条机会判 expired：GRAM（市值崩至约 $2M，远低于 $30M 门槛，且 rollout 日期缺位第 11 期）；1 条降 stale：VVV（sessions_since_progress 达 5）；新立 1 条：ADA 14/20（🟢已扩散，8/9 ETF 资格里程碑）；1 条调分：KAITO 13→12（8/20 解锁占流通约 9.7% 确认，risk 2→1）</li></ul></div>
+<div class="key-changes"><strong>其余告警规则本期均未触发</strong>（mvrv_overheated / mvrv_deep_value / extreme_fear_entry / funding_rate_extreme / fomc_imminent / cpi_release / surprise_rate_change / major_hack / regulatory_action / tvl_weekly_drop / risk_off_signal / new_high_grade_opportunity）。</div>
+
+  <!-- SECTION 1: OPPORTUNITY BOARD -->
+  <h2>一、机会看板</h2>
+  <!-- 机会卡片复用 .alpha-card CSS：red/yellow/green 对应扩散度，gray 对应无新机会占位 -->
+  <h3>🆕 本期新发现</h3>
+<div class="alpha-card green"><div><span class="coin-tag">ADA</span><span style="font-size:11px;color:var(--text-muted);">🟢 已扩散 · new · 跟踪 1 期 · 无进展 0 期</span><span style="float:right;font-weight:700;font-size:13px;">14/20</span></div><div style="margin-top:5px;font-weight:600;">🆕Cardano：8/9 CME 期货满 6 个月触发 SEC 通用上市「快速通道」资格 + Grayscale ADA ETF 决定日 10/23</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;">🆕<strong>本期唯一的新机会，也是唯一带硬日期的 ETF 路径条目</strong>。<strong>催化剂</strong>：CME 集团的 ADA 期货合约于 <strong>2026/2/9</strong> 上线，至 <strong>2026/8/9</strong> 满足 SEC 新版通用上市标准所要求的「在受监管市场连续交易满 6 个月」门槛。达标后，NYSE Arca / Nasdaq / Cboe 任一交易所可<strong>免于单独提交 19b-4 规则变更</strong>直接挂牌合格加密产品，审查窗口上限 75 天。Grayscale 的 ADA ETF 申请已在审查中，媒体口径的决定日为 <strong>10/23</strong>。<strong>数据侧</strong>：ADA +9.2% 收 $0.188391（7d +14.9%、30d +7.7%、市值 $7.034B、vol <strong>$634.3M</strong> 为异动榜第一、换手 9.0%），并出现在 trending 榜。<strong>为什么只给 14 分</strong>：①催化剂 4 分而非 5——8/9 是<strong>资格里程碑而非批准</strong>，本身不产生资金流，真正的二元事件在 10/23；②crowding 2 分——CryptoSlate / Blockonomi / CoinGape / MEXC / thecryptobasic 等已全面报道，属已扩散；③risk 3 分——7d 已 +14.9%，存在 8/9 当日 sell-the-news 风险，且 ADA 的证券属性分类仍是公开的未决风险。…</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 4 · 时间窗 5 · 拥挤度 2 · 风险 3</div><div class="source">来源: <a href="https://cryptoslate.com/the-sec-just-gave-cardano-a-75-day-shortcut-to-a-spot-etf-that-took-bitcoin-240-days/" style="color:var(--text-muted);">https://cryptoslate.com/the-sec-just-gave-cardano-a-75-day-shortcut-to-a-spot-</a></div></div>
+<h3>📌 持续跟踪（按评分降序，最多 10 项）</h3>
+<div class="alpha-card green"><div><span class="coin-tag">UNI</span><span style="font-size:11px;color:var(--text-muted);">🟢 已扩散 · tracking · 跟踪 32 期 · 无进展 0 期</span><span style="float:right;font-weight:700;font-size:13px;">17/20</span></div><div style="margin-top:5px;font-weight:600;">Uniswap：v4 协议费用切换——⚡收入侧溢价<strong>第 3 期连续走阔</strong>：7 日日均 $260.5k vs 30 日日均 $141.7k（+83.9%，上期 +69.0%、上上期 +54.7%）</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;"><strong>本期机会池唯一同时具备硬数据、趋势加速与独立交叉印证的条目</strong>。收入侧（DeFiLlama <code>/summary/fees/uniswap</code>，dailyRevenue）：7 日日均 $260,532、30 日日均 $141,702，<strong>运行率溢价 +83.9%</strong>，为立项以来最高读数，且为连续第 3 期扩大（+54.7% → +69.0% → +83.9%）——这意味着 7/27 通过的治理提案 100（约 4,660 万票赞成 / 127 万票反对）激活 v4 协议费开关后，费用捕获不是一次性脉冲而是在爬坡。⚠️注意 total24h 仅 $147,864，明显低于 7 日均值，说明日度波动很大，单日读数不可用于判断趋势。…</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 5 · 时间窗 5 · 拥挤度 2 · 风险 5</div><div class="source">来源: <a href="https://api.llama.fi/summary/fees/uniswap?dataType=dailyRevenue" style="color:var(--text-muted);">https://api.llama.fi/summary/fees/uniswap?dataType=dailyRevenue</a></div></div>
+<div class="alpha-card green"><div><span class="coin-tag">AAVE</span><span style="font-size:11px;color:var(--text-muted);">🟢 已扩散 · tracking · 跟踪 40 期 · 无进展 4 期</span><span style="float:right;font-weight:700;font-size:13px;">16/20</span></div><div style="margin-top:5px;font-weight:600;">Aavenomics 3.0 回购飞轮 + V4——⬇️收入侧<strong>第 3 期</strong>证实无跃升（溢价 +5.2%），sessions_since_progress 4/5，下期若仍无进展将自动降级</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;">本期 DeFiLlama dailyRevenue：total24h $136,181、7 日日均 $134,193、30 日日均 $127,508，<strong>运行率溢价仅 +5.2%</strong>——这是连续第 3 期读到「回购飞轮未体现为收入侧跃升」。作为对照，同期 UNI 的同口径溢价为 +83.9%，两者相差 16 倍，说明<strong>这不是数据源或口径问题，而是 AAVE 侧确实没有发生费用捕获的结构性变化</strong>。价格侧 +1.8% 收 $92.84（7d -4.2%、30d +4.9%、市值 $1.432B、vol $204.8M / 换手 <strong>14.3%</strong>）——在 148/250 普涨日仅涨 1.8%，落后大盘，但换手仍处机会池前列，说明关注度未流失。…</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 4 · 时间窗 5 · 拥挤度 2 · 风险 5</div><div class="source">来源: <a href="https://api.llama.fi/summary/fees/aave?dataType=dailyRevenue" style="color:var(--text-muted);">https://api.llama.fi/summary/fees/aave?dataType=dailyRevenue</a></div></div>
+<div class="alpha-card yellow"><div><span class="coin-tag">TAO</span><span style="font-size:11px;color:var(--text-muted);">🟡 早期 · tracking · 跟踪 33 期 · 无进展 2 期</span><span style="float:right;font-weight:700;font-size:13px;">16/20</span></div><div style="margin-top:5px;font-weight:600;">Bittensor：现货 TAO ETF 决策窗口（8 月）——本期仍无具体 SEC 日期，价格已跌至 $200 检验线下方 3.6%</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;"><strong>连续第 2 期无任何新增进展</strong>。事实边界不变：Grayscale 于去年 12/30 提交 S-1（拟将 Bittensor Trust 转为 NYSE Arca 上市的现货 ETF、代码 GTAO），2026/4/2 提交 S-1 修正案 No.1；<strong>至今未检索到 SEC 的具体决定日期</strong>——这与本期新立的 ADA 条目形成直接对照：ADA 有 8/9 与 10/23 两个明确日期，TAO 只有「8 月窗口」这一模糊表述。价格侧 +0.6% 收 $192.73（7d -2.6%、30d <strong>-10.3%</strong>、市值 $1.850B、vol $61.3M / 换手 3.3%），已位于自设 $200 检验线<strong>下方 3.6%</strong>（上期在其上方 4.9%，本期首次跌破）。…</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 5 · 时间窗 5 · 拥挤度 3 · 风险 3</div><div class="source">来源: <a href="https://coingape.com/grayscale-files-s-1-for-first-bittensor-tao-etf-with-u-s-sec/" style="color:var(--text-muted);">https://coingape.com/grayscale-files-s-1-for-first-bittensor-tao-etf-with-u-s-</a></div></div>
+<div class="alpha-card green"><div><span class="coin-tag">ONDO</span><span style="font-size:11px;color:var(--text-muted);">🟢 已扩散 · tracking · 跟踪 29 期 · 无进展 3 期</span><span style="float:right;font-weight:700;font-size:13px;">16/20</span></div><div style="margin-top:5px;font-weight:600;">Ondo：FINRA 放行代币化美股 + DTCC——⚠️<strong>上期的「RWA 板块级利空」本期撤回</strong>：该板块读数已判定为口径异常，不可用</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;"><strong>本期首先要做一次自我更正</strong>：上期以「RWA 板块环比自 -0.24% 扩大至 -1.34%、连续 2 期下跌」作为 ONDO 的板块级利空证据。本期 CoinGecko 的 RWA 板块市值自 $64.63B 骤降至 $40.83B（-36.8%），但同期该板块前 5 大成分（FIGR_HELOC -3.1%、LINK +4.2%、XLM +2.4%、ONDO +1.9%、QNT -1.2%）无一有对应级别的跌幅——<strong>该字段已判定为成分/口径变更，不是行情</strong>。据此，上期由板块读数推出的利空结论<strong>缺乏可靠依据，本期予以撤回</strong>，并把 trend_sessions 归零重建基线。…</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 5 · 时间窗 4 · 拥挤度 3 · 风险 4</div><div class="source">来源: <a href="https://bitcoinworld.co.in/why-is-ondo-ondo-trending-what-you-need-to-know/" style="color:var(--text-muted);">https://bitcoinworld.co.in/why-is-ondo-ondo-trending-what-you-need-to-know/</a></div></div>
+<div class="alpha-card yellow"><div><span class="coin-tag">ARB</span><span style="font-size:11px;color:var(--text-muted);">🟡 早期 · tracking · 跟踪 34 期 · 无进展 1 期</span><span style="float:right;font-weight:700;font-size:13px;">15/20</span></div><div style="margin-top:5px;font-weight:600;">Arbitrum：Robinhood Chain 费用分成——RH Chain TVL 连续第 3 期上涨（+1.08%）但<strong>已不再领涨</strong>，且涨幅低于大盘 beta</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;"><strong>本期需要下调对 TVL 证据的解读强度</strong>。Robinhood Chain TVL $391M、环比 <strong>+1.08%</strong>，为连续第 3 期正增长；但：①上期为 +4.51% 且<strong>全链第一</strong>，本期 +1.08% 仅排第 3；②更关键的是，本期 13 条追踪链<strong>全线 12 涨 1 跌</strong>，而全球总市值同期 +1.45%——即 +1.08% 的 TVL 增长<strong>低于计价 beta</strong>，用 USD 计价的 TVL 上涨在这种日子里不构成净流入证据。诚实的结论是：RH Chain 本期<strong>没有提供新的独立信息</strong>。…</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 5 · 时间窗 4 · 拥挤度 3 · 风险 3</div><div class="source">来源: <a href="https://api.llama.fi/v2/chains" style="color:var(--text-muted);">https://api.llama.fi/v2/chains</a></div></div>
+<div class="alpha-card red"><div><span class="coin-tag">AKT</span><span style="font-size:11px;color:var(--text-muted);">🔴 首发 · tracking · 跟踪 2 期 · 无进展 1 期</span><span style="float:right;font-weight:700;font-size:13px;">14/20</span></div><div style="margin-top:5px;font-weight:600;">Akash：aep-49 虚拟机（官方路线图 8/30，27 天）+ BME 销毁机制——本期无新信息，价格在普涨日逆势 -0.7%</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;">上期新立的条目，本期<strong>无任何新增进展</strong>。催化剂（一手信源）不变：Akash 官方 2026 路线图页面列出 <code>aep-49: Virtual Machines</code>，标注 <strong>Estimated Completion: 8/30/2026</strong>，内容为把可售卖单元自容器扩展至通用虚拟机——若兑现，可售卖工作负载的种类扩大，配合 BME（burn-mint equilibrium）销毁机制形成需求侧传导。<strong>数据侧本期转弱</strong>：-0.7% 收 $0.469805（7d -1.2%、30d <strong>-27.3%</strong>、市值 $139.2M、vol $3.9M / 换手 2.8%），在 148/250 普涨日<strong>逆势收跌</strong>，且已跌出上期的 trending 榜。…</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 3 · 时间窗 4 · 拥挤度 4 · 风险 3</div><div class="source">来源: <a href="https://akash.network/roadmap/2026/" style="color:var(--text-muted);">https://akash.network/roadmap/2026/</a></div></div>
+<div class="alpha-card yellow"><div><span class="coin-tag">LIT</span><span style="font-size:11px;color:var(--text-muted);">🟡 早期 · tracking · 跟踪 40 期 · 无进展 4 期</span><span style="float:right;font-weight:700;font-size:13px;">14/20</span></div><div style="margin-top:5px;font-weight:600;">Lighter × Robinhood：perp DEX 零售分发——换手连续第 2 期下滑至 3.4%（上期 3.8%、上上期 6.7%），关注度持续流失</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;">本期 -0.6% 收 $2.06（7d -1.7%、30d -5.1%、市值 $515.2M、vol $17.7M / 换手 <strong>3.4%</strong>）。上期确认的「GRVT 注意力分流」压力<strong>本期继续</strong>：换手自 6.7% → 3.8% → 3.4%，连续 2 期下滑，且在 148/250 普涨日<strong>逆势收跌</strong>。催化剂侧无新信息——Robinhood 分发合作的具体上线时点仍未披露，这是本条目自立项以来最核心的缺口。…</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 4 · 时间窗 4 · 拥挤度 2 · 风险 4</div><div class="source">来源: <a href="https://beincrypto.com/lighter-lit-token-price-burn-staking-yield/" style="color:var(--text-muted);">https://beincrypto.com/lighter-lit-token-price-burn-staking-yield/</a></div></div>
+<div class="alpha-card yellow"><div><span class="coin-tag">LINK</span><span style="font-size:11px;color:var(--text-muted);">🟡 早期 · tracking · 跟踪 16 期 · 无进展 4 期</span><span style="float:right;font-weight:700;font-size:13px;">14/20</span></div><div style="margin-top:5px;font-weight:600;">Chainlink：CCIP 机构集群——无进展第 16 期，但本期出现两条边际改善：重回 trending 榜 + 换手自 2.3% 回升至 2.9%</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;">本期 +3.5% 收 $8.33（7d -3.2%、30d +5.5%、市值 $6.228B、vol $178.8M / 换手 <strong>2.9%</strong>），跑赢大盘 +1.45% 与 DeFi 板块 +2.05% 基本持平。<strong>两条边际改善</strong>：①重新进入 CoinGecko trending 榜（第 12 位），上期不在榜内；②换手自连续走低的 2.3% 回升至 2.9%。<strong>但这两条都属于关注度指标而非催化剂进展</strong>——CCIP 机构集群论点自 7/19 立项以来<strong>第 16 期未获得任何新的可核验机构接入公告</strong>，这才是决定性的事实。…</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 4 · 时间窗 3 · 拥挤度 3 · 风险 4</div><div class="source">来源: <a href="https://www.coingecko.com/en/coins/chainlink" style="color:var(--text-muted);">https://www.coingecko.com/en/coins/chainlink</a></div></div>
+<div class="alpha-card yellow"><div><span class="coin-tag">AVAX</span><span style="font-size:11px;color:var(--text-muted);">🟡 早期 · tracking · 跟踪 15 期 · 无进展 0 期</span><span style="float:right;font-weight:700;font-size:13px;">13/20</span></div><div style="margin-top:5px;font-weight:600;">Avalanche：机构集群 vs 价格钝化——⚡本期取得新增信源：Helicon 升级（连续执行 + 新质押经济学）待上主网，41.5% AVAX 已质押</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;">⚡<strong>本期是本条目自立项以来第一次拿到「机构叙事之外」的协议侧新信息</strong>：①<strong>Helicon 升级</strong>引入连续执行（continuous execution）与新的质押经济学，待上主网——⚠️<strong>无确认日期，因此不进事件日历</strong>；②质押率 <strong>41.5%</strong>（约 1.96 亿枚 AVAX、约 $1.3B），最高收益 6.3%——高质押率意味着实际流通抛压小于名义流通量；③DeFi Kingdoms 于 8/1 关闭其 DFK Chain 专属子网、迁回 C-Chain，理由是降低开销并共享流动性——这条<strong>方向上偏正面</strong>（活动向主链集中），但也反映独立子网模式的经济性问题。价格侧 <strong>+5.4% 收 $6.59</strong>（7d -0.7%、30d -3.4%、市值 $2.847B、vol $241.1M / 换手 8.5%），为机会池本期第一，跑赢 L1 板块 +1.74% 三倍以上，并重回 trending 榜——<strong>这直接反转了上期「L1 内最弱之一」的读数</strong>。⚠️但按规则单日价格反转不计为进展，sessions_since_progress 归零的依据是上述三条<strong>新增可引用信源</strong>。…</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 4 · 时间窗 2 · 拥挤度 4 · 风险 3</div><div class="source">来源: <a href="https://crypto.com/en/coins-ai/avalanche/latest-news" style="color:var(--text-muted);">https://crypto.com/en/coins-ai/avalanche/latest-news</a></div></div>
+<div class="alpha-card green"><div><span class="coin-tag">MORPHO</span><span style="font-size:11px;color:var(--text-muted);">🟢 已扩散 · tracking · 跟踪 33 期 · 无进展 4 期</span><span style="float:right;font-weight:700;font-size:13px;">13/20</span></div><div style="margin-top:5px;font-weight:600;">Morpho：Robinhood Earn 导流——❌DeFiLlama 收入读数<strong>第 2 期确认为 0</strong>，换手 0.77% 连续第 4 期低于 1%</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;">❌<strong>本期是本条目的负面证据叠加期</strong>。①收入侧：定向调用 DeFiLlama <code>/summary/fees/morpho?dataType=dailyRevenue</code>，30 日序列<strong>全为 0</strong>（计算 30 日均值时触发除零），即连续第 2 期确认协议侧无可读收入；②流动性侧：换手 <strong>0.77%</strong>，连续第 4 期低于 1%，为机会池 $1B+ 市值标的中最低；③价格侧 -0.9% 收 $1.93（7d -0.7%、30d -1.5%、市值 $1.268B、vol <strong>$9.7M</strong>），在 148/250 普涨日<strong>逆势收跌</strong>，$1.27B 市值仅对应 $9.7M 成交。<strong>诚实的结论</strong>：Robinhood Earn 导流论点已连续 4 期没有在任何可测量指标上留下痕迹——不是收入、不是成交、不是价格。…</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 4 · 时间窗 4 · 拥挤度 2 · 风险 3</div><div class="source">来源: <a href="https://api.llama.fi/summary/fees/morpho?dataType=dailyRevenue" style="color:var(--text-muted);">https://api.llama.fi/summary/fees/morpho?dataType=dailyRevenue</a></div></div>
+<h3>✅ 已触发 / 已过期</h3>
+<div class="alpha-card green"><div><span class="coin-tag">GRAM</span><span style="font-size:11px;color:var(--text-muted);">🟢 已扩散 · expired · 跟踪 11 期 · 无进展 9 期</span><span style="float:right;font-weight:700;font-size:13px;">13/20</span></div><div style="margin-top:5px;font-weight:600;">Gram：Telegram 钱包 rollout——❌判 <strong>expired</strong>：市值已崩至 $2M，rollout 日期缺位第 11 期</div><div style="margin-top:5px;color:var(--text-secondary);line-height:1.65;">❌<strong>本期判 expired</strong>。两条独立依据：①<strong>论点失效</strong>：Telegram 钱包 rollout 的日期自立项以来<strong>第 11 期缺位</strong>，sessions_since_progress 已达 9；②<strong>标的失效</strong>：定向取数显示 GRM 市值已崩至约 <strong>$2M</strong>（价格 $0.00088666，24h -5.1%、7d -14.1%、30d -12.3%），24h 成交不足 $0.1M——已远低于 scan-config 的 $30M 市值门槛与 $3M 成交门槛，不具备任何可交易性。即便 rollout 日后兑现，该标的的流动性也无法支撑研究投入。</div><div style="margin-top:6px;font-size:11px;color:var(--text-muted);">催化剂 4 · 时间窗 3 · 拥挤度 2 · 风险 4</div><div class="source">来源: <a href="https://www.coingecko.com/en/coins/gram-2" style="color:var(--text-muted);">https://www.coingecko.com/en/coins/gram-2</a></div></div>
+<div class="key-changes"><strong>14 项机会持续静默跟踪，无进展或评分溢出（详见 JSON，不逐条展示）</strong><div style="margin-top:6px;font-size:13px;color:var(--text-secondary);">溢出（评分达标但超出看板 10 项限额）：GNO 13、LDO 13、MON 12、ZAMA 12、KAITO 12、PUMP 12<br>stale（无进展 ≥5 期）：VVV 13、EDGE 13、PYTH 13、CC 12、ETHFI 12、XLM 12、SYRUP 12、JTO 11</div></div>
+
+  <h3>值得深挖（优先级排序）</h3>
+  <!-- 复用 .rec-card CSS：buy=高优先级 hold=中 watch=观察 sell=证伪/放弃 -->
+  <div class="rec-card buy"><div class="rec-header"><span class="rec-coin">UNI</span><span class="rec-action buy">优先级 1 · 17/20</span></div><div class="rec-body">全池唯一有硬数据且<strong>优势在加速</strong>的条目：收入侧溢价 +54.7% → +69.0% → <strong>+83.9%</strong> 三期连续走阔。<br><strong>验证</strong>：继续跟踪 7d/30d 日均收入比值｜<strong>证伪</strong>：溢价转负。</div></div>
+<div class="rec-card buy"><div class="rec-header"><span class="rec-coin">ADA</span><span class="rec-action buy">优先级 2 · 🆕 · 14/20</span></div><div class="rec-body">唯一有<strong>两级明确日期</strong>的条目（8/9 资格 → 10/23 决定），且 $634M 日成交为机会池流动性最佳。<br><strong>验证</strong>：8/9 后是否有交易所依通用标准提交挂牌｜<strong>证伪</strong>：两周内无动作或 SEC 就分类不利表态。</div></div>
+<div class="rec-card hold"><div class="rec-header"><span class="rec-coin">AKT</span><span class="rec-action hold">优先级 3 · 🔴 低扩散 · 14/20</span></div><div class="rec-body">「明确日期（8/30）+ 零媒体覆盖 + 价格完全未定价（30d -27.3%）」三条件本期仍全部成立，是唯一的低扩散度条目。<br><strong>验证</strong>：8/30 前后 aep-49 上线公告｜<strong>证伪</strong>：路线图延期或 8/30 后两周无公告。</div></div>
+<div class="rec-card hold"><div class="rec-header"><span class="rec-coin">AVAX</span><span class="rec-action hold">优先级 4 · 13/20</span></div><div class="rec-body">本期首次取得协议侧新增信源（Helicon 升级、41.5% 质押率），且价格 +5.4% 反转上期弱势。<br><strong>但 Helicon 无确认日期</strong>——这是它排在第 4 而非更前的唯一原因。</div></div>
+<div class="rec-card sell"><div class="rec-header"><span class="rec-coin">KAITO</span><span class="rec-action sell">降低权重 · 12/20</span></div><div class="rec-body">8/20 解锁占流通约 <strong>9.7%</strong> 已确认，risk 降至 1，本期 -14.3% 已开始定价。解锁前不宜作为研究重点。</div></div>
+<div class="rec-card sell"><div class="rec-header"><span class="rec-coin">MORPHO</span><span class="rec-action sell">降低权重 · 13/20</span></div><div class="rec-body">收入读数第 2 期为 0、换手第 4 期低于 1%、普涨日逆势下跌——三项负面证据叠加。</div></div>
+<div class="rec-card watch"><div class="rec-header"><span class="rec-coin">AAVE / LINK / LIT / GNO / LDO / ZAMA / PUMP</span><span class="rec-action watch">下期决定 · 均 sp 4/5</span></div><div class="rec-body">七条目均已累计 4 期无实质进展，<strong>下期若无进展将按防膨胀规则自动降 stale</strong>。</div></div>
+<div class="signal-box neutral"><strong>无持仓视角的总结</strong>：11/20 位于「中性」区间上沿，含义是<strong>可以开始把研究转化为观察清单，但尚不构成铺开布局的环境</strong>。本期核心分歧是——<strong>广度（24h 148/250）与结构（7d 69/250、阻力位 3 期未破）指向相反方向</strong>；结构确认之前，单日广度不足以改变框架。环境侧持续改善的一条是 MVRV 连续第 3 期回落至 1.1887，周期位置继续向全市场持仓成本线移动，但距 &lt;1.0 的周期级信号仍有 15.9% 空间。</div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 2: MARKET SCAN -->
+  <h2>二、全市场扫描</h2>
+
+  <h3>异动榜</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table"><thead><tr><th>币种</th><th>价格</th><th>24h</th><th>7d</th><th>30d</th><th>市值</th><th>原因</th></tr></thead><tbody><tr><td><strong>UAI</strong></td><td>$0.5087</td><td><span class="up">+3.6%</span></td><td><span class="up">+62.7%</span></td><td><span class="up">+50.1%</span></td><td>$121.5M</td><td class="meaning">AI 板块内轮动延续，连续第 3 期入榜（7d 自 +52.9% 走阔至 +62.7%）；仍无个券催化剂，原因未明。⚠️上期实测前 100 地址持有 99.03% 供应，FDV $508M vs 市值 $122M，集中度与解锁压力均为极端值</td></tr><tr><td><strong>META</strong></td><td>$5.60</td><td><span class="down">-12.7%</span></td><td><span class="up">+32.8%</span></td><td><span class="up">+66.0%</span></td><td>$127.1M</td><td class="meaning">Upbit 上所（7/29）行情降温回吐——上期 +41.5% 后本期 -12.7%；7d 仍 +32.8%、30d +66.0%，换手 18.2% 仍为异动榜内最扎实者之一</td></tr><tr><td><strong>BEAT</strong></td><td>$3.38</td><td><span class="down">-31.5%</span></td><td><span class="down">-6.4%</span></td><td><span class="up">+23.1%</span></td><td>$1.041B</td><td class="meaning">⚡解锁逼空后的 sell-the-news：8/1 解锁约 2,125 万枚 BEAT（媒体口径约 $67.8M、约 6.9% 流通供应），当日不跌反涨 19.4% 至约 $4.93（空头挤压），本期回吐 -31.5% 至 $3.38。同期 8/1 宣布与 AI agent 基础设施方 Astarter 达成 BNB Chain 合作。⚠️媒体口径数字仅作定性引用，未进入任何数值字段</td></tr><tr><td><strong>BTW</strong></td><td>$0.0804</td><td><span class="down">-28.0%</span></td><td><span class="up">+9.5%</span></td><td><span class="up">+32.1%</span></td><td>$176.9M</td><td class="meaning">原因未明——连续第 3 期入榜但方向反转（上期 +19.8%，本期 -28.0%）。检索无任何可核验的 8 月催化剂或利空；7d 仍 +9.5%、30d +32.1%，属前两期急涨后的整体回吐。背景为 Binance Labs 投资的 BTC 生态 L2</td></tr><tr><td><strong>H</strong></td><td>$0.0754</td><td><span class="up">+12.4%</span></td><td><span class="up">+22.4%</span></td><td><span class="up">+8.7%</span></td><td>$150.1M</td><td class="meaning">原因未明——检索仅返回 6 月安全事件背景（约 $36M 被盗、攻击者取得约 4.47 亿枚 H，创始人其后宣布自链上身份转向企业级 AI 产品），无 8 月新催化剂。⚠️FDV $754M vs 市值 $150M（流通仅 19.9%），距 6/1 ATH $0.8358 仍 -91%</td></tr><tr><td><strong>DEXE</strong></td><td>$2.43</td><td><span class="up">+4.2%</span></td><td><span class="down">-30.4%</span></td><td><span class="down">-89.5%</span></td><td>$234.2M</td><td class="meaning">崩塌后首次收涨 +4.2%，但 7d -30.4%、30d -89.5% 仍为全池最深——上期已记录的大户抛售形态延续，本期反弹与全市场普涨同步，不构成独立企稳信号</td></tr><tr><td><strong>PIEVERSE</strong></td><td>$0.8027</td><td><span class="up">+17.0%</span></td><td><span class="up">+13.8%</span></td><td><span class="up">+12.5%</span></td><td>$221.0M</td><td class="meaning">上所预期驱动——媒体口径称即将登陆 Upbit / MEXC / BingX，⚠️无任何确认日期，故未进事件日历。同时 8/14 解锁 16,744,662 枚（1.7% 总供应、约当前市值 6%）已在事件日历中，属「上所预期 vs 解锁抛压」对冲局面</td></tr><tr><td><strong>US</strong></td><td>$0.0547</td><td><span class="down">-2.7%</span></td><td><span class="up">+25.5%</span></td><td><span class="up">+235.8%</span></td><td>$547.3M</td><td class="meaning">Sui 上的 AI agent 基础设施，30d +235.8% 行情延续但本期转跌；⚠️换手自上期 2.6% 降至 1.7%，$547M 市值仅 $9.3M 成交，薄流动性支撑高市值</td></tr><tr><td><strong>TAG</strong></td><td>$0.001319</td><td><span class="down">-10.1%</span></td><td><span class="up">+15.9%</span></td><td><span class="up">+39.2%</span></td><td>$143.6M</td><td class="meaning">上所扩张行情退潮（7/10 前后 9 家交易所、KuCoin 7/23 开放 TAG/USDT 现货）——本期 -10.1%，换手 2.5%，7d 仍 +15.9%</td></tr><tr><td><strong>ADA</strong></td><td>$0.1884</td><td><span class="up">+9.2%</span></td><td><span class="up">+14.9%</span></td><td><span class="up">+7.7%</span></td><td>$7.034B</td><td class="meaning">⚡本期最有价值的异动：8/9 CME 的 ADA 期货将满 6 个月，达到 SEC 新版通用上市标准所要求的「受监管市场满 6 个月交易」门槛，Grayscale ADA ETF 申请审查期上限 75 天、决定日 10/23。trending 榜内、换手 9.0%、$634M 成交为异动榜第一——已升级为机会看板条目</td></tr><tr><td><strong>UB</strong></td><td>$0.1667</td><td><span class="neutral">+0.0%</span></td><td><span class="up">+23.8%</span></td><td><span class="up">+74.5%</span></td><td>$416.8M</td><td class="meaning">原因未明——7d +23.8%、30d +74.5%，本期 24h 持平；换手 6.4% 相对扎实，但检索无可核验催化剂</td></tr><tr><td><strong>STABLE</strong></td><td>$0.0319</td><td><span class="down">-5.9%</span></td><td><span class="down">-17.9%</span></td><td><span class="down">-10.4%</span></td><td>$797.8M</td><td class="meaning">原因未明——7d -17.9% 为异动榜最深跌幅，且在 148/250 普涨日逆势收跌 5.9%；换手仅 1.3%，$798M 市值对应 $10.3M 成交，属薄流动性下的持续阴跌</td></tr></tbody></table>
+    </div>
+    <div class="etf-text-summary"><strong>普涨日，但涨的是广度不是结构</strong>。24h 上涨数自上期 61/250 跃升至 <strong>148/250</strong>，为近期最强广度读数；但 7d 上涨数仅自 64 升至 <strong>69/250</strong>，30d 上涨数 87/250——即本期是一次单日反弹，周级与月级结构尚未修复。异动榜的构成印证了这一点：12 席中 7 席为<strong>下跌</strong>，且跌幅榜前二（BEAT -31.5%、BTW -28.0%）都是前期急涨标的的回吐，而非新利空。本期唯一具备前瞻价值的异动是 <strong>ADA +9.2%</strong>（8/9 ETF 资格里程碑，已升级为机会条目）；<strong>BEAT</strong> 则提供了一个干净的解锁案例样本：8/1 解锁当日逼空 +19.4%、两日后 -31.5% 回吐，可作为 8 月后续 PROVE(8/5)/YZY(8/16)/KAITO(8/20) 解锁的行为参照。另记 <strong>ENA +10.3%</strong>（市值 $849M、换手 18.4%）未入榜（|24h|+|7d| 未达门槛）但值得记录：其 8/2 解锁昨日执行完毕，次日即录得两位数反弹，同样属「解锁落地即利空出尽」形态。</div>
+  </div>
+
+  <h3>板块轮动</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table"><thead><tr><th>板块</th><th>市值</th><th>24h 变化</th><th>连续同向</th><th>备注</th></tr></thead><tbody><tr><td><strong>DeFi</strong></td><td>$92.651B</td><td><span class="up">+2.04%</span></td><td>1</td><td class="meaning">自上期 -1.48% 反转为 +2.05%，为 7 板块本期最强；连续 2 期下跌的形态被打断</td></tr><tr><td><strong>AI</strong></td><td>$22.400B</td><td><span class="up">+1.87%</span></td><td>1</td><td class="meaning">自 -0.57% 反转为 +1.87%；异动榜内 UAI/US 两只 AI 标的 7d 分别 +62.7%/+25.5%，板块内部轮动仍活跃</td></tr><tr><td><strong>Layer 1</strong></td><td>$1.8091T</td><td><span class="up">+1.74%</span></td><td>1</td><td class="meaning">自连续 2 期下跌反转为 +1.74%；ADA +9.2%、AVAX +5.4%、SOL +3.5% 为主要贡献</td></tr><tr><td><strong>Meme</strong></td><td>$25.400B</td><td><span class="up">+1.64%</span></td><td><strong class="warn">2</strong></td><td class="meaning">连续第 2 期上涨（+0.02% → +1.64%），为唯一连续 2 期同向上行且加速的板块——⚡轮动信号</td></tr><tr><td><strong>Layer 2</strong></td><td>$7.000B</td><td><span class="up">+0.83%</span></td><td><strong class="warn">2</strong></td><td class="meaning">连续第 2 期上涨（+0.01% → +0.83%），但绝对市值 $7.0B 仍为 7 板块最小之一，涨幅落后大盘 +1.45%</td></tr><tr><td><strong>Gaming</strong></td><td>$4.459B</td><td><span class="down">-5.00%</span></td><td><strong class="warn">2</strong></td><td class="meaning">连续第 2 期下跌且跌幅放大 9 倍——⚠️主因可归因于单一标的：板块第一大市值 BEAT（$1.04B / 板块 $4.46B）单日 -31.5%，剔除后板块实为小幅上涨，不构成板块级轮动信号</td></tr><tr><td><strong>RWA</strong></td><td>$40.829B</td><td><span class="down">-36.81%</span></td><td>0</td><td class="meaning">⚠️<strong>判定为口径/成分变更，非真实行情，本期不计入轮动信号</strong>。依据：板块市值自上期 $64.63B 降至 $40.83B（-$23.8B），但前 5 大成分股同期涨跌幅全部在 ±5% 内（FIGR_HELOC -3.1%、LINK +4.2%、XLM +2.4%、ONDO +1.9%、QNT -1.2%）；同源的 tokenized-treasuries -26.6%、tokenized-products -14.0% 亦同步异常。trend_sessions 归零，下期重建基线</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <h3>热搜 Trending</h3>
+  <div class="card">
+    <div><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">BTC</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">BLESS</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">PENGU</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">CATE</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">ETH</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:rgba(88,166,255,.15);color:var(--accent);font-size:12px;font-weight:700;">ADA</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">HYPE</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">KAS</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">STRK</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">VIRTUAL</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">PEPE</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:rgba(88,166,255,.15);color:var(--accent);font-size:12px;font-weight:700;">LINK</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">APT</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:rgba(88,166,255,.15);color:var(--accent);font-size:12px;font-weight:700;">AVAX</span><span style="display:inline-block;padding:3px 10px;margin:3px;border-radius:12px;background:var(--border);font-size:12px;">SOL</span></div><div class="etf-text-summary">高亮为机会池内标的：ADA 本期新入榜并升级为机会条目，LINK / AVAX 为重回榜内。</div>
+  </div>
+
+  <h3>链 TVL 动量</h3>
+  <div class="card">
+    <div class="chart-small">
+      <canvas id="chartTVL"></canvas>
+      <div id="noDataTVL" class="no-data" style="display:none;">数据暂缺 — DeFiLlama 链 TVL 数据未获取</div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 3: EVENT CALENDAR -->
+  <h2>三、事件日历</h2>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table"><thead><tr><th>日期</th><th>倒计时</th><th>币种</th><th>类型</th><th>事件</th><th>机会角度</th></tr></thead><tbody><tr><td><strong class="warn">⏰ 2026-08-05</strong></td><td><strong class="warn">2 天</strong></td><td><strong>PROVE</strong></td><td>解锁</td><td class="meaning">⏰Succinct（PROVE）Contributors（Team &amp; Future Core）解锁，为 8 月绝对值最大的 cliff 之一（tokenomist 上期列示 $35.56M）；媒体独立确认解锁日为 8/5</td><td class="meaning">⏰<strong>48h 内</strong>。参照本期两个已实现样本：ENA（解锁前已充分定价 → 解锁后 +10.3%）与 BEAT（解锁日逼空 +19.4% → 两日后 -31.5%）。观察要点是解锁<strong>前</strong>两日的价格行为——若已提前下跌则倾向利空出尽，若逆势拉抬则警惕 BEAT 式回吐</td></tr><tr><td>2026-08-06</td><td>3 天</td><td><strong>HYPE</strong></td><td>解锁</td><td class="meaning">Hyperliquid 下一次 Core Contributors 解锁；tokenomist 上期列示 $22.53M、占供应 0.2%</td><td class="meaning">占供应仅 0.2%，规模相对温和。HYPE 本期在 trending 榜内且 Hyperliquid L1 稳定币供应 $6.22B 为全链第五——注意力充足，抛压吸收条件优于薄盘标的</td></tr><tr><td>2026-08-07</td><td>4 天</td><td><strong>MACRO</strong></td><td>宏观</td><td class="meaning">参议院 8/7-8/8 夏季休会：CLARITY Act 已于 7/27 被搁置（转而优先俄罗斯制裁法案与人事提名），休会前的 floor vote 窗口实质关闭；此前障碍（Thune 未分配 floor time、无参院民主党公开支持、需 7-9 名民主党跨党过 60 票、道德条款/AML/CFT 三项争议）本期仍全部未解</td><td class="meaning">立法侧催化剂在 9 月复会前基本归零，这是 8 月「宏观真空期」判断的立法侧支柱。含义是本月的价格驱动将来自事件与流动性，而非政策——利于事件驱动型机会（ADA 8/9、AKT 8/30），不利于依赖监管放行的叙事</td></tr><tr><td>2026-08-09</td><td>6 天</td><td><strong>ADA</strong></td><td>ETF</td><td class="meaning">🆕CME 集团的 ADA 期货于 2026/2/9 上线，8/9 满足 SEC 新版通用上市标准所要求的「受监管市场连续交易满 6 个月」门槛；达标后 NYSE Arca / Nasdaq / Cboe 任一所可免于单独提交 19b-4 直接挂牌合格加密产品，审查窗口上限 75 天</td><td class="meaning"><strong>资格里程碑而非批准</strong>——本身不产生资金流，但打开通道。角度：8/9 前抢跑「通道打开」预期 vs 8/9 当日 sell-the-news（ADA 7d 已 +14.9%）。真正的二元事件在 10/23 的 Grayscale 决定日</td></tr><tr><td>2026-08-10</td><td>7 天</td><td><strong>VELVET</strong></td><td>解锁</td><td class="meaning">VELVET 第 2 批月度解锁约 1,040 万枚（媒体口径约 1% 供应；首批 7/10 已释放）；4 连月度解锁之二 + 后续 15% 更大池起 vest</td><td class="meaning">VELVET 本期 +1.0% 收 $0.399（市值 $168.0M、换手 1.8%），7d -13.2%——解锁前已在下跌，属「提前定价」形态。角度：观察 8/10 后能否企稳，若企稳则后续 3 批解锁的边际影响递减</td></tr><tr><td>2026-08-13</td><td>10 天</td><td><strong>IP</strong></td><td>解锁</td><td class="meaning">🆕Story Protocol（IP）解锁 1,750 万枚（媒体口径约占总供应 1.7%）</td><td class="meaning">8 月三大解锁（YZY / PROVE / KAITO）之外规模较大的一笔。角度同其余解锁条目：观察解锁前两日的价格是否已提前反映</td></tr><tr><td>2026-08-13</td><td>10 天</td><td><strong>GRVT</strong></td><td>上所/退市</td><td class="meaning">GRVT Airdrop+ 活动窗口关闭（7/30 10:00 UTC 开启 → 8/13 10:00 UTC 结束，MEXC 口径含 $60,000 等值 GRVT + 10,000 USDT 奖励池）。GRVT 于 7/30 TGE，仅解锁总量 10 亿枚中的 11.43%</td><td class="meaning">与机会池中的 LIT 条目直接相关：GRVT 是 LIT 换手自 6.7% → 3.8% → 3.4% 连续下滑的分流来源。角度：8/13 活动结束后观察 LIT 换手是否回升——若回升，说明分流是活动性的而非结构性的</td></tr><tr><td>2026-08-13</td><td>10 天</td><td><strong>LAB</strong></td><td>解锁</td><td class="meaning">LAB 约 2.82 亿枚解锁（媒体口径 8/13-14 窗口）；团队已销毁 $11M、媒体另有「下批 4,600 万枚」口径并记</td><td class="meaning">口径不一致（2.82 亿 vs 4,600 万），两说并记不做取舍。角度：销毁与解锁并行，净供应变化方向需在事件后用链上数据确认</td></tr><tr><td>2026-08-14</td><td>11 天</td><td><strong>PIEVERSE</strong></td><td>解锁</td><td class="meaning">PIEVERSE 解锁 16,744,662 枚（占总供应 1.7%、约当前市值 6%——tokenomics.com 口径）；11/14 另有占市值 10.1% 的更大批次</td><td class="meaning">⚡<strong>本期升级为对冲局面</strong>：PIEVERSE 今日 +17.0% 入异动榜，驱动为上所预期（媒体称即将登陆 Upbit/MEXC/BingX，⚠️无确认日期）。角度：上所预期（无日期）vs 解锁抛压（有日期）——有日期的一侧确定性更高，这是典型的「利好模糊、利空明确」结构</td></tr><tr><td>2026-08-16</td><td>13 天</td><td><strong>YZY</strong></td><td>解锁</td><td class="meaning">🆕YZY 代币归属释放，媒体口径约 $35.47M、占该次计划释放量的 22.83%——为 8 月全月约 $323M 解锁总额中最大的单笔之一</td><td class="meaning">8 月三大解锁之首（YZY / PROVE / KAITO）。⚠️YZY 不在 250 币池内，本引擎无法用 API 核验其价格与流动性，仅作日历记录，不构成机会候选</td></tr><tr><td>2026-08-20</td><td>17 天</td><td><strong>KAITO</strong></td><td>解锁</td><td class="meaning">🆕KAITO 解锁 3,260 万枚（媒体口径约 $37.81M），占<strong>总供应 3.3%</strong>、占<strong>流通供应约 9.67%</strong>——为 8 月三大解锁之一</td><td class="meaning">⚡<strong>本期机会池内影响最大的事件</strong>：KAITO 机会条目已因此把 risk 自 2 降至 1（13→12）。占流通近 10% 的单次释放规模罕见，且期货未平仓上期已扩张近 3 倍。角度：解锁前避险 vs 解锁后企稳吸筹——市场传闻可能伴随第二次空投（若属实会显著改变持有者行为，是本条最大的不确定项）</td></tr><tr><td>2026-08-25</td><td>22 天</td><td><strong>ZANO</strong></td><td>升级</td><td class="meaning">Zano HF6 硬分叉（区块 3,833,000，预期窗口 8/25-27）：Gateway Addresses——面向交易所/DEX/桥的账户型地址</td><td class="meaning">ZANO 本期 +5.5% 收 $145.3M 市值，但换手仅 1.0%、24h 成交 $1.5M，低于 scan-config 的 $3M 门槛。角度：升级前抢跑 vs sell-the-news，但薄流动性使任何一侧的执行都困难</td></tr><tr><td>2026-08-26</td><td>23 天</td><td><strong>CEX</strong></td><td>上所/退市</td><td class="meaning">BitMart 全部现货与合约交易停止（7/26 01:30 UTC 已停注册/充值/新订单，提现保持开放；2027/1/31 平台彻底停运）</td><td class="meaning">与 BitMEX(9/23)、AscendEX、以及 MiCA 过渡期到期后 Binance/MEXC/HTX 退出欧盟共同构成「中小与离岸场所全球性收缩」的结构性背景。角度：仅在 BitMart 有深度的长尾标的将面临流动性迁移，注意机会池中换手已低于 1% 的条目（CC 0.13%、GNO 0.37%、MORPHO 0.77%）</td></tr><tr><td>2026-08-30</td><td>27 天</td><td><strong>AKT</strong></td><td>升级</td><td class="meaning">Akash 官方 2026 路线图列示 <code>aep-49: Virtual Machines</code>，标注 Estimated Completion 8/30/2026——把可售卖单元自容器扩展至通用虚拟机</td><td class="meaning">🔴机会池中唯一「有明确日期 + 零媒体覆盖」的组合。AKT 本期在普涨日逆势 -0.7%、30d -27.3%，说明市场对该日期毫无定价。角度：升级前的低位布局 vs 路线图延期风险（Estimated 为估计值而非承诺）</td></tr><tr><td>2026-08-31</td><td>28 天</td><td><strong>ETH</strong></td><td>升级</td><td class="meaning">Glamsterdam 升级（ePBS EIP-7732、200M gas 上限目标）：内部工作目标 8 月底主网激活（aspirational，测试网后定最终日期）</td><td class="meaning">⚠️日期为「志向性目标」而非确定日期，本期仍无测试网后的最终定档。角度：ETH 本期 +0.8% 明显落后大盘 +1.45%，ETH/BTC 0.029664（上期 0.029387）小幅回升但仍处低位——升级预期尚未被定价</td></tr><tr><td>2026-09-01</td><td>29 天</td><td><strong>SUI</strong></td><td>解锁</td><td class="meaning">SUI 下一次月度解锁（tokenomist 确认日期，释放至 Community Reserve；金额与占比页面未展示，写 null）</td><td class="meaning">月度节奏性解锁，历史上占供应比例小（8/1 批次约 0.3%）。角度：规律性解锁的边际影响通常递减，除非叠加其他事件</td></tr><tr><td>2026-09-23</td><td>51 天</td><td><strong>CEX</strong></td><td>上所/退市</td><td class="meaning">BitMEX 全部交易所业务停止运营（9/23 04:00 UTC、7/23 宣布后即刻停止新注册）——运营逾 11 年的加密早期衍生品场所退出</td><td class="meaning">同 BitMart 条目的结构性背景。BitMEX 曾是 BTC 永续合约的定价中心之一，其退出对 BTC 资金费率与未平仓合约的口径连续性有潜在影响——本引擎的 funding_rate / open_interest 取自 Binance (Futures)，不受直接影响</td></tr><tr><td>2026-10-23</td><td>81 天</td><td><strong>ADA</strong></td><td>ETF</td><td class="meaning">🆕Grayscale 的 Cardano（ADA）现货 ETF 申请审查决定日，媒体口径为 10/23——即 8/9 资格达标后 75 天审查窗口的终点</td><td class="meaning"><strong>这是 ADA 机会条目的真正二元事件</strong>（8/9 只是资格里程碑）。角度：距今 81 天，属于需要提前建立观察但不需立即行动的时间窗；中间的可验证节点是 S-1 是否完成生效、以及是否有交易所依通用标准提交挂牌</td></tr></tbody></table><div class="key-changes" style="margin-top:12px;"><strong>上期已过事件回顾</strong><ul style="margin:6px 0 0;padding-left:18px;"><li><strong>[ENA] 2026-08-02</strong>：✅<strong>已过事件回顾</strong>：解锁次日 ENA <strong>+10.3%</strong> 收 $0.0855（市值 $849.3M、换手 18.4%），为本期全池涨幅第四——「解锁落地即利空出尽」的典型样本，与 BEAT 的「解锁日逼空、两日后 -31.5%」形成对照。两者共同说明：解锁本身不决定方向，解锁前的定价程度才决定</li></ul></div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 4: MARKET CONTEXT (进场时机参考) -->
+  <h2>四、市场环境（进场时机参考）</h2>
+
+  <h3>市场阶段评估</h3>
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;flex-wrap:wrap;">
+      <span style="font-size:13px;color:var(--text-secondary);">综合评分</span>
+      <span style="font-size:22px;font-weight:700;">11<span style="font-size:14px;color:var(--text-secondary);">/20</span></span>
+      <span style="font-size:14px;font-weight:600;">中性（区间内单日反弹，广度改善但周级结构未修复）</span>
+    </div>
+    <div class="score-row">
+      <span class="label">BTC 趋势</span>
+      <div class="score-track"><div class="score-fill" id="bar-btc-trend"></div></div>
+      <span class="val">3</span>
+    </div>
+    <div class="score-row">
+      <span class="label">资金面</span>
+      <div class="score-track"><div class="score-fill" id="bar-funding"></div></div>
+      <span class="val">3</span>
+    </div>
+    <div class="score-row">
+      <span class="label">市场情绪</span>
+      <div class="score-track"><div class="score-fill" id="bar-sentiment"></div></div>
+      <span class="val">3</span>
+    </div>
+    <div class="score-row">
+      <span class="label">宏观环境</span>
+      <div class="score-track"><div class="score-fill" id="bar-macro"></div></div>
+      <span class="val">2</span>
+    </div>
+  </div>
+
+  <h3>BTC 核心指标</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>指标</th><th>当前值</th><th>24h 变化</th><th>信号</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>价格</td>
+            <td><strong>$63,395</strong></td>
+            <td><span class="up">+1.48%</span></td>
+            <td>✅ 收复上期跌破的 $62,527 支撑，support_break 告警解除</td>
+          </tr>
+          <tr>
+            <td>恐惧贪婪</td>
+            <td><strong>27</strong></td>
+            <td>Fear</td>
+            <td>上期 27 → 持平，连续 2 期同值，仍处低位</td>
+          </tr>
+          <tr>
+            <td>BTC 主导率</td>
+            <td><strong>56.254%</strong></td>
+            <td><span class="neutral">+0.004pt</span></td>
+            <td>连续 2 期几乎完全持平——山寨与 BTC 同步反弹</td>
+          </tr>
+          <tr>
+            <td>总市值</td>
+            <td><strong>$2.2606T</strong></td>
+            <td>--</td>
+            <td>--</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:3px;">
+        <span>Extreme Fear</span><span>Fear</span><span>Neutral</span><span>Greed</span><span>Extreme Greed</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fgi" style="width:27%"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>BTC 7 日价格走势</h3>
+  <div class="card">
+    <div class="chart-inline">
+      <canvas id="chartSparkline"></canvas>
+      <div id="noDataSparkline" class="no-data" style="display:none;">数据暂缺 — CoinGecko sparkline API 未返回有效数据</div>
+    </div>
+  </div>
+
+  <h3>ETF 资金流向（定性）</h3>
+  <div class="card">
+    <div class="etf-text-summary">BTC ETF: 数据暂缺（无免费 API；farside / sosovalue 均 403）。本期检索到的媒体描述称美国现货 BTC ETF 仍处净流出（点名 iShares Bitcoin Trust 与 Fidelity Wise Origin），⚠️未经一手信源核验、无任何数值进入 JSON。可核验旁证：dominance 连续 2 期几乎持平——若存在集中赎回通常伴随 dominance 明显上行，本期未出现。</div>
+    <div class="etf-text-summary">ETH ETF: 数据暂缺（同上）。ETH +0.8% 跑输 BTC +1.48% 与大盘 +1.45%，但 ETH/BTC 自 0.029387 回升至 0.029664（+0.9%），结束连续 2 期走弱——相对 BTC 略有修复，全市场中仍属落后。</div>
+  </div>
+
+  <h3>周期指标</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table"><thead><tr><th>指标</th><th>数值</th><th>信号</th><th>新鲜度</th></tr></thead><tbody><tr><td>MVRV 比率</td><td><strong>1.1887</strong></td><td class="meaning">连续第 3 期回落，距 deep_value 线（&lt;1.0）尚有 15.9%</td><td class="meaning">正常（数据点 8/1，CoinMetrics 惯常 1-2 日滞后）</td></tr><tr><td>资金费率</td><td><strong>0.0100%</strong></td><td class="meaning">自极低位回升近一倍，绝对值仍处中性下沿——杠杆开始回补、远未拥挤</td><td class="meaning">正常（上期 0.005459%）</td></tr><tr><td>未平仓合约</td><td><strong>$6.931B</strong></td><td class="meaning"><span class="up">+2.4%</span>（上期 $6.768B），与费率同向确认</td><td class="meaning">正常</td></tr></tbody></table><div class="etf-text-summary">⚠️ 恐惧贪婪指数连续 2 期为 27——尚未达「连续 ≥3 期不变」的告警阈值，本期仅记录。</div>
+    </div>
+  </div>
+
+  <h3>技术面</h3>
+  <div class="card">
+    <table class="data-table compact">
+      <tbody>
+        <tr><td style="width:80px;font-weight:600;">支撑</td><td><strong>$62,457</strong> — 7 日低点，较上期 $62,527 再下移约 $70，下沿仍在被缓慢侵蚀</td></tr>
+        <tr><td style="font-weight:600;">阻力</td><td><strong>$65,439</strong> — <span class="warn">连续 3 期未被突破</span>，是同一条压力线</td></tr>
+        <tr><td style="font-weight:600;">趋势</td><td>区间内反弹：收复支撑，7d 自 -2.86% 收敛至 -1.92%，30d 自 +1.75% 回升至 +1.98%；但周级广度几乎无改善（7d 上涨 69/250）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>宏观日历</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="macro-table"><thead><tr><th>日期</th><th>事件</th><th>预期影响</th></tr></thead><tbody><tr><td>08-07</td><td>参议院夏季休会（8/7-8/8）</td><td>CLARITY Act 已搁置，立法侧催化剂在 9 月复会前归零</td></tr><tr><td>08-09</td><td>ADA ETF 资格里程碑</td><td>本期唯一在 7 日内的正向事件（详见事件日历）</td></tr><tr><td>09-16</td><td><strong>FOMC</strong>（含 SEP 与点阵图），距今 <strong>44 天</strong></td><td>8 月为完整宏观真空期；7/29 已以 9:3 连续第 5 次按兵不动，3 票鹰派异议未消散</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 5: WATCHLIST (config/watchlist.json 为空时输出空字符串并省略标题) -->
+  
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    Generated by Crypto Monitor | Data: CoinGecko, DeFiLlama, CoinMetrics, Alternative.me, Tokenomist
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS                                                       -->
+<!-- ============================================================ -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ---------- Chart.js Defaults ---------- */
+  Chart.defaults.color = '#8b949e';
+  Chart.defaults.borderColor = '#21262d';
+  Chart.defaults.font.family = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+  Chart.defaults.font.size = 11;
+
+  /* ---------- Score Bars ---------- */
+  function colorBar(id, rawScore) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var v = parseFloat(rawScore);
+    if (isNaN(v)) return;
+    el.style.width = (v / 5 * 100) + '%';
+    el.style.background = v <= 2 ? 'var(--red)' : v <= 3.5 ? 'var(--orange)' : 'var(--green)';
+  }
+  colorBar('bar-btc-trend', '3');
+  colorBar('bar-funding',   '3');
+  colorBar('bar-sentiment', '3');
+  colorBar('bar-macro',     '2');
+
+  /* ---------- BTC 7d Sparkline ---------- */
+  (function () {
+    var data = [64637.67, 64621.86, 65048.7, 65378.24, 65310.39, 65116.26, 65143.04, 65199.88, 65241.19, 65257.66, 65438.55, 65374.75, 65160.08, 65060.51, 65207.53, 65248.68, 65106.23, 65041.93, 65293.49, 64597.47, 64483.66, 64795.05, 64964.8, 64774.28, 64986.8, 64884.87, 64629.23, 63688.83, 63673.71, 63430.34, 63160.99, 63150.25, 63263.25, 63352.02, 63379.83, 63567.48, 63453.85, 63369.7, 63340.0, 63395.99, 63382.57, 63466.09, 63108.02, 63339.3, 63851.44, 63950.76, 63706.07, 63755.76, 63824.74, 63880.66, 63881.99, 63687.66, 63957.04, 63917.8, 63662.39, 63856.18, 63644.82, 63908.85, 64028.3, 64360.21, 64472.38, 64386.37, 64634.93, 64417.3, 64419.37, 64213.27, 64516.7, 64063.46, 63869.62, 63741.91, 64498.15, 64493.1, 63447.32, 63418.14, 63844.04, 63860.43, 63934.1, 63677.61, 64197.11, 64148.05, 64084.5, 63886.91, 63951.84, 64035.55, 63942.45, 64228.97, 64518.72, 64477.01, 64756.29, 64828.74, 64926.99, 64616.04, 64709.19, 64785.98, 64813.09, 64686.56, 64857.32, 64747.47, 64711.16, 64804.03, 64776.94, 64854.76, 64469.11, 64198.75, 64340.47, 64337.14, 64283.82, 64145.13, 63884.98, 63780.52, 63625.53, 63898.67, 63729.36, 63702.62, 63160.92, 62562.73, 62721.33, 62833.52, 63189.22, 63065.59, 62925.21, 62841.07, 62851.08, 62904.77, 62896.51, 62898.05, 62931.22, 63001.84, 62950.28, 63022.79, 62974.67, 63021.78, 63020.85, 63060.8, 62986.67, 62993.66, 63043.73, 63046.18, 63019.53, 63061.43, 62904.51, 62885.13, 62609.72, 62529.31, 62457.34, 62723.11, 62750.89, 62798.37, 62802.63, 62797.29, 62926.68, 63388.0, 63452.61, 63509.78, 63400.45, 63433.93, 63435.23, 63104.14, 63197.91, 63129.65, 63037.31, 63085.93, 63032.56, 63016.61, 63053.2, 63132.67, 63249.62, 63321.74];  /* DATA_PLACEHOLDER */
+    if (!Array.isArray(data) || data.length === 0) {
+      document.getElementById('chartSparkline').style.display = 'none';
+      document.getElementById('noDataSparkline').style.display = 'flex';
+      return;
+    }
+    var support = parseFloat('62457.34');
+    var resistance = parseFloat('65438.55');
+    var labels = data.map(function (_, i) { return i; });
+    var datasets = [{
+      data: data,
+      fill: true,
+      borderColor: '#58a6ff',
+      backgroundColor: 'rgba(88,166,255,.08)',
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.3
+    }];
+    if (!isNaN(support)) {
+      datasets.push({
+        data: Array(data.length).fill(support),
+        borderColor: 'rgba(63,185,80,.5)',
+        borderWidth: 1,
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false,
+        label: 'Support $' + support.toLocaleString()
+      });
+    }
+    if (!isNaN(resistance)) {
+      datasets.push({
+        data: Array(data.length).fill(resistance),
+        borderColor: 'rgba(248,81,73,.5)',
+        borderWidth: 1,
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false,
+        label: 'Resistance $' + resistance.toLocaleString()
+      });
+    }
+    new Chart(document.getElementById('chartSparkline'), {
+      type: 'line',
+      data: { labels: labels, datasets: datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: 'top', labels: { boxWidth: 10, padding: 10, font: { size: 11 } } }
+        },
+        scales: {
+          x: { display: false },
+          y: {
+            grid: { color: '#21262d' },
+            ticks: { callback: function (v) { return '$' + v.toLocaleString(); }, font: { size: 10 } }
+          }
+        }
+      }
+    });
+  })();
+
+  /* ---------- TVL Horizontal Bar ---------- */
+  (function () {
+    var labels = ["Ethereum", "BSC", "Tron", "Solana", "Base", "Bitcoin"];  /* DATA_PLACEHOLDER */
+    var data = [40.761, 4.872, 4.861, 4.743, 4.537, 3.514];      /* DATA_PLACEHOLDER */
+    if (!Array.isArray(labels) || labels.length === 0) {
+      document.getElementById('chartTVL').style.display = 'none';
+      document.getElementById('noDataTVL').style.display = 'flex';
+      return;
+    }
+    new Chart(document.getElementById('chartTVL'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: ['#f7931a','#627eea','#14f195','#375bd2','#28a0f0','#836ef9'],
+          borderRadius: 4
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: '#21262d' }, ticks: { callback: function (v) { return '$' + v + 'B'; }, font: { size: 10 } } },
+          y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+  })();
+
+});
+</script>
+</body>
+</html>
