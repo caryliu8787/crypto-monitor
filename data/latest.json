@@ -1,239 +1,229 @@
 {
-  "timestamp": "2026-08-10T04:00:00+08:00",
+  "timestamp": "2026-08-11T04:00:00+08:00",
   "session": "daily",
   "market_scan": {
     "movers": [
       {
-        "coin_id": "tutorial",
-        "symbol": "TUT",
-        "price_usd": 0.184745,
-        "price_change_24h": 128.7,
-        "price_change_7d": 897.1,
-        "price_change_30d": 1456.4,
-        "market_cap": 154011254,
-        "volume_24h": 697599460,
-        "reason": "Aster DEX 8/6 上线 TUT 永续（5x 杠杆）引发轧空，8/9 创 ATH $0.2362；本期换手 453% 为全池最高、24h 量 $697.6M 超市值 4.5 倍。⚠️前 5 钱包持仓 86.6%、RSI 86 超买——极端集中 + 杠杆驱动，回撤风险同级放大",
-        "narrative_tag": "BNB meme/轧空抛物线",
-        "source_url": "https://coinmarketcap.com/cmc-ai/tutorial/latest-updates/"
-      },
-      {
         "coin_id": "cysic",
         "symbol": "CYS",
-        "price_usd": 1.11,
-        "price_change_24h": 15.3,
-        "price_change_7d": 270.9,
-        "price_change_30d": 259.5,
-        "market_cap": 178719163,
-        "volume_24h": 35219005,
-        "reason": "抛物线第 4 期，归因终获明确：InferBench（去中心化 AI 基准平台）上线引爆期货投机——8/5 量 +3000%、Binance Futures 8/4 涨幅榜首、8/5 清算 $2.29M。RSI~90 过热、流通盘薄；换手 71.5%→19.7% 降温但价格续创新高",
-        "narrative_tag": "ZK 硬件/AI 基准抛物线第 4 期",
-        "source_url": "https://www.interactivecrypto.com/cys-surges-past-key-resistance-in-overheated-rally-fueled-by-ai-benchmark-launch-aug-2026"
+        "price_usd": 1.23,
+        "price_change_24h": 18.0,
+        "price_change_7d": 331.3,
+        "price_change_30d": 325.0,
+        "market_cap": 198054582,
+        "volume_24h": 88893610,
+        "reason": "归因升级：Upbit 8/10 14:00 KST 上线 CYS/BTC、CYS/USDT（crypto.news 口径周涨 223%）——韩所效应接棒 InferBench 叙事，抛物线第 5 期；8/9 23:00 UTC 前后自 ~$0.80 急拉上刺 $1.30。换手 44.9% 再度过热，追高风险同级放大",
+        "narrative_tag": "ZK 硬件/Upbit 上线抛物线第 5 期",
+        "source_url": "https://crypto.news/cysic-surges-223-weekly-as-upbit-adds-cys-markets/"
+      },
+      {
+        "coin_id": "kinesis-gold",
+        "symbol": "KAU",
+        "price_usd": 141.12,
+        "price_change_24h": 111.6,
+        "price_change_7d": 8.3,
+        "price_change_30d": 8.9,
+        "market_cap": 336743752,
+        "volume_24h": 8638523,
+        "reason": "⚠️疑似数据异常打印：API 快照 +111.6% 意味着前日价 ~$66，但 Forbes/Kraken 等报价源同期显示 KAU $137.6、-1.2%/24h——金背书代币（1 枚 = 1 克金，$141 与金价一致）不可能真实翻倍。判定为源数据坏打印，不作行情解读",
+        "narrative_tag": "金背书/数据异常",
+        "source_url": "https://www.coingecko.com/en/coins/kinesis-gold"
       },
       {
         "coin_id": "cash-cat",
         "symbol": "CASHCAT",
-        "price_usd": 0.142703,
-        "price_change_24h": 21.1,
-        "price_change_7d": 215.5,
-        "price_change_30d": -2.9,
-        "market_cap": 141105329,
-        "volume_24h": 23186553,
-        "reason": "双催化剂：Robinhood 8/6 官方上币（CASHCAT 为 Robinhood Chain 旗舰 meme）+ Uniswap 发币平台 pools.trade 8/5 上线（当日 +33%）。周内最高触及 ~$0.20 后回落至 $0.143；RH Chain 生态零售活跃度的旁证样本",
+        "price_usd": 0.154644,
+        "price_change_24h": 8.7,
+        "price_change_7d": 181.4,
+        "price_change_30d": -27.0,
+        "market_cap": 152879295,
+        "volume_24h": 20525532,
+        "reason": "Robinhood 8/6 上币效应延续：7d +181.4% 但 24h 降温至 +8.7%，trending 第 3 位；RH Chain 零售活跃样本意义仍在（pools.trade 与 PONS 的 launchpad 生态战为新背景）",
         "narrative_tag": "Robinhood 生态 meme",
         "source_url": "https://coinsprobe.com/robinhood-lists-cashcat-memecoin-jumps-sharply-on-official-announcement/"
       },
       {
-        "coin_id": "bitway",
-        "symbol": "BTW",
-        "price_usd": 0.214948,
-        "price_change_24h": 11.1,
-        "price_change_7d": 159.6,
-        "price_change_30d": 233.8,
-        "market_cap": 444631104,
-        "volume_24h": 24982730,
-        "reason": "回调一期后恢复上行（+11.1%），30d +233.8% 为中市值最强。归因仍弱：媒体仅称「与大型区块链平台的合作公告」（未具体指明），8/8 起进入 daily movers 报道口径——扩散度上升但信息含量低",
-        "narrative_tag": "Binance Wallet/领涨恢复",
-        "source_url": "https://thecurrencyanalytics.com/breaking-news/bitway-surges-16-amid-altcoin-gains-daily-movers-aug-8"
-      },
-      {
         "coin_id": "audiera",
         "symbol": "BEAT",
-        "price_usd": 3.7,
-        "price_change_24h": 35.1,
-        "price_change_7d": 1.9,
-        "price_change_30d": 38.8,
-        "market_cap": 1223251507,
-        "volume_24h": 38397011,
-        "reason": "第二轮投机拉升 +35.1% 重回 $3.70（接近崩盘前 $3.97），7d 仅 +1.9% 说明 V 型往返完成。销毁循环叙事延续：媒体口径周销毁率 99.8%（7/20-27 收入 801,250 BEAT 销毁 799,750）、8/1 $67.8M 解锁已被吸收。⚠️连续 2 期单币拉动 gaming 板块口径（占板块市值约 26%）",
-        "narrative_tag": "音乐 AI/销毁循环二次拉升",
-        "source_url": "https://coinmarketcap.com/cmc-ai/audiera/latest-updates/"
+        "price_usd": 1.63,
+        "price_change_24h": -51.8,
+        "price_change_7d": -36.0,
+        "price_change_30d": -23.8,
+        "market_cap": 537090092,
+        "volume_24h": 58346565,
+        "reason": "二次崩盘 -51.8% 至 $1.63（上期二次拉升 $3.70 全数回吐）：8/1 解锁 21.25M 枚（流通 6.9%）消化失败 + 8 月首周链上交易数 -50% + 杠杆清算连锁；coinpedia 口径距峰值 -88%、定性 pump-and-dump。gaming 板块 -14.9% 即此单币效应",
+        "narrative_tag": "音乐 AI/二次崩盘",
+        "source_url": "https://coinpedia.org/price-analysis/audiera-beat-collapses-88-in-a-week-have-investors-just-witnessed-a-classic-pump-and-dump"
       },
       {
-        "coin_id": "pump-fun",
-        "symbol": "PUMP",
-        "price_usd": 0.00272269,
-        "price_change_24h": 12.9,
-        "price_change_7d": 25.2,
-        "price_change_30d": 85.7,
-        "market_cap": 1072083785,
-        "volume_24h": 130768469,
-        "reason": "回购执行数字披露：332M 枚 @ 均价 $0.00225（约 $747k/日，出自 $1.49M 日收入，50% 协议收入回购销毁），年化收入口径 $356M（8/5）+ 轧空清算助推。trending 第 4 位、换手 12.2%、市值站上 $1.07B",
-        "narrative_tag": "Solana launchpad/回购飞轮",
-        "source_url": "https://ambcrypto.com/pump-fun-buys-back-332m-pump-rally-continues-only-if/"
+        "coin_id": "ribbita-by-virtuals",
+        "symbol": "TIBBIR",
+        "price_usd": 0.126105,
+        "price_change_24h": 30.9,
+        "price_change_7d": 38.0,
+        "price_change_30d": -8.1,
+        "market_cap": 126108098,
+        "volume_24h": 4756365,
+        "reason": "Virtuals 生态联动（母币 VIRTUAL 拉升 + Base 扩展利用），无独立催化剂——弱归因；+30.9%/24h 为 meme 轮动内的资金再分配",
+        "narrative_tag": "Virtuals 生态 meme",
+        "source_url": "https://coinmarketcap.com/cmc-ai/ribbita-by-virtuals/latest-updates/"
       },
       {
-        "coin_id": "kaito",
-        "symbol": "KAITO",
-        "price_usd": 0.681834,
-        "price_change_24h": -8.1,
-        "price_change_7d": -34.6,
-        "price_change_30d": 10.8,
-        "market_cap": 164587102,
-        "volume_24h": 43552457,
-        "reason": "8/20 解锁前抛售第 2 周：7d -34.6% 但恐慌降温——换手 45.4%→26.5% 腰斩。解锁价值随价格缩水至媒体口径 $22.9M（32.6M 枚/3.3% 总供应不变）；crypto.news 提出解锁前二次空投猜想（未证实）",
-        "narrative_tag": "AI 注意力/解锁恐慌降温",
-        "source_url": "https://www.ccn.com/analysis/crypto/kaito-price-token-unlock/"
-      },
-      {
-        "coin_id": "build-on",
-        "symbol": "B",
-        "price_usd": 0.145007,
-        "price_change_24h": -11.2,
-        "price_change_7d": -14.1,
-        "price_change_30d": -33.0,
-        "market_cap": 145006932,
-        "volume_24h": 6582331,
-        "reason": "原因未明（未纳入检索预算）；30d -33.0% 阴跌延续中的加速下行",
-        "narrative_tag": "BNB 生态/阴跌加速",
-        "source_url": "https://www.coingecko.com/en/coins/buildon"
-      },
-      {
-        "coin_id": "convex-finance",
-        "symbol": "CVX",
-        "price_usd": 1.6,
-        "price_change_24h": 5.2,
-        "price_change_7d": 22.7,
-        "price_change_30d": 27.9,
-        "market_cap": 160104232,
-        "volume_24h": 7543631,
-        "reason": "Curve 生态联动上涨（8/6 LlamaLend v2 gauge 激励上线背景下与 CRV 同向，CVX 为 Curve 治理聚合层直接受益者），未单独检索确认",
-        "narrative_tag": "Curve 生态/联动",
-        "source_url": "https://www.coingecko.com/en/coins/convex-finance"
+        "coin_id": "bitway",
+        "symbol": "BTW",
+        "price_usd": 0.198732,
+        "price_change_24h": -6.7,
+        "price_change_7d": 82.3,
+        "price_change_30d": 222.5,
+        "market_cap": 537386100,
+        "volume_24h": 31112556,
+        "reason": "回调 -6.7%（上期 +11.1%），30d +222.5% 仍为中市值最强；归因依旧薄弱（未具体指明的合作公告），本期未纳入检索预算",
+        "narrative_tag": "Binance Wallet/高位震荡",
+        "source_url": "https://www.coingecko.com/en/coins/bitway"
       },
       {
         "coin_id": "talus",
         "symbol": "US",
-        "price_usd": 0.04481112,
-        "price_change_24h": -4.2,
-        "price_change_7d": -20.2,
-        "price_change_30d": 97.1,
-        "market_cap": 130368609,
-        "volume_24h": 21377044,
-        "reason": "AI 微盘退潮第 3 期（-10.7%→-10.0%→-4.2%/24h 跌速放缓），30d +97.1% 高位回吐持续；原因未明（未纳入检索预算）",
+        "price_usd": 0.03984491,
+        "price_change_24h": -10.4,
+        "price_change_7d": -26.6,
+        "price_change_30d": 82.1,
+        "market_cap": 115917174,
+        "volume_24h": 6220044,
+        "reason": "AI 微盘退潮第 4 期（-4.2%→-10.4% 跌速再扩），30d +82.1% 高位回吐持续；原因未明（未纳入检索预算）",
         "narrative_tag": "AI 微盘/退潮",
         "source_url": "https://www.coingecko.com/en/coins/talus"
       },
       {
-        "coin_id": "bitcoin-cash-sv",
-        "symbol": "BSV",
-        "price_usd": 15.0,
-        "price_change_24h": 5.2,
-        "price_change_7d": 18.1,
-        "price_change_30d": 10.8,
-        "market_cap": 300915088,
-        "volume_24h": 6437029,
-        "reason": "补涨延续第 2 期（7d +13.0%→+18.1%）；原因未明（未纳入检索预算）",
-        "narrative_tag": "PoW/补涨延续",
-        "source_url": "https://www.coingecko.com/en/coins/bitcoin-cash-sv"
+        "coin_id": "unibase",
+        "symbol": "UB",
+        "price_usd": 0.14546,
+        "price_change_24h": 10.4,
+        "price_change_7d": -25.9,
+        "price_change_30d": 99.6,
+        "market_cap": 363293298,
+        "volume_24h": 10726272,
+        "reason": "24h +10.4% 反弹 vs 7d -25.9%——AI 微盘高波动往返，原因未明（未纳入检索预算）",
+        "narrative_tag": "AI 微盘/波动往返",
+        "source_url": "https://www.coingecko.com/en/coins/unibase"
+      },
+      {
+        "coin_id": "convex-finance",
+        "symbol": "CVX",
+        "price_usd": 1.75,
+        "price_change_24h": 7.1,
+        "price_change_7d": 29.3,
+        "price_change_30d": 37.0,
+        "market_cap": 175383929,
+        "volume_24h": 11100417,
+        "reason": "Curve 生态联动第 2 期（+29.3%/7d）且新进 trending 第 8 位；生态数值佐证首次可引：Curve DEX TVL +10.9%/7d 至 $1.41B。CRV 治理聚合层受益逻辑不变",
+        "narrative_tag": "Curve 生态/联动加速",
+        "source_url": "https://www.coingecko.com/en/coins/convex-finance"
+      },
+      {
+        "coin_id": "build-on",
+        "symbol": "B",
+        "price_usd": 0.164712,
+        "price_change_24h": 20.8,
+        "price_change_7d": 1.5,
+        "price_change_30d": 29.5,
+        "market_cap": 164670711,
+        "volume_24h": 8347041,
+        "reason": "+20.8% 突破反转（上期 -11.2% 阴跌加速）：coingabbar 口径鲸鱼驱动突破延伸（媒体标题 59% rally），USD1/WLFI 集成叙事为背景；结构反转待确认",
+        "narrative_tag": "BNB 生态/鲸鱼突破反转",
+        "source_url": "https://www.coingabbar.com/en/price-prediction/buildon-price-prediction-b-surges-58-percent-after-breakout"
       },
       {
         "coin_id": "curve-dao-token",
         "symbol": "CRV",
-        "price_usd": 0.238042,
-        "price_change_24h": 5.5,
-        "price_change_7d": 17.2,
-        "price_change_30d": 15.9,
-        "market_cap": 368043104,
-        "volume_24h": 38554200,
-        "reason": "归因明确：8/6 Curve DAO 在三个 LlamaLend v2 gauge 启动 CRV 激励（CMC 归因当日 +3.65%），叠加 DeFi 基建轮动定性；CVX +22.7%/7d 生态同向佐证。已升级为机会条目",
-        "narrative_tag": "DeFi/LlamaLend v2 激励",
-        "source_url": "https://cryptorank.io/news/feed/632d2-why-is-curve-dao-crv-price-rising-ascending-triangle-signals-a-potential-breakout"
+        "price_usd": 0.257495,
+        "price_change_24h": 7.8,
+        "price_change_7d": 25.0,
+        "price_change_30d": 21.3,
+        "market_cap": 398093695,
+        "volume_24h": 55876328,
+        "reason": "LlamaLend v2 激励论点首获数值核验且分化：v2 TVL 仅 $1.98M（-39.8%/7d）落空，但 Curve DEX TVL $1.41B（+10.9%/7d）强劲；+25.0%/7d 动能延续，详见机会条目",
+        "narrative_tag": "DeFi/Curve 生态",
+        "source_url": "https://api.llama.fi/protocols"
+      },
+      {
+        "coin_id": "kaito",
+        "symbol": "KAITO",
+        "price_usd": 0.669653,
+        "price_change_24h": -4.9,
+        "price_change_7d": -28.5,
+        "price_change_30d": -1.3,
+        "market_cap": 161665642,
+        "volume_24h": 35408227,
+        "reason": "8/20 解锁（9 天）倒计时：换手 26.5%→21.9% 续衰减、跌速放缓（-28.5%/7d，上期 -34.6%）；解锁细则确认 32.6M 枚/占流通 7.63%（coinmarketcal 口径）",
+        "narrative_tag": "AI 注意力/解锁倒计时",
+        "source_url": "https://www.tradingview.com/news/coinmarketcal:6f570fe71094b:0-kaito-kaito-32-6mm-token-unlock-20-aug-2026/"
       }
     ],
-    "movers_narrative": "广度单日回落但周线仍稳：24h 上涨 93/250（37.2%，上期 56.4%）单日过半行情未延续，7d 137/250（54.8%）仍过半，30d 34.7%——周线级反弹未破坏，日线歇脚。异动头部被「赌场三件套」占据：TUT（Aster 永续轧空、换手 453%、前 5 钱包 86.6%）、CASHCAT（Robinhood 上币）、CYS（InferBench 抛物线第 4 期）全为杠杆/事件驱动薄盘。BEAT 二次拉升 +35.1% 回到崩盘前水位。基本面侧唯二：PUMP 回购执行数字落地（332M 枚 @ $0.00225）、Curve 生态 CRV/CVX 双升（LlamaLend v2 激励）——后者为本期唯一非 meme 的「无聊 DeFi」轮动。KAITO 解锁恐慌降温（换手腰斩）但价格未止跌。12 条中 9 条有可引用归因。",
+    "movers_narrative": "情绪单日转弱：24h 上涨仅 64/250（25.6%，上期 37.2%），7d 广度跌破半数（46.0%，上期 54.8%）——上期「周线仍稳」的缓冲本期失守，30d 32.4%。异动榜结构换血：上期赌场三件套之一 BEAT 崩盘离场（-51.8%，解锁消化失败），CYS 获 Upbit 上线接棒为唯一延续的抛物线；新面孔 TIBBIR（Virtuals 联动）、B（鲸鱼突破反转）均为 meme/微盘投机。基本面侧仍是 Curve 生态（CRV/CVX 双升 + DEX TVL +10.9%/7d 首次数值佐证）与 PUMP（收入 API 首验 7d 日均 $979k）。KAU +111.6% 判定为数据坏打印非行情。12 条中 8 条有可引用归因、2 条原因未明、1 条数据异常、1 条回调无新信息。",
     "sector_rotation": [
       {
         "category": "layer-1",
-        "market_cap": 1852245762378.7441,
-        "market_cap_change_24h": 0.24,
-        "market_cap_change_vs_prev_snapshot": 0.21,
-        "trend_sessions": 7,
-        "note": "连续第 7 期上行但增速放缓（0.42→0.21），与大盘 +0.20% 同步"
+        "market_cap": 1819412025097.7698,
+        "market_cap_change_24h": -1.77,
+        "market_cap_change_vs_prev_snapshot": -1.77,
+        "trend_sessions": 1,
+        "note": "7 期连升终止转跌（-1.77%），与大盘 -1.44% 同向放大"
       },
       {
         "category": "layer-2",
-        "market_cap": 6987538919.4612465,
-        "market_cap_change_24h": -0.15,
-        "market_cap_change_vs_prev_snapshot": -0.14,
+        "market_cap": 7080397496.624608,
+        "market_cap_change_24h": 1.34,
+        "market_cap_change_vs_prev_snapshot": 1.33,
         "trend_sessions": 1,
-        "note": "2 期轮动信号终止：-0.14% 转跌，上期加速上行（+2.44%）未延续"
+        "note": "转升 +1.33%（上期 -0.14%），方向反复，无信号"
       },
       {
         "category": "artificial-intelligence",
-        "market_cap": 20829050442.032467,
-        "market_cap_change_24h": 0.52,
-        "market_cap_change_vs_prev_snapshot": 0.51,
-        "trend_sessions": 2,
-        "note": "**连续 2 期上行（+1.40%→+0.51%）= 弱轮动信号**但增速腰斩；板块内分化：CYS 抛物线 vs UB/US 微盘退潮"
+        "market_cap": 20846103357.294304,
+        "market_cap_change_24h": 0.07,
+        "market_cap_change_vs_prev_snapshot": 0.08,
+        "trend_sessions": 3,
+        "note": "连续 3 期上行但增速趋零（1.40→0.51→0.08），信号趋弱；板块内 CYS 抛物线 vs US/UB 微盘退潮分化持续"
       },
       {
         "category": "real-world-assets-rwa",
-        "market_cap": 40406987017.69677,
-        "market_cap_change_24h": -34.78,
-        "market_cap_change_vs_prev_snapshot": -34.78,
+        "market_cap": 62084677651.5647,
+        "market_cap_change_24h": 53.66,
+        "market_cap_change_vs_prev_snapshot": 53.65,
         "trend_sessions": 0,
-        "note": "⚠️**-34.78% 为 CoinGecko 分类调整口径失真**（top3 变为 figure-heloc/LINK/XLM，约 $21.5B 成分移出），非真实下跌——成分币 ONDO -1.0%/LINK -0.1%/XLM -1.9% 仅温和走弱。本期重置基线 $40.41B，下期起按新口径对比"
+        "note": "⚠️+53.65% 再度为分类调整口径失真（top3 仍为 figure-heloc/LINK/XLM，约 $21.7B 成分回流），连续第 2 期基线失效；成分币实际温和（ONDO -8.4%/7d、LINK -0.2%/7d）。本期再次重置基线 $62.08B"
       },
       {
         "category": "decentralized-finance-defi",
-        "market_cap": 56953286779.157234,
-        "market_cap_change_24h": -0.08,
-        "market_cap_change_vs_prev_snapshot": -0.09,
+        "market_cap": 57457390836.91749,
+        "market_cap_change_24h": 0.89,
+        "market_cap_change_vs_prev_snapshot": 0.89,
         "trend_sessions": 1,
-        "note": "-0.09% 转跌，但板块内 Curve 生态逆势领涨（CRV +5.5%、CVX +5.2%/24h，LlamaLend v2 激励）"
+        "note": "转升 +0.89%，Curve 生态领涨（CRV +25.0%、CVX +29.3%/7d，DEX TVL +10.9%/7d）——板块内唯一有数值佐证的轮动"
       },
       {
         "category": "meme-token",
-        "market_cap": 25451810988.264275,
-        "market_cap_change_24h": 0.46,
-        "market_cap_change_vs_prev_snapshot": 0.36,
-        "trend_sessions": 3,
-        "note": "**连续 3 期上行（0.12→1.61→0.36）= 轮动信号延续**但增速回落；TUT/CASHCAT 居 trending 前 3 互证"
+        "market_cap": 25411935381.500595,
+        "market_cap_change_24h": -0.14,
+        "market_cap_change_vs_prev_snapshot": -0.16,
+        "trend_sessions": 1,
+        "note": "3 期轮动信号终止（-0.16%）；trending 前列仍被 meme 占据（MOW/PUMP/CASHCAT）但市值动能歇"
       },
       {
         "category": "gaming",
-        "market_cap": 4681765591.006036,
-        "market_cap_change_24h": 4.97,
-        "market_cap_change_vs_prev_snapshot": 5.16,
+        "market_cap": 3985453400.5761247,
+        "market_cap_change_24h": -14.89,
+        "market_cap_change_vs_prev_snapshot": -14.87,
         "trend_sessions": 1,
-        "note": "⚠️+5.16% 连续第 2 期为 BEAT 单币效应（+35.1%/24h、占板块市值约 26%），不计入轮动信号"
+        "note": "⚠️-14.87% 为 BEAT 单币崩盘效应（-51.8%，上期占板块约 26%），与上期 +5.16% 同源镜像，不计入轮动信号"
       }
     ],
     "trending": [
       {
-        "coin_id": "tutorial",
-        "symbol": "TUT",
-        "name": "Tutorial"
-      },
-      {
-        "coin_id": "pudgy-penguins",
-        "symbol": "PENGU",
-        "name": "Pudgy Penguins"
-      },
-      {
-        "coin_id": "cash-cat",
-        "symbol": "CASHCAT",
-        "name": "Cash Cat"
+        "coin_id": "mowcat",
+        "symbol": "MOW",
+        "name": "MowCat"
       },
       {
         "coin_id": "pump-fun",
@@ -241,39 +231,14 @@
         "name": "Pump.fun"
       },
       {
-        "coin_id": "bitcoin",
-        "symbol": "BTC",
-        "name": "Bitcoin"
+        "coin_id": "cash-cat",
+        "symbol": "CASHCAT",
+        "name": "Cash Cat"
       },
       {
-        "coin_id": "sui",
-        "symbol": "SUI",
-        "name": "Sui"
-      },
-      {
-        "coin_id": "lighter",
-        "symbol": "LIT",
-        "name": "Lighter"
-      },
-      {
-        "coin_id": "render-token",
-        "symbol": "RENDER",
-        "name": "Render"
-      },
-      {
-        "coin_id": "stellar",
-        "symbol": "XLM",
-        "name": "Stellar"
-      },
-      {
-        "coin_id": "solstice",
-        "symbol": "SLX",
-        "name": "Solstice"
-      },
-      {
-        "coin_id": "pepe",
-        "symbol": "PEPE",
-        "name": "Pepe"
+        "coin_id": "dappos",
+        "symbol": "DOS",
+        "name": "DAPPOS"
       },
       {
         "coin_id": "solana",
@@ -281,96 +246,131 @@
         "name": "Solana"
       },
       {
-        "coin_id": "bittensor",
-        "symbol": "TAO",
-        "name": "Bittensor"
+        "coin_id": "ethereum",
+        "symbol": "ETH",
+        "name": "Ethereum"
       },
       {
-        "coin_id": "cardano",
-        "symbol": "ADA",
-        "name": "Cardano"
+        "coin_id": "pudgy-penguins",
+        "symbol": "PENGU",
+        "name": "Pudgy Penguins"
       },
       {
-        "coin_id": "mubarak",
-        "symbol": "MUBARAK",
-        "name": "Mubarak"
+        "coin_id": "convex-finance",
+        "symbol": "CVX",
+        "name": "Convex Finance"
+      },
+      {
+        "coin_id": "bitcoin",
+        "symbol": "BTC",
+        "name": "Bitcoin"
+      },
+      {
+        "coin_id": "pons",
+        "symbol": "PONS",
+        "name": "Pons"
+      },
+      {
+        "coin_id": "tutorial",
+        "symbol": "TUT",
+        "name": "Tutorial"
+      },
+      {
+        "coin_id": "cysic",
+        "symbol": "CYS",
+        "name": "Cysic"
+      },
+      {
+        "coin_id": "canton-network",
+        "symbol": "CC",
+        "name": "Canton"
+      },
+      {
+        "coin_id": "internet-computer",
+        "symbol": "ICP",
+        "name": "Internet Computer"
+      },
+      {
+        "coin_id": "render-token",
+        "symbol": "RENDER",
+        "name": "Render"
       }
     ],
     "chains_tvl_delta": [
       {
         "chain": "Ethereum",
-        "tvl": 41953392777.054184,
-        "tvl_change_pct_vs_prev": 0.13
+        "tvl": 41445241572.16226,
+        "tvl_change_pct_vs_prev": -1.21
       },
       {
         "chain": "BSC",
-        "tvl": 5000946380.553788,
-        "tvl_change_pct_vs_prev": 0.59
+        "tvl": 4942284367.943172,
+        "tvl_change_pct_vs_prev": -1.17
       },
       {
         "chain": "Solana",
-        "tvl": 4861737419.438394,
-        "tvl_change_pct_vs_prev": 0.8
+        "tvl": 4815023744.141501,
+        "tvl_change_pct_vs_prev": -0.96
       },
       {
         "chain": "Tron",
-        "tvl": 4844557299.769389,
-        "tvl_change_pct_vs_prev": 0.27
+        "tvl": 4813403653.104682,
+        "tvl_change_pct_vs_prev": -0.64
       },
       {
         "chain": "Base",
-        "tvl": 4692998094.757588,
-        "tvl_change_pct_vs_prev": 0.25
+        "tvl": 4610752604.887047,
+        "tvl_change_pct_vs_prev": -1.75
       },
       {
         "chain": "Bitcoin",
-        "tvl": 3563564407.1863656,
-        "tvl_change_pct_vs_prev": 0.05
+        "tvl": 3490915799.6439705,
+        "tvl_change_pct_vs_prev": -2.04
       },
       {
         "chain": "Provenance",
-        "tvl": 1585337910.8212357,
-        "tvl_change_pct_vs_prev": -1.24
+        "tvl": 1616468408.0579412,
+        "tvl_change_pct_vs_prev": 1.96
       },
       {
         "chain": "Hyperliquid L1",
-        "tvl": 1211459586.4021711,
-        "tvl_change_pct_vs_prev": -0.54
+        "tvl": 1224802480.126091,
+        "tvl_change_pct_vs_prev": 1.1
       },
       {
         "chain": "Arbitrum",
-        "tvl": 1203498454.2262433,
-        "tvl_change_pct_vs_prev": 0.16
+        "tvl": 1183146323.7849836,
+        "tvl_change_pct_vs_prev": -1.69
       },
       {
         "chain": "Monad",
-        "tvl": 875003828.7163136,
-        "tvl_change_pct_vs_prev": 3.18
+        "tvl": 882916765.1185153,
+        "tvl_change_pct_vs_prev": 0.9
       },
       {
         "chain": "Polygon",
-        "tvl": 806050615.420372,
-        "tvl_change_pct_vs_prev": 0.46
+        "tvl": 800925265.4153365,
+        "tvl_change_pct_vs_prev": -0.64
       },
       {
         "chain": "Plasma",
-        "tvl": 614377352.145684,
-        "tvl_change_pct_vs_prev": -1.74
+        "tvl": 616541396.6344268,
+        "tvl_change_pct_vs_prev": 0.35
       },
       {
         "chain": "Robinhood Chain",
-        "tvl": 474154573.1492971,
-        "tvl_change_pct_vs_prev": 0.85
+        "tvl": 472704616.8115154,
+        "tvl_change_pct_vs_prev": -0.31
       },
       {
         "chain": "Avalanche",
-        "tvl": 425946791.4262135,
-        "tvl_change_pct_vs_prev": 0.41
+        "tvl": 421324428.9012106,
+        "tvl_change_pct_vs_prev": -1.09
       },
       {
         "chain": "Sui",
-        "tvl": 414981767.0702872,
-        "tvl_change_pct_vs_prev": 0.05
+        "tvl": 410900609.05358887,
+        "tvl_change_pct_vs_prev": -0.98
       }
     ]
   },
@@ -378,8 +378,8 @@
     {
       "id": "uniswap-robinhood-chain-volume",
       "coin": "UNI",
-      "title": "Uniswap：v4 协议费用切换——第 3 期低于 $240k 检验线（7d 日均 $231.2k），未破 $200k 下限，维持 3 分",
-      "thesis": "7d 日均 $234.5k→$231.2k，连续第 3 期低于 $240k 检验线但仍高于 $200k 降级线——catalyst 维持 3。隐忧：8/8-8/9 单日 $135.7k/$151.7k 为近期最弱两日；缓冲：30d 日均 $167.4k→$168.6k 仍在爬升，8/6 单日 $332.5k 证明弹性仍在。价格 $4.07（+1.7%/24h、-2.5%/7d、+14.8%/30d）。验证方式不变：7d 日均收复 $240k 则 catalyst 3→4；跌破 $200k 则降 time_window。",
+      "title": "Uniswap：v4 协议费用切换——7d 日均 $233.7k 第 4 期低于 $240k 检验线，8/10 单日 $248k 回升",
+      "thesis": "7d 日均 $231.2k→$233.7k 微升但连续第 4 期低于 $240k 检验线，仍高于 $200k 降级线——catalyst 维持 3。周内结构：8/8-8/9 两弱日（$135.7k/$168.3k）后 8/10 回升至 $248.1k；30d 日均 $168.6k→$169.1k 续爬。价格 $3.95（-3.0%/24h、+0.1%/7d、+6.0%/30d）。验证方式不变：7d 日均收复 $240k 则 catalyst 3→4；跌破 $200k 则降 time_window。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 3,
@@ -390,16 +390,16 @@
       },
       "status": "tracking",
       "first_seen": "2026-07-10_evening",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 38,
-      "sessions_since_progress": 1,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 39,
+      "sessions_since_progress": 2,
       "source_url": "https://api.llama.fi/summary/fees/uniswap?dataType=dailyRevenue"
     },
     {
       "id": "ondo-dtcc-tokenization",
       "coin": "ONDO",
-      "title": "Ondo：FINRA 放行代币化美股 + DTCC——无新信息第 2 期，7d -8.9% 弱势未止",
-      "thesis": "本期无新检索（预算外）。价格 -1.0%/24h、-8.9%/7d（上期 -8.0%，跌势未收窄）、30d +7.4%。⚠️CoinGecko RWA 板块口径本期因分类调整失真（-34.78%），成分币实际仅温和走弱，不构成板块级利空。验证方式不变：代币化美股 AUM/TVL 一手披露 + 鲸鱼减持是否衰竭。",
+      "title": "Ondo：FINRA 放行代币化美股 + DTCC——无新信息第 3 期，7d -8.4% 跌势未再扩大",
+      "thesis": "本期无新检索（预算外）。价格 -2.3%/24h、-8.4%/7d（上期 -8.9%，跌势基本持平）、30d +3.0%。RWA 板块口径本期再度失真（+53.65% 分类调整，与上期 -34.78% 同源镜像），不构成板块信号。验证方式不变：代币化美股 AUM/TVL 一手披露 + 鲸鱼减持是否衰竭。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 5,
@@ -410,16 +410,16 @@
       },
       "status": "tracking",
       "first_seen": "2026-07-12_evening",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 35,
-      "sessions_since_progress": 2,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 36,
+      "sessions_since_progress": 3,
       "source_url": "https://coinmarketcap.com/cmc-ai/ondo-finance/latest-updates/"
     },
     {
       "id": "arbitrum-robinhood-fee-share",
       "coin": "ARB",
-      "title": "Arbitrum：Robinhood Chain 费用分成——RH Chain TVL 九连升（+0.85%），零售侧新证据：CASHCAT 获 Robinhood 官方上币",
-      "thesis": "RH Chain TVL $470.1M→$474.2M（+0.85%）连续第 9 期上涨（增速 5.18→0.85 放缓）。新旁证：RH Chain 旗舰 meme CASHCAT 8/6 获 Robinhood 官方上币、周内最高近翻倍——零售活跃度成为链上 TVL 之外的第二观察维度。Morpho RH 部署 $346.5M→$348.7M 同向。费用分成一手披露仍缺位。ARB -1.1%/24h、-3.1%/7d 仍无价格弹性。验证方式：RH Chain TVL 趋势 + 费用分成一手披露。",
+      "title": "Arbitrum：Robinhood Chain 费用分成——RH Chain TVL 九连升终止（-0.31%），新增 8/17 窗口 $7.46M 解锁 + launchpad 生态战证据",
+      "thesis": "RH Chain TVL $474.2M→$472.7M（-0.31%）九连升终止；Morpho RH 部署 $348.7M→$345.8M（-0.8%）同步首降——扩张动能歇脚但未逆转。新定性证据：RH Chain launchpad 生态战开打——Uniswap pools.trade（8/5 上线、零费模式）对撼原生 PONS（8/1 V2 上线：Uniswap v4 集成 + 9 只代币化美股配对、平台累计发行 25 万代币）——链上活动维度在 TVL 之外继续多元化。新风险：tokenomist 7 日窗口 ARB $7.46M 解锁（占供应 1.4%）。ARB +1.9%/24h、-2.2%/7d 仍无价格弹性。验证方式：RH Chain TVL 是否恢复上行 + 费用分成一手披露。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 4,
@@ -430,16 +430,16 @@
       },
       "status": "tracking",
       "first_seen": "2026-07-09_evening",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 40,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 41,
       "sessions_since_progress": 0,
       "source_url": "https://api.llama.fi/v2/chains"
     },
     {
       "id": "morpho-robinhood-earn-distribution",
       "coin": "MORPHO",
-      "title": "Morpho：Robinhood Earn 导流——RH Chain 部署 $348.7M（+0.6%）续升，第 3 大链地位稳固",
-      "thesis": "RH Chain 部署 $346.5M→$348.7M（+0.6%）继续扩张（次于 Ethereum $3.68B、Base $3.31B）。Arbitrum 部署序列 8/4-8/9 稳定于 $23.1-23.6M——上期数据故障结案后序列无异常。收入序列本期未复查。价格 -0.4%/24h、-0.6%/7d，换手 0.7%。验证方式：RH Chain 部署增速 + 收入序列是否恢复非零。",
+      "title": "Morpho：Robinhood Earn 导流——RH Chain 部署 $345.8M 扩张后首降（-0.8%），Monad 部署 +3.3% 为各链最强",
+      "thesis": "RH Chain 部署 $348.7M→$345.8M（-0.8%）扩张后首降（仍为第 3 大链，次于 Ethereum $3.60B、Base $3.24B）；Monad 部署 $152.7M→$157.7M（+3.3%）为各链最强增速。收入序列本期未复查。价格 0.0%/24h、-0.6%/7d，换手 1.0%。验证方式：RH Chain 部署是否恢复增长 + 收入序列复查。",
       "diffusion": "red",
       "score": {
         "catalyst_strength": 3,
@@ -450,16 +450,16 @@
       },
       "status": "tracking",
       "first_seen": "2026-07-10_morning",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 39,
-      "sessions_since_progress": 1,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 40,
+      "sessions_since_progress": 2,
       "source_url": "https://api.llama.fi/protocol/morpho-blue"
     },
     {
       "id": "cardano-etf-eligibility-window",
       "coin": "ADA",
-      "title": "Cardano：ETF 资格里程碑已兑现（8/9）——无 sell-the-news，下一验证点为 8 月中旬「申报激活」",
-      "thesis": "8/9 CME 期货满 6 个月里程碑平稳兑现：-0.8%/24h、+4.8%/7d、+19.0%/30d，未现回吐。本期媒体口径：现有申报「最早 8 月中旬激活」进入 75 天快速通道 → 10/23 决定窗口；Grayscale 拟以 GADA 代码将信托转为 ETF；「Late Q3-Q4 为现实目标」的审慎口径并存。ADA 重回 trending（第 14 位）。验证方式：①交易所激活/申报推进公告（8 月中旬窗口）；②10/23 前的审批节奏。",
+      "title": "Cardano：ETF 申报激活窗口（8 月中旬）——激活公告未落地，GADA/NYSE Arca 待命",
+      "thesis": "8/9 里程碑兑现后进入申报激活等待期：媒体口径「最早 8 月中旬激活」触发 75 天快速通道 → 10/23 决定窗口；Grayscale GADA（NYSE Arca）为确认代码。本期无激活公告；审慎口径并存：SEC 从未批准 top2 以外资产的现货 ETF。价格 -2.4%/24h、+0.9%/7d、+13.4%/30d，已退出 trending 榜。验证方式：①激活公告（本周-下周为窗口）；②10/23 前审批节奏。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 4,
@@ -470,16 +470,16 @@
       },
       "status": "tracking",
       "first_seen": "2026-08-03_daily",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 7,
-      "sessions_since_progress": 0,
-      "source_url": "https://cryptorank.io/news/feed/8e4d8-cardano-etf-countdown-begins-as-ada-futures-hit-key-sec-milestone"
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 8,
+      "sessions_since_progress": 1,
+      "source_url": "https://memeburn.com/cardano-ada-etf-eligibility-timeline/"
     },
     {
       "id": "canton-dtcc-tokenization",
       "coin": "CC",
-      "title": "Canton：DTCC 生产级代币化（10 月）——新增 Nano Labs 验证人节点，24h 转正但 7d -15.5% 背离仍深",
-      "thesis": "新进展：Nano Labs 获批运营 Canton 验证人节点（验证人生态扩充的可引用证据）；DTCC 10 月更大规模服务上线口径再确认。价格 +5.3%/24h 反弹、-15.5%/7d、-26.3%/30d，市值 $3.89B；换手 0.5% 仍为大市值最低档。媒体出现「社区分裂：机构信仰 vs 价格挫败」定性、部分交易者视当前为吸筹区。验证方式：10 月 DTCC 上线节奏 + Super Validator 名单扩充。",
+      "title": "Canton：DTCC 生产级代币化（10 月）——7d -15.5% 弱势与机构叙事背离持平，仍居 trending 第 13 位",
+      "thesis": "本期无新检索（预算外）。价格 -2.1%/24h、-15.5%/7d（与上期持平）、-29.7%/30d，市值 $3.81B，换手 0.3% 仍为大市值最低档——「机构信仰 vs 价格挫败」张力持续。热度未退（trending 第 13 位）。验证方式不变：10 月 DTCC 上线节奏 + Super Validator 名单扩充。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 5,
@@ -490,16 +490,16 @@
       },
       "status": "tracking",
       "first_seen": "2026-07-18_evening",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 24,
-      "sessions_since_progress": 0,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 25,
+      "sessions_since_progress": 1,
       "source_url": "https://coinmarketcap.com/cmc-ai/canton-network/latest-updates/"
     },
     {
       "id": "lighter-robinhood-distribution",
       "coin": "LIT",
-      "title": "Lighter × Robinhood：perp DEX 零售分发——重回 trending 榜（第 7 位），7d +14.2% 动能修复",
-      "thesis": "无新基本面检索（预算外）。市场面：重回 trending 榜第 7 位，价格 +1.4%/24h、+14.2%/7d 连续 2 期双位数周涨——上期暴露的量成色问题（月成交自峰值 -83%、farming 驱动）尚无新数据检验。验证方式不变：激励退坡后的量留存 + Robinhood 渠道一手进展。",
+      "title": "Lighter × Robinhood：perp DEX 零售分发——退出 trending 榜，7d +15.4% 动能仍在",
+      "thesis": "无新基本面检索（预算外）。市场面：上期 trending 第 7 位本期退出榜单；价格 +2.0%/24h、+15.4%/7d 连续 3 期双位数周涨。量成色问题（月成交自峰值 -83%、farming 驱动）仍无新数据检验。验证方式不变：激励退坡后的量留存 + Robinhood 渠道一手进展。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 3,
@@ -510,16 +510,16 @@
       },
       "status": "tracking",
       "first_seen": "2026-07-06_morning",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 46,
-      "sessions_since_progress": 1,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 47,
+      "sessions_since_progress": 2,
       "source_url": "https://blockeden.xyz/blog/2026/01/29/perp-dex-wars-2026-hyperliquid-lighter-aster-edgex-paradex-decentralized-derivatives/"
     },
     {
       "id": "pump-fun-unlock-absorption",
       "coin": "PUMP",
-      "title": "Pump.fun：解锁吸收 + 回购飞轮——回购执行数字终获披露（332M 枚 @ $0.00225），catalyst 4→5",
-      "thesis": "上期缺位的回购执行披露本期落地：332M PUMP @ 均价 $0.00225（约 $747k/日，出自 $1.49M 日收入，50% 协议收入回购销毁），年化收入口径 $356M（8/5）——回购飞轮从「机制存在」升级为「执行可引用」，catalyst 4→5（总分 12→13）。价格 +12.9%/24h、+25.2%/7d、+85.7%/30d，trending 第 4 位，换手 12.2%。⚠️扩散度快速上升（CMC top stories 多篇 + tradingview），crowding 后续或降分。验证方式：回购节奏可持续性（日收入是否维持 $1M+）+ 治理瑕疵是否复发。",
+      "title": "Pump.fun：回购飞轮——收入首获 API 核验：7d 日均 $979k 贴近 $1M 验证线，最新单日 $1.12M",
+      "thesis": "验证方式本期落地：DeFiLlama dailyRevenue 首次核验——8/3-8/9 日收入 $895k-$1.12M、7d 日均 $979k，略低于媒体 $1.49M 口径但贴近论点 $1M+ 验证线，最新日（8/9）$1.12M 为周内最高。价格 +4.2%/24h、+24.6%/7d、+92.4%/30d，市值 $1.11B，trending 第 2 位，换手 12.5%。⚠️30d 近翻倍 + 持续 trending，crowding 后续承压。验证方式：日收入序列维持 $1M 上下 + 回购执行披露的连续性。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 5,
@@ -530,16 +530,16 @@
       },
       "status": "tracking",
       "first_seen": "2026-07-16_morning",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 28,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 29,
       "sessions_since_progress": 0,
-      "source_url": "https://ambcrypto.com/pump-fun-buys-back-332m-pump-rally-continues-only-if/"
+      "source_url": "https://api.llama.fi/summary/fees/pump.fun?dataType=dailyRevenue"
     },
     {
       "id": "curve-llamalend-v2-incentives",
       "coin": "CRV",
-      "title": "Curve：LlamaLend v2 gauge 激励启动（8/6）——生态双升（CRV +17.2%、CVX +22.7%/7d），压抑筹码的低门槛催化剂",
-      "thesis": "8/6 Curve DAO 在三个 LlamaLend v2 gauge 启动 CRV 激励，当日 +3.65%（CMC 归因）；7d CRV +17.2%、CVX +22.7% 生态联动，为本期唯一非 meme 的板块内轮动。背景：CRV 长期压抑（$0.238、市值 $368M），媒体定性「筹码压抑下催化剂门槛低」。⚠️DeFiLlama llamalend slug 无数据，TVL 增量暂无法数值验证。风险：激励驱动 TVL 多为雇佣资金，激励结束后留存存疑。验证方式：LlamaLend v2 借贷量/TVL 一手数据出现 + 激励结束后的量留存。",
+      "title": "Curve：LlamaLend v2 激励——首个数值核验分化：v2 TVL 仅 $1.98M（-39.8%/7d）落空，Curve DEX TVL $1.41B（+10.9%/7d）强劲",
+      "thesis": "上期缺位的 TVL 数据本期落地且信号分化：curve-llamalend-v2 slug TVL 仅 $1.98M、-27.5%/24h、-39.8%/7d——8/6 gauge 激励未吸引资金，狭义论点（激励→v2 TVL）首验落空；但 curve-dex TVL $1.414B、+9.0%/24h、+10.9%/7d 为生态级强信号，LlamaLend v1 $62.2M（+1.2%/7d）平稳。价格动能延续：CRV +7.8%/24h、+25.0%/7d；CVX +7.1%/24h、+29.3%/7d 且新进 trending 第 8 位——扩散度上升中。论点重心从「v2 激励拉动」修正为「压抑筹码 + 生态 TVL 回流」。验证方式：v2 TVL 是否随激励发酵回升 + DEX TVL 涨势留存 + CRV 站稳 $0.25。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 3,
@@ -548,18 +548,18 @@
         "risk": 3,
         "total": 13
       },
-      "status": "new",
+      "status": "tracking",
       "first_seen": "2026-08-10_daily",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 1,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 2,
       "sessions_since_progress": 0,
-      "source_url": "https://cryptorank.io/news/feed/632d2-why-is-curve-dao-crv-price-rising-ascending-triangle-signals-a-potential-breakout"
+      "source_url": "https://api.llama.fi/protocols"
     },
     {
       "id": "kaito-x-data-agreement",
       "coin": "KAITO",
-      "title": "Kaito：8/20 解锁（10 天）——恐慌降温：换手 45.4%→26.5% 腰斩，价格续跌 -34.6%/7d，解锁价值缩水至 $22.9M",
-      "thesis": "恐慌顶点或已过：换手自 45.4% 腰斩至 26.5%，但价格未止跌（-8.1%/24h、-34.6%/7d、30d +10.8%）。解锁价值随价格缩水至媒体口径 $22.9M（32.6M 枚/占总供应 3.3% 不变）；新变量：crypto.news 提出解锁前二次空投猜想（未证实，若成真则抛压结构改变）。「利空出尽」实验进入最后 10 天窗口。验证方式：解锁前换手是否继续衰减 + 8/20 落地后 3-5 日企稳形态。",
+      "title": "Kaito：8/20 解锁（9 天）——换手续衰减至 21.9%，解锁细则确认：32.6M 枚/占流通 7.63%",
+      "thesis": "论点跟踪信号按预期演进：换手 45.4%→26.5%→21.9% 连续收缩，价格 -4.9%/24h、-28.5%/7d（跌速较上期 -34.6% 放缓）、30d -1.3%。解锁细则获 coinmarketcal 口径确认：8/20 12:00 UTC 解锁 32.6M 枚、占流通 7.63%（并存口径：占总供应 3.3%/$22.9M；cryip 口径 $34.68M/流通 13.5%——口径分歧本身即风险提示），用途为创作者激励/生态/基金会。二次空投猜想（crypto.news）仍未证实。「利空出尽」实验进入最后 9 天。验证方式：解锁前换手是否降至 15% 下方 + 8/20 落地后 3-5 日企稳形态。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 4,
@@ -570,16 +570,16 @@
       },
       "status": "tracking",
       "first_seen": "2026-08-02_daily",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 8,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 9,
       "sessions_since_progress": 0,
-      "source_url": "https://www.ccn.com/analysis/crypto/kaito-price-token-unlock/"
+      "source_url": "https://www.tradingview.com/news/coinmarketcal:6f570fe71094b:0-kaito-kaito-32-6mm-token-unlock-20-aug-2026/"
     },
     {
       "id": "monad-defi-inflection",
       "coin": "MON",
-      "title": "Monad DeFi 基建拐点——✅TVL 收复 $850M 检验线（$875.0M、+3.18%），按预设 catalyst 3→4",
-      "thesis": "TVL $848.0M→$875.0M（**+3.18%**，本期 15 链最大升幅），一期即收复 $850M 检验线——按上期预设机械执行 catalyst 3→4（总分 11→12）。Morpho Monad 部署 $150.9M→$152.7M 微升。价格 -0.1%/24h、+1.1%/7d 仍无弹性。验证方式：TVL 能否站稳 $850M 上方 2 期 + 价格弹性是否出现。",
+      "title": "Monad DeFi 基建拐点——检验线兑现：TVL 连续 2 期站稳 $850M（$883M，+0.90%），首现价格弹性 +4.9%/24h",
+      "thesis": "上期预设验证全部通过：TVL $875.0M→$883.0M（+0.90%）连续第 2 期站上 $850M，且为逆势（本期 15 链中 11 链下跌，Monad 涨幅第 3）；Morpho Monad 部署 $152.7M→$157.7M（+3.3%）为该协议各链最强增速；价格 +4.9%/24h（大盘 -1.4% 背景）首现相对弹性、+3.6%/7d。验证方式升级：TVL 触及 $900M + 价格弹性连续 2 期（7d 转正站稳）。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 4,
@@ -590,16 +590,16 @@
       },
       "status": "tracking",
       "first_seen": "2026-07-06_morning",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 46,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 47,
       "sessions_since_progress": 0,
       "source_url": "https://api.llama.fi/v2/chains"
     },
     {
       "id": "layerzero-zero-chain-gas-token",
       "coin": "ZRO",
-      "title": "LayerZero：Zero 链 ZRO gas 代币化——第 4 期相对强势（7d +18.6%）且加速，主网日期仍缺位",
-      "thesis": "跟踪基线不变：Zero 链以 ZRO 为原生 gas，Citadel Securities 战略投资，主网 Fall 2026 无具体日期。本期无新信息（预算外），价格 +4.3%/24h、+18.6%/7d 连续第 4 期相对强势且加速（14.3→18.6）。⚠️ssp 已达 4，下期无进展按 4.7(a) 降 stale。等待：主网日期公布（进事件日历门槛）。",
+      "title": "LayerZero：Zero 链 ZRO gas 代币化——按 4.7(a) 降 stale：主网日期缺位第 5 期",
+      "thesis": "无新信息第 5 期（ssp=5），按 4.7(a) 机械降 stale。价格 -0.1%/24h、+15.4%/7d（连续第 5 期周线相对强势，较上期 18.6% 略降速）。恢复条件：Zero 主网日期公布（进事件日历门槛）。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 4,
@@ -608,18 +608,18 @@
         "risk": 2,
         "total": 10
       },
-      "status": "tracking",
+      "status": "stale",
       "first_seen": "2026-08-05_daily",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 5,
-      "sessions_since_progress": 4,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 6,
+      "sessions_since_progress": 5,
       "source_url": "https://www.businesswire.com/news/home/20260210491975/en/LayerZero-Announces-Zero-Blockchain-to-Build-Global-Market-Infrastructure-In-Collaboration-with-Citadel-Securities-The-Depository-Trust-Clearing-Corporation-Intercontinental-Exchange-With-Strategic-Investment-in-ZRO"
     },
     {
       "id": "bittensor-tao-etf-window",
       "coin": "TAO",
-      "title": "Bittensor：现货 TAO ETF 决策窗口——维持 stale：第 8 期无具体日期，「8 月内裁决」仅剩 21 天",
-      "thesis": "本期定向检索仍无 SEC 日历日期（Grayscale/Bitwise 联合申请、媒体口径「裁决落在 8 月内」）——缺口第 8 期未填补，但 8 月仅剩 21 天，决议临近。边际变化：连续 2 期 trending（第 13 位），价格 +4.1%/24h、+7.4%/7d 至 $207.09。若 SEC 公布日期或 8 月内出现批准/拒绝，立即恢复 tracking。",
+      "title": "Bittensor：现货 TAO ETF 决策窗口——维持 stale：第 9 期无具体日期，「8 月内裁决」仅剩 20 天",
+      "thesis": "本期检索仍无 SEC 日历日期（Grayscale/Bitwise 联合申请、媒体口径「裁决落在 8 月内」）——缺口第 9 期未填补，8 月仅剩 20 天。价格 -3.4%/24h、+4.6%/7d 至 $201.08，已退出 trending。若公布日期或 8 月内出现批准/拒绝，立即恢复 tracking。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 5,
@@ -630,16 +630,16 @@
       },
       "status": "stale",
       "first_seen": "2026-07-10_morning",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 39,
-      "sessions_since_progress": 8,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 40,
+      "sessions_since_progress": 9,
       "source_url": "https://www.sec.gov/Archives/edgar/data/2029297/000119312526140409/gtao_s-1_amendment_1.htm"
     },
     {
       "id": "aave-aavenomics-buyback",
       "coin": "AAVE",
       "title": "Aavenomics 3.0 回购飞轮 + V4——维持 stale（本期未复查收入）",
-      "thesis": "无新信息（预算外，收入序列未复查）。价格 -0.2%/24h、-1.4%/7d，换手 8.3%。",
+      "thesis": "无新信息（预算外，收入序列未复查）。价格 -1.6%/24h、-4.1%/7d，换手 9.7%。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 4,
@@ -650,16 +650,16 @@
       },
       "status": "stale",
       "first_seen": "2026-07-06_morning",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 46,
-      "sessions_since_progress": 10,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 47,
+      "sessions_since_progress": 11,
       "source_url": "https://api.llama.fi/summary/fees/aave?dataType=dailyRevenue"
     },
     {
       "id": "akash-aep49-virtual-machines",
       "coin": "AKT",
-      "title": "Akash：AEP-49 虚拟机（8/30，20 天）——按 4.7(a) 降 stale：第 6 次核实零变化",
-      "thesis": "本期第 6 次直接抓取官方页：状态仍 **Draft**、预计完成仍 8/30/2026、最后修改仍 5/1/2026——ssp 达 5，按 4.7(a) 机械降 stale。价格 +0.9%/24h、+7.8%/7d 温和反弹。距 8/30 仅 20 天且提案从未离开草案，落空转 expired 概率上升。恢复条件：官方页 status 字段变更；8/30 落空即转 expired。",
+      "title": "Akash：AEP-49 虚拟机（8/30，19 天）——维持 stale；本期未复查官方页",
+      "thesis": "本期未复查官方页（预算外）；上期第 6 次核实状态仍 Draft、最后修改 5/1/2026。价格 -1.9%/24h、-6.8%/7d。距 8/30 仅 19 天且提案从未离开草案，落空转 expired 概率持续上升。恢复条件：官方页 status 变更；8/30 落空即转 expired。",
       "diffusion": "red",
       "score": {
         "catalyst_strength": 2,
@@ -670,16 +670,16 @@
       },
       "status": "stale",
       "first_seen": "2026-08-02_daily",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 8,
-      "sessions_since_progress": 5,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 9,
+      "sessions_since_progress": 6,
       "source_url": "https://akash.network/roadmap/aep-49/"
     },
     {
       "id": "chainlink-ccip-institutional",
       "coin": "LINK",
       "title": "Chainlink：CCIP 机构集群——维持 stale，价格持平",
-      "thesis": "无新信息。价格 -0.1%/24h、-0.1%/7d、30d +5.1%。旁注：成为 CoinGecko RWA 新口径 top3 成分（分类调整）。",
+      "thesis": "无新信息。价格 -1.0%/24h、-0.2%/7d、30d +1.9%。旁注：RWA 板块再调整后仍居新口径 top3 成分。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 4,
@@ -690,16 +690,16 @@
       },
       "status": "stale",
       "first_seen": "2026-07-19_morning",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 22,
-      "sessions_since_progress": 10,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 23,
+      "sessions_since_progress": 11,
       "source_url": "https://www.coingecko.com/en/coins/chainlink"
     },
     {
       "id": "venice-vvv-emission-cut",
       "coin": "VVV",
-      "title": "Venice：排放削减 + API 回购——按 4.7(a) 降 stale：DIEM 执行披露缺位第 5 期",
-      "thesis": "无新信息（预算外）。价格 +4.4%/24h、+0.8%/7d，换手 1.8%。9/14 达标日前若出现分阶段执行一手记录即恢复 tracking。",
+      "title": "Venice：排放削减 + API 回购——维持 stale：DIEM 执行披露缺位第 6 期",
+      "thesis": "无新信息（预算外）。价格 +0.5%/24h、-4.2%/7d，换手 1.5%。9/14 达标日前若出现分阶段执行一手记录即恢复 tracking。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 3,
@@ -710,16 +710,16 @@
       },
       "status": "stale",
       "first_seen": "2026-07-08_evening",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 43,
-      "sessions_since_progress": 5,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 44,
+      "sessions_since_progress": 6,
       "source_url": "https://crypto-economy.com/venice-unveils-major-tokenomics-overhaul-with-automatic-vvv-buybacks/"
     },
     {
       "id": "avalanche-institutional-cluster",
       "coin": "AVAX",
-      "title": "Avalanche：机构集群 vs 价格钝化——维持 stale；本周 $10.9M 解锁（0.4% 供应，常规量级）",
-      "thesis": "Helicon 升级仍无公布日期（未纳入检索预算）。tokenomist 口径：未来 7 日 $10.90M 解锁（占供应 0.4%），常规可吸收量级。价格 0.0%/24h、-1.5%/7d。恢复条件不变：Helicon 日期公布或机构公告落地。",
+      "title": "Avalanche：机构集群 vs 价格钝化——维持 stale；7 日窗口 $10.80M 解锁（0.4% 供应，常规量级）",
+      "thesis": "Helicon 升级仍无公布日期（未纳入检索预算）。tokenomist 本期口径：7 日窗口 $10.80M 解锁（占供应 0.4%），常规可吸收量级。价格 -1.0%/24h、-0.8%/7d。恢复条件不变：Helicon 日期公布或机构公告落地。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 4,
@@ -730,16 +730,16 @@
       },
       "status": "stale",
       "first_seen": "2026-07-19_evening",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 21,
-      "sessions_since_progress": 6,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 22,
+      "sessions_since_progress": 7,
       "source_url": "https://api.llama.fi/v2/chains"
     },
     {
       "id": "gnosis-gip151-redemption",
       "coin": "GNO",
-      "title": "Gnosis：GIP-151 金库赎回——维持 stale，流动性仍枯竭（换手 0.3%）",
-      "thesis": "赎回要约仍有效，流动性维持极低：换手 0.3%，价格 +0.3%/24h、+2.7%/7d。",
+      "title": "Gnosis：GIP-151 金库赎回——维持 stale，流动性仍低（换手 0.9%）",
+      "thesis": "赎回要约仍有效。换手 0.9%，价格 -2.0%/24h、+0.1%/7d。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 5,
@@ -750,16 +750,16 @@
       },
       "status": "stale",
       "first_seen": "2026-07-15_evening",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 30,
-      "sessions_since_progress": 10,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 31,
+      "sessions_since_progress": 11,
       "source_url": "https://thecurrencyanalytics.com/altcoins/gno-holders-face-170-redemption-offer-as-activists-target-220m-gnosis-treasury-256794"
     },
     {
       "id": "lido-nest-buyback",
       "coin": "LDO",
-      "title": "Lido：NEST 回购 + 治理密集期——维持 stale，7d -10.1% 弱势重现",
-      "thesis": "无新信息（本期未复查收入）。价格 -1.0%/24h、-10.1%/7d，换手 6.3%。",
+      "title": "Lido：NEST 回购 + 治理密集期——维持 stale，7d -8.8% 弱势持续",
+      "thesis": "无新信息（本期未复查收入）。价格 +1.5%/24h、-8.8%/7d，换手 10.6%。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 4,
@@ -770,16 +770,16 @@
       },
       "status": "stale",
       "first_seen": "2026-07-08_morning",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 43,
-      "sessions_since_progress": 10,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 44,
+      "sessions_since_progress": 11,
       "source_url": "https://api.llama.fi/summary/fees/lido?dataType=dailyRevenue"
     },
     {
       "id": "edgex-buyback-burn",
       "coin": "EDGE",
-      "title": "edgeX：100% 净利润回购销毁——维持 stale；7d +9.2% 温和修复",
-      "thesis": "催化剂无新信息。价格 $0.390、+1.9%/24h、+9.2%/7d、30d -5.3%，市值 $137M，换手 1.6%。",
+      "title": "edgeX：100% 净利润回购销毁——维持 stale",
+      "thesis": "催化剂无新信息。价格 $0.379、-4.1%/24h、+4.8%/7d、30d +1.0%，市值 $133M，换手 1.6%。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 5,
@@ -790,16 +790,16 @@
       },
       "status": "stale",
       "first_seen": "2026-07-12_morning",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 36,
-      "sessions_since_progress": 15,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 37,
+      "sessions_since_progress": 16,
       "source_url": "https://www.coingecko.com/en/coins/edgex"
     },
     {
       "id": "pyth-network-nasdaq-totalview",
       "coin": "PYTH",
-      "title": "Pyth：Nasdaq TotalView 上链——维持 stale，+5.5%/24h",
-      "thesis": "无新信息。价格 +5.5%/24h、+4.3%/7d，换手 7.6%。",
+      "title": "Pyth：Nasdaq TotalView 上链——维持 stale，7d +8.8% 温和修复",
+      "thesis": "无新信息。价格 +2.8%/24h、+8.8%/7d，换手 5.1%。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 4,
@@ -810,15 +810,15 @@
       },
       "status": "stale",
       "first_seen": "2026-07-07_morning",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 46,
-      "sessions_since_progress": 13,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 47,
+      "sessions_since_progress": 14,
       "source_url": "https://www.coingecko.com/en/coins/pyth-network"
     },
     {
       "id": "zama-confidential-rfq",
       "coin": "ZAMA",
-      "title": "Zama：FHE 机密交易协议主网——维持 stale，连续第 3 期不在 250 币池",
+      "title": "Zama：FHE 机密交易协议主网——维持 stale，连续第 4 期不在 250 币池",
       "thesis": "本期仍不在 250 币池，无法从 API 取价。无催化剂或信源更新。",
       "diffusion": "yellow",
       "score": {
@@ -830,16 +830,16 @@
       },
       "status": "stale",
       "first_seen": "2026-07-28_daily",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 12,
-      "sessions_since_progress": 10,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 13,
+      "sessions_since_progress": 11,
       "source_url": "https://www.cryptotimes.io/2026/07/24/zama-token-jumps-32-as-confidential-swap-protocol-goes-live/"
     },
     {
       "id": "etherfi-restaking-recovery",
       "coin": "ETHFI",
       "title": "Ether.fi：$100M RWA vault + restaking 修复——维持 stale",
-      "thesis": "无新信息。价格 +1.9%/24h、-3.0%/7d，换手 3.6%。",
+      "thesis": "无新信息。价格 -0.6%/24h、-3.4%/7d，换手 4.9%。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 3,
@@ -850,16 +850,16 @@
       },
       "status": "stale",
       "first_seen": "2026-07-09_evening",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 40,
-      "sessions_since_progress": 12,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 41,
+      "sessions_since_progress": 13,
       "source_url": "https://www.coingecko.com/en/coins/ether-fi"
     },
     {
       "id": "stellar-protocol27-bitwise",
       "coin": "XLM",
-      "title": "Stellar：Protocol 27 + Bitwise 重录——维持 stale 第 21 期；重回 trending 榜（第 9 位）",
-      "thesis": "信息面无更新第 21 期，但出现边际变化：重回 trending 榜第 9 位（数期以来首次）。价格 -1.9%/24h、-7.0%/7d、30d -14.6%——热度与价格背离，无信息面支撑不改状态。",
+      "title": "Stellar：Protocol 27 + Bitwise 重录——维持 stale 第 22 期；已退出 trending 榜",
+      "thesis": "信息面无更新第 22 期；上期重回 trending 的边际热度本期消退（退出榜单）。价格 -0.2%/24h、-5.4%/7d、30d -15.1%。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 4,
@@ -870,15 +870,15 @@
       },
       "status": "stale",
       "first_seen": "2026-07-12_morning",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 36,
-      "sessions_since_progress": 21,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 37,
+      "sessions_since_progress": 22,
       "source_url": "https://www.coingecko.com/en/coins/stellar"
     },
     {
       "id": "maple-syrup-kraken-lending",
       "coin": "SYRUP",
-      "title": "Maple：Kraken 仓单借贷——维持 stale，连续第 3 期不在 250 币池",
+      "title": "Maple：Kraken 仓单借贷——维持 stale，连续第 4 期不在 250 币池",
       "thesis": "本期仍不在 250 币池，无法取价。无催化剂更新。",
       "diffusion": "yellow",
       "score": {
@@ -890,16 +890,16 @@
       },
       "status": "stale",
       "first_seen": "2026-07-10_evening",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 38,
-      "sessions_since_progress": 12,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 39,
+      "sessions_since_progress": 13,
       "source_url": "https://www.coingecko.com/en/coins/maple"
     },
     {
       "id": "jito-jtx-perp-launch",
       "coin": "JTO",
-      "title": "Jito：JTX + JIP-38——维持 stale，+8.3%/7d 温和反弹",
-      "thesis": "无新信息。价格 +5.2%/24h、+8.3%/7d、30d -15.7%，换手 5.5%。",
+      "title": "Jito：JTX + JIP-38——维持 stale，+9.6%/7d 反弹延续",
+      "thesis": "无新信息。价格 +3.3%/24h、+9.6%/7d、30d -11.8%，换手 11.1%。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 3,
@@ -910,33 +910,33 @@
       },
       "status": "stale",
       "first_seen": "2026-07-08_evening",
-      "last_updated": "2026-08-10_daily",
-      "sessions_tracked": 42,
-      "sessions_since_progress": 18,
+      "last_updated": "2026-08-11_daily",
+      "sessions_tracked": 43,
+      "sessions_since_progress": 19,
       "source_url": "https://www.coingecko.com/en/coins/jito-governance-token"
     }
   ],
   "events": [
     {
-      "id": "cardano-etf-eligibility-20260809",
-      "coin": "ADA",
-      "event_type": "etf_decision",
-      "date": "2026-08-09",
-      "days_away": -1,
-      "description": "✅已兑现（昨日）：CME ADA 期货满 6 个月，进入 SEC 通用上市标准 75 天快速通道。兑现平稳无 sell-the-news（-0.8%/24h、+4.8%/7d）；媒体口径「最早 8 月中旬申报激活」",
-      "opportunity_angle": "已兑现；后续锚点转移至 8 月中旬申报激活与 10/23 决定窗口",
-      "source_url": "https://cryptorank.io/news/feed/8e4d8-cardano-etf-countdown-begins-as-ada-futures-hit-key-sec-milestone",
-      "status": "passed"
-    },
-    {
       "id": "velvet-unlock-20260810",
       "coin": "VELVET",
       "event_type": "unlock",
       "date": "2026-08-10",
-      "days_away": 0,
-      "description": "⏰Velvet 解锁（今日）。规模连续第 5 期未获 tokenomist 页面确认；VELVET -4.9%/24h（连续 2 日转负）、+14.2%/7d——抢跑动能消退，解锁前回吐已开始",
-      "opportunity_angle": "抢跑形态的解锁日直接验证：今明两日回吐幅度 vs 企稳",
+      "days_away": -1,
+      "description": "已过（昨日）：Velvet 解锁。VELVET 本期跌出 250 币池——解锁次日价格不可验证，「抢跑→解锁回吐」样本以数据缺失收尾（解锁前已连续 2 日转负）",
+      "opportunity_angle": "样本关闭；跌出币池本身即弱势信号",
       "source_url": "https://tokenomist.ai/",
+      "status": "passed"
+    },
+    {
+      "id": "us-cpi-release-20260812",
+      "coin": "MACRO",
+      "event_type": "macro",
+      "date": "2026-08-12",
+      "days_away": 1,
+      "description": "⏰美国 7 月 CPI（8/12 8:30 ET）——9/16 FOMC 定价的关键读数，加息定价背景下为最近的宏观波动源",
+      "opportunity_angle": "读数高于预期 = 风险资产承压；低于预期 = 缓解反弹窗口",
+      "source_url": "https://www.bls.gov/news.release/cpi.htm",
       "status": "upcoming"
     },
     {
@@ -944,8 +944,8 @@
       "coin": "IP",
       "event_type": "unlock",
       "date": "2026-08-13",
-      "days_away": 3,
-      "description": "Story Protocol (IP) 解锁（沿用记录，精确数量缺失；IP 不在本期 250 币池内）",
+      "days_away": 2,
+      "description": "⏰Story Protocol (IP) 解锁（沿用记录，精确数量缺失；IP 不在本期 250 币池内）",
       "opportunity_angle": "解锁前避险 vs 解锁后企稳吸筹",
       "source_url": "https://tokenomist.ai/",
       "status": "upcoming"
@@ -955,8 +955,8 @@
       "coin": "GRVT",
       "event_type": "listing",
       "date": "2026-08-13",
-      "days_away": 3,
-      "description": "GRVT 空投/分发窗口（沿用记录）",
+      "days_away": 2,
+      "description": "⏰GRVT 空投/分发窗口（沿用记录）",
       "opportunity_angle": "空投抛压窗口，关注分发后的换手衰减速度",
       "source_url": "https://tokenomist.ai/",
       "status": "upcoming"
@@ -966,8 +966,8 @@
       "coin": "LAB",
       "event_type": "unlock",
       "date": "2026-08-13",
-      "days_away": 3,
-      "description": "LAB 解锁（沿用记录，精确数量缺失）",
+      "days_away": 2,
+      "description": "⏰LAB 解锁（沿用记录，精确数量缺失）",
       "opportunity_angle": "解锁前避险 vs 解锁后企稳吸筹",
       "source_url": "https://tokenomist.ai/",
       "status": "upcoming"
@@ -977,9 +977,9 @@
       "coin": "PIEVERSE",
       "event_type": "unlock",
       "date": "2026-08-14",
-      "days_away": 4,
-      "description": "PieVerse 解锁（精确数量缺失）。PIEVERSE 本期 -1.9%/24h、7d 由 +18.5% 转 -0.9%——连续 3 期抢跑动能消退，解锁前回吐已开始",
-      "opportunity_angle": "与 VELVET 同构的「抢跑→解锁前回吐」样本，解锁日验证回吐深度",
+      "days_away": 3,
+      "description": "PieVerse 解锁（精确数量缺失）。PIEVERSE 本期 -1.7%/24h、+3.5%/7d——上期「解锁前回吐」暂止、转入横盘",
+      "opportunity_angle": "与 VELVET 同构样本：解锁日验证回吐 vs 承接",
       "source_url": "https://tokenomist.ai/",
       "status": "upcoming"
     },
@@ -988,10 +988,21 @@
       "coin": "YZY",
       "event_type": "unlock",
       "date": "2026-08-16",
+      "days_away": 5,
+      "description": "YZY 解锁升级为一手口径：tokenomist 确认 8/16 cliff **$35.58M、占供应 40.6%/占流通 22.82%**——本月美元价值最大 cliff，解锁对象为私募投资人",
+      "opportunity_angle": "供应四成级解锁 = 规避级事件；私募成本价与现价差决定抛压烈度",
+      "source_url": "https://tokenomist.ai/",
+      "status": "upcoming"
+    },
+    {
+      "id": "arbitrum-unlock-20260817",
+      "coin": "ARB",
+      "event_type": "unlock",
+      "date": "2026-08-17",
       "days_away": 6,
-      "description": "YZY 解锁，与 PROVE/KAITO 同列 8 月超 $323M 解锁潮的领头（媒体口径，精确数量未获一手确认）",
-      "opportunity_angle": "解锁前避险 vs 解锁后企稳吸筹",
-      "source_url": "https://cryip.co/crypto-token-unlocks-august-2026-yzy-prove-kaito-323m-releases/",
+      "description": "Arbitrum 解锁 $7.46M、占供应 1.4%（tokenomist 7 日窗口口径，精确日未列，以窗口末记录）——与机会条目 ARB 相关的新增供给",
+      "opportunity_angle": "常规月度量级但叠加 RH Chain TVL 歇脚期，观察吸收情况",
+      "source_url": "https://tokenomist.ai/",
       "status": "upcoming"
     },
     {
@@ -999,9 +1010,9 @@
       "coin": "CONX",
       "event_type": "unlock",
       "date": "2026-08-17",
-      "days_away": 7,
-      "description": "Connex (CONX) cliff 解锁 $12.55M、**占供应 41.0%**（tokenomist 未来 7 日窗口口径，精确日未列，以窗口末 8/17 记录）——量级极端，居本周 cliff 解锁榜首",
-      "opportunity_angle": "供应量四成级解锁 = 规避级事件，不构成吸筹论点",
+      "days_away": 6,
+      "description": "Connex (CONX) cliff 解锁 $11.28M、**占供应 36.8%**（价值随价格缩水，上期口径 $12.55M/41.0%）——量级仍极端",
+      "opportunity_angle": "供应三成级解锁 = 规避级事件，不构成吸筹论点",
       "source_url": "https://tokenomist.ai/",
       "status": "upcoming"
     },
@@ -1010,8 +1021,8 @@
       "coin": "CYBER",
       "event_type": "unlock",
       "date": "2026-08-17",
-      "days_away": 7,
-      "description": "CyberConnect (CYBER) cliff 解锁 $4.44M、占供应 9.4%（tokenomist 未来 7 日窗口口径，精确日未列，以窗口末 8/17 记录）",
+      "days_away": 6,
+      "description": "CyberConnect (CYBER) cliff 解锁（沿用上期口径 $4.44M/占供应 9.4%；本期 tokenomist 摘要未再列出）",
       "opportunity_angle": "接近双位数占比的解锁，观察前后换手与承接",
       "source_url": "https://tokenomist.ai/",
       "status": "upcoming"
@@ -1021,10 +1032,10 @@
       "coin": "ETH",
       "event_type": "upgrade",
       "date": "2026-08-17",
-      "days_away": 7,
-      "description": "Glamsterdam **Hoodi 测试网分叉**（eipsinsight 日程口径 projected）——⚠️本期检索未获锁定日确认（媒体仅「8 月底前后」口径），置信度下调；仍为主网前最近的免费验证点",
-      "opportunity_angle": "分叉顺利 = 主网 9/16 概率上修；日期滑动 = 时间表再度松动",
-      "source_url": "https://eipsinsight.com/upgrade/schedule",
+      "days_away": 6,
+      "description": "Glamsterdam **Hoodi 测试网分叉——本期获锁定确认**（everstake/datawallet 日程口径；Sepolia 已于 8/3 先行分叉），上期置信度下调本期修复",
+      "opportunity_angle": "分叉顺利 = 主网 9/16 概率上修；Sepolia→Hoodi 连续两个免费验证点",
+      "source_url": "https://everstake.one/resources/blog/ethereum-glamsterdam-upgrade-explained",
       "status": "upcoming"
     },
     {
@@ -1032,10 +1043,10 @@
       "coin": "KAITO",
       "event_type": "unlock",
       "date": "2026-08-20",
-      "days_away": 10,
-      "description": "Kaito 解锁：32.6M 枚/占总供应 3.3%，价值随价格缩水至媒体口径 $22.9M，同步开启线性解锁。本期恐慌降温：换手 45.4%→26.5%，价格 -8.1%/24h、-34.6%/7d",
-      "opportunity_angle": "「利空出尽」实验最后 10 天：解锁前换手继续衰减 + 落地后 3-5 日企稳形态为判定信号",
-      "source_url": "https://www.ccn.com/analysis/crypto/kaito-price-token-unlock/",
+      "days_away": 9,
+      "description": "Kaito 解锁：8/20 12:00 UTC，32.6M 枚/占流通 7.63%（coinmarketcal 口径；并存口径总供应 3.3%/$22.9M）。换手 26.5%→21.9% 续衰减、跌速放缓",
+      "opportunity_angle": "「利空出尽」实验最后 9 天：换手降至 15% 下方 + 落地后 3-5 日企稳形态为判定信号",
+      "source_url": "https://www.tradingview.com/news/coinmarketcal:6f570fe71094b:0-kaito-kaito-32-6mm-token-unlock-20-aug-2026/",
       "status": "upcoming"
     },
     {
@@ -1043,8 +1054,8 @@
       "coin": "H",
       "event_type": "unlock",
       "date": "2026-08-25",
-      "days_away": 15,
-      "description": "Humanity Protocol 解锁（媒体口径 266.47M H、约 $21.77M、占总供应 2.7%）。H 本期 +3.2%/24h、+3.1%/7d——relief-rally 崩塌后企稳中",
+      "days_away": 14,
+      "description": "Humanity Protocol 解锁（媒体口径 266.47M H、约 $21.77M、占总供应 2.7%）。H 本期 +4.1%/24h、+9.1%/7d、30d +19.3%——企稳转走强",
       "opportunity_angle": "投机盘已提前撤退，8/25 前后的真实承接力检验",
       "source_url": "https://coinmarketcap.com/cmc-ai/humanity-protocol/latest-updates/",
       "status": "upcoming"
@@ -1054,8 +1065,8 @@
       "coin": "ZANO",
       "event_type": "upgrade",
       "date": "2026-08-25",
-      "days_away": 15,
-      "description": "Zano 主网升级（沿用记录）",
+      "days_away": 14,
+      "description": "Zano 主网升级（沿用记录）。ZANO 本期 -2.1%/24h、-6.9%/7d——升级前无抢跑迹象",
       "opportunity_angle": "升级前抢跑 vs sell-the-news",
       "source_url": "https://tokenomist.ai/",
       "status": "upcoming"
@@ -1065,7 +1076,7 @@
       "coin": "CEX",
       "event_type": "listing",
       "date": "2026-08-26",
-      "days_away": 16,
+      "days_away": 15,
       "description": "BitMart 部分交易对停牌（沿用记录）",
       "opportunity_angle": "流动性迁移，关注受影响标的的深度变化",
       "source_url": "https://tokenomist.ai/",
@@ -1076,9 +1087,9 @@
       "coin": "AKT",
       "event_type": "upgrade",
       "date": "2026-08-30",
-      "days_away": 20,
-      "description": "Akash AEP-49 虚拟机。本期第 6 次核实官方页：状态仍 **Draft**、最后修改仍 5/1/2026——距目标 20 天零变化，机会条目已按规则降 stale",
-      "opportunity_angle": "8/30 落空则条目转 expired；本双周为最后观察窗口",
+      "days_away": 19,
+      "description": "Akash AEP-49 虚拟机。本期未复查官方页（预算外）；上期第 6 次核实仍 Draft、最后修改 5/1/2026——距目标 19 天",
+      "opportunity_angle": "8/30 落空则条目转 expired；最后观察窗口",
       "source_url": "https://akash.network/roadmap/aep-49/",
       "status": "upcoming"
     },
@@ -1087,8 +1098,8 @@
       "coin": "SUI",
       "event_type": "unlock",
       "date": "2026-09-01",
-      "days_away": 22,
-      "description": "Sui 月度解锁。量级参考：8/1 上次月度解锁 $9.76M/占流通 0.34%（tokenomist 口径），常规可吸收量级。SUI 本期 trending 第 6 位",
+      "days_away": 21,
+      "description": "Sui 月度解锁。量级参考：8/1 上次 $9.76M/占流通 0.34%（tokenomist 口径），常规可吸收量级。SUI 本期已退出 trending",
       "opportunity_angle": "常规量级，非事件驱动机会",
       "source_url": "https://tokenomist.ai/",
       "status": "upcoming"
@@ -1098,8 +1109,8 @@
       "coin": "MACRO",
       "event_type": "macro",
       "date": "2026-09-14",
-      "days_away": 35,
-      "description": "参议院 9/14 复会，CLARITY 初始投票已排期（8/8 已启动 cloture 程序性投票，复会后「几乎立即」表决——coindesk 口径）。未决：稳定币收益禁令、官员持币限制条款、Trump 背书",
+      "days_away": 34,
+      "description": "参议院 9/14 复会，CLARITY 初始投票已排期（8/8 已启动 cloture 程序性投票，复会后「几乎立即」表决——coindesk 口径）。未决：稳定币收益禁令、官员持币限制条款",
       "opportunity_angle": "最大的确定性宏观催化剂排期；60 票门槛为主要变数，通过则监管明确性利好全板块",
       "source_url": "https://www.coindesk.com/policy/2026/08/08/u-s-senate-opens-first-stage-of-crypto-clarity-act-voting-to-give-bill-a-chance-next-month",
       "status": "upcoming"
@@ -1109,8 +1120,8 @@
       "coin": "ETH",
       "event_type": "upgrade",
       "date": "2026-09-16",
-      "days_away": 37,
-      "description": "Ethereum Glamsterdam 硬分叉主网目标 9/16（projected，未锁定）。前置验证点 Hoodi 分叉日期本期未获锁定确认",
+      "days_away": 36,
+      "description": "Ethereum Glamsterdam 硬分叉主网目标 9/16（projected）。前置链条修复：Sepolia 8/3 已分叉、Hoodi 8/17 锁定确认",
       "opportunity_angle": "Hoodi 分叉为最近验证点；⚠️9/16 与 FOMC 同日，升级行情可能被宏观波动淹没或放大",
       "source_url": "https://eipsinsight.com/upgrade/schedule",
       "status": "upcoming"
@@ -1120,7 +1131,7 @@
       "coin": "CEX",
       "event_type": "listing",
       "date": "2026-09-23",
-      "days_away": 44,
+      "days_away": 43,
       "description": "BitMEX 关停（沿用记录）",
       "opportunity_angle": "流动性迁移与衍生品持仓再分配",
       "source_url": "https://tokenomist.ai/",
@@ -1131,10 +1142,10 @@
       "coin": "ADA",
       "event_type": "etf_decision",
       "date": "2026-10-23",
-      "days_away": 74,
-      "description": "Grayscale ADA ETF 的 SEC 最迟决定日（8/9 资格达成后 75 天窗口；媒体审慎口径「Late Q3-Q4 为现实目标」并存）",
-      "opportunity_angle": "8/9 里程碑的后续锚点；批准概率变化看 8 月中旬申报激活节奏",
-      "source_url": "https://cryptorank.io/news/feed/8e4d8-cardano-etf-countdown-begins-as-ada-futures-hit-key-sec-milestone",
+      "days_away": 73,
+      "description": "Grayscale ADA ETF（GADA/NYSE Arca）的 SEC 最迟决定日（8/9 资格达成后 75 天窗口；「Late Q3-Q4 现实目标」审慎口径并存）",
+      "opportunity_angle": "批准概率变化看 8 月中旬申报激活节奏",
+      "source_url": "https://memeburn.com/cardano-ada-etf-eligibility-timeline/",
       "status": "upcoming"
     },
     {
@@ -1142,7 +1153,7 @@
       "coin": "CEX",
       "event_type": "listing",
       "date": "2026-11-01",
-      "days_away": 83,
+      "days_away": 82,
       "description": "Bitget 停止接受新日本用户，存量账户 11/1 起转只可平仓（日本监管收紧）",
       "opportunity_angle": "司法辖区退出的流动性迁移观察",
       "source_url": "https://www.cryptotimes.io/2026/08/04/coldcard-exploit-15-attackers-130m-losses-galaxy/",
@@ -1151,40 +1162,16 @@
   ],
   "market_context": {
     "btc": {
-      "price_usd": 65146,
-      "price_change_24h": 0.17884,
-      "price_change_7d": 2.74951,
-      "fear_greed": 31,
+      "price_usd": 63968,
+      "price_change_24h": -1.80009,
+      "price_change_7d": 0.29815,
+      "fear_greed": 30,
       "fear_greed_label": "Fear",
-      "mvrv_ratio": 1.230809722123391,
-      "funding_rate": 0.009819,
-      "open_interest": 7038126477.54,
-      "dominance": 56.65222673084791,
+      "mvrv_ratio": 1.2301135746614489,
+      "funding_rate": 0.01,
+      "open_interest": 6835899676.88,
+      "dominance": 56.458689055708156,
       "sparkline_7d": [
-        63402.9,
-        63439.96,
-        63657.31,
-        63370.59,
-        63466.47,
-        63240.38,
-        63105.54,
-        63081.19,
-        62818.98,
-        62781.09,
-        62766.19,
-        62555.67,
-        62532.59,
-        62456.49,
-        62728.4,
-        62627.23,
-        62520.57,
-        62648.88,
-        63112.26,
-        63854.92,
-        63689.89,
-        63692.06,
-        63842.74,
-        63819.62,
         63777.65,
         63699.36,
         63489.75,
@@ -1325,37 +1312,61 @@
         64929.52,
         65154.08,
         65181.09,
-        65187.34,
-        65187.44,
-        65156.11,
-        65157.33
+        65174.89,
+        65177.98,
+        65159.29,
+        65152.75,
+        65135.76,
+        65097.51,
+        65196.98,
+        65006.43,
+        64860.52,
+        64964.81,
+        65089.27,
+        65040.53,
+        64952.56,
+        64963.06,
+        65121.63,
+        65234.54,
+        65219.94,
+        65155.54,
+        64959.15,
+        64945.77,
+        65108.02,
+        64841.34,
+        64610.23,
+        64612.78,
+        64227.28,
+        63840.93,
+        63892.11,
+        63838.22
       ],
-      "support": 62456.49,
-      "resistance": 65187.44,
-      "trend": "**边际新高后的滞涨巩固 + 广度单日降温**：BTC +0.18% 收 $65,146，7d +2.75%；sparkline 窗口高点上移至 $65,187（前值 $65,159）——期内曾创边际新高后收于其下，突破未确认。广度回落：24h 上涨 93/250（**37.2%**，上期 56.4%）单日过半行情未延续；7d 137/250（54.8%）仍过半、30d 34.7%——周线级反弹未破坏，日线歇脚。dominance 56.652%（-0.022pt）连续第 2 期微降；ETH/BTC 0.029594（+0.27%）居 30 日区间（0.02731-0.03011）上部，无 altseason 信号。杠杆侧为本期主要边际变化：**费率 +0.007098%→+0.009819%（+38%）**——价格滞涨下费率抬升 = 多头拥挤重建初期，OI $7.038B（+0.71%）同升；距 0.1% 警戒线尚远但连续 2 期净抬升。MVRV 1.2308（数据点 8/8）持平低位。支撑 $62,456 连续第 7 期同一低点未破。"
+      "support": 63381.48,
+      "resistance": 65234.54,
+      "trend": "**阻力拒绝回落 + 广度失守**：BTC -1.80% 收 $63,968，7d +0.30% 勉强持平；sparkline 窗口曾刺出边际新高 $65,234（前值 $65,187）后单边回落收 $63,838——连续 2 期「边际新高后收低」，$65.2k 一带确认为供给区。广度全面转弱：24h 上涨 64/250（**25.6%**，上期 37.2%）、7d **46.0%** 跌破半数（上期 54.8%）、30d 32.4%——上期「周线级反弹未破坏」的判断本期失守。七期未破的 $62,456 支撑移出窗口，新窗口低点 $63,381 本期未破。dominance 56.459%（-0.194pt）连续第 3 期下降；ETH/BTC 0.028928（-2.25%）回落至 30 日区间（0.02731-0.03011）中部，山寨相对强势消退。杠杆侧良性去化：费率 +0.009819%→+0.0100%（第 3 期微升）但 OI **-2.87%** 至 $6.836B——价格下跌中多头减仓而非加仓，上期「拥挤重建」担忧缓解。MVRV 1.2301（数据点 8/9）持平低位。"
     },
     "macro": {
       "fomc_date": "2026-09-16",
-      "fomc_days_away": 37,
-      "note": "9/16 FOMC 距今 37 天，加息定价仍在（本期无新读数）。CLARITY：参议院休会中，9/14 复会后初始投票排期不变（上期 coindesk 口径，本期未再检索）。Hoodi 测试网分叉 8/17 仍为 projected——本期检索未获锁定日确认（媒体仅「8 月底前后」口径），置信度下调。⚠️所有日期均为媒体口径，无数值进入 JSON。"
+      "fomc_days_away": 36,
+      "note": "⏰**7 月 CPI 明日（8/12 8:30 ET）发布**——9/16 FOMC（36 天）定价的关键读数，为最近的宏观波动源。CLARITY：参议院 9/14 复会后初始投票排期不变（上期 coindesk 口径）。ETH Hoodi 测试网分叉 8/17 本期获锁定确认（everstake/datawallet 日程口径，Sepolia 已于 8/3 分叉），Glamsterdam 主网 9/16 目标维持——与 FOMC 同日。⚠️所有日期均为媒体/官方日程口径，无数值进入 JSON。"
     },
     "etf_qualitative": {
-      "btc_etf_flow_text": "数据暂缺（无免费 API；farside/sosovalue 403）。定性背景：本期未检索到可靠日度流向表述。旁证方向：dominance -0.022pt 连续第 2 期微降、FGI 30→31 缓慢修复、但 24h 广度回落至 37.2%——资金面无明确方向信号。⚠️无任何数值进入 JSON。",
-      "eth_etf_flow_text": "数据暂缺（同上）。定性背景：ETH -0.1%/24h、+2.8%/7d、+7.4%/30d；ETH/BTC 0.029594（+0.27%）居 30 日区间上部；Ethereum 链 TVL +0.13% 持平。Hoodi 分叉日期未获锁定确认，Glamsterdam 主网 9/16 目标维持（projected）。⚠️无任何数值进入 JSON。"
+      "btc_etf_flow_text": "数据暂缺（无免费 API；farside/sosovalue 403）。定性背景：本期未检索到可靠日度流向表述。旁证方向：dominance 连续第 3 期微降但 24h 广度暴跌至 25.6%、总市值 -1.44%——资金面向防御收缩。⚠️无任何数值进入 JSON。",
+      "eth_etf_flow_text": "数据暂缺（同上）。定性背景：ETH -2.6%/24h、+0.2%/7d、+2.6%/30d；ETH/BTC 0.028928（-2.25%）回落至 30 日区间中部；Ethereum 链 TVL -1.21%。Hoodi 分叉 8/17 锁定确认（Sepolia 8/3 已分叉）为 9/16 主网前最近验证点。⚠️无任何数值进入 JSON。"
     },
     "global": {
-      "total_market_cap_usd": 2307370453729.774,
-      "stablecoin_total_supply": 299708786283.712
+      "total_market_cap_usd": 2274069556658.8745,
+      "stablecoin_total_supply": 298928986954.97705
     }
   },
   "market_score": {
-    "btc_trend": 4,
-    "funding": 3,
+    "btc_trend": 3,
+    "funding": 2,
     "sentiment": 3,
     "macro": 2,
-    "total": 12,
-    "label": "偏多下沿（周线广度与链 TVL 广度仍正；稳定币再度微缩 + 费率抬升为新减分苗头）",
-    "vs_previous": "12 → 12（维持偏多下沿，四维全部不变，但内部此消彼长）。\n• **BTC 趋势 4→4（维持）**：窗口高点上移至 $65,187 的边际新高 + 支撑 $62,456 七期未破为加分；24h 广度 56.4%→**37.2%** 单日大幅降温、突破未确认为减分——相抵维持 4。\n• **资金面 3→3（维持）**：稳定币 $300.11B→**$299.71B（-0.135%）**再度转缩、跌回 $300B 下方——上期「止缩」依据一期即失效；对冲项：链 TVL 13/15 上涨（Monad +3.18% 最强、RH Chain 九连升）。净判断维持 3 下沿，**连续 2 期收缩则降 2**。\n• **情绪面 3→3（维持）**：FGI 30→**31** 缓修；费率 +38%（0.0071→0.0098）价格滞涨下抬升 = 拥挤重建初期，OI +0.71% 同升——无极端但方向转负。\n• **宏观面 2→2（维持）**：无新信息（参议院休会、FOMC 37 天、Hoodi 未锁定）。\n\n**解读（当前无持仓）**：连续第 2 期偏多下沿，「加大研究强度、择优深挖」框架不变，但本期市场质量下降——异动头部全为赌场型薄盘（TUT 换手 453%、前 5 钱包 86.6%），基本面型信号仅 PUMP（回购数字落地）与 Curve 生态（LlamaLend v2 激励）。研究精力排序：①**KAITO**——恐慌降温（换手腰斩至 26.5%）但价格未止跌，8/20 前后为「利空出尽」实验判定窗口；②**ADA**——8/9 里程碑平稳兑现（无 sell-the-news），8 月中旬「申报激活」为下一可证伪节点；③**PUMP**——回购执行披露后验证收入可持续性（$1M+/日）；④**MON**——TVL 一期收复检验线（catalyst 回升 4），看能否站稳 2 期；⑤**CRV 新条目**——LlamaLend v2 的 TVL 一手数据何时可得。\n状态变动：升分 2 条（PUMP 12→13 回购披露、MON 11→12 检验线收复）、无降分；AKT/VVV 按 4.7(a) 降 stale（各 ssp=5）；新机会 1 条（CRV 13/20 🟡）。持续跟踪 11 条取前 10（ZRO 10/20 溢出并入折叠行），新条目 CRV 单列；stale 15 条。\n⚠️48h 内事件：**VELVET 解锁（今日）**。",
+    "total": 10,
+    "label": "中性（自偏多下沿回落：阻力二次拒绝 + 广度失守 + 稳定币连续收缩）",
+    "vs_previous": "12 → 10（偏多下沿 → 中性，BTC 趋势与资金面各降 1 分）。\n• **BTC 趋势 4→3（降）**：连续 2 期「边际新高后收低」（$65,234 刺出后 -1.8% 收 $63,968），$65.2k 确认为供给区；24h 广度 37.2%→**25.6%**、7d 广度 54.8%→**46.0% 跌破半数**——上期维持 4 分的「周线级反弹未破坏」依据失效。缓冲：新窗口低点 $63,381 未破、7d +0.30% 未转负。\n• **资金面 3→2（降，机械执行）**：稳定币 $299.71B→**$298.93B（-0.260%）连续第 2 期收缩**——上期预设「连续 2 期收缩则降 2」触发；同向确认：链 TVL 11/15 下跌（上期 13/15 上涨）、总市值 -1.44%。对冲项仅 Monad/Hyperliquid/Provenance 逆势。\n• **情绪面 3→3（维持）**：FGI 31→30 持平恐惧区；费率 0.0098→0.0100 第 3 期微升但 **OI -2.87%**——价格下跌中多头减仓（良性去杠杆），上期「拥挤重建」担忧缓解，无极端读数。\n• **宏观面 2→2（维持）**：CPI 明日（8/12）为最近波动源；CLARITY 9/14、FOMC+Glamsterdam 9/16 双事件日不变。\n\n**解读（当前无持仓）**：三期内首次跌出偏多区——「积极找机会」切换为「精选深挖 + 等待广度修复」。信号质量本期反而上升：多个跟踪论点获得一手数据判定。研究精力排序：①**KAITO**——换手衰减路径完全符合论点预测（45.4→26.5→21.9%），8/20 解锁为 9 天内最高信息量事件；②**MON**——检验线站稳 2 期兑现 + 逆势 TVL + 首现价格弹性，跟踪名单中数据面最扎实；③**CRV**——v2 TVL 落空 vs DEX TVL +10.9% 的分化需一期观察定向；④**ADA**——8 月中旬申报激活随时可能落地（GADA/NYSE Arca 待命）；⑤**PUMP**——收入 API 首验 $979k/日贴线，可持续性观察。规避提示：**YZY 8/16（供应 40.6%）与 CONX 8/17（36.8%）为月内最极端解锁**。\n状态变动：无升降分；ZRO 按 4.7(a) 降 stale（ssp=5）；无新机会条目（CYS Upbit 上线为已兑现催化剂、DOS 为 TGE 首日，均不构成前瞻论点）。持续跟踪 11 条取前 10（MON 12/20 与 KAITO 同分，按催化剂日期近者优先展示 KAITO，MON 并入折叠行但其进展在上文优先级②）；stale 16 条。\n⚠️48h 内事件：**CPI（明日 8/12）+ 8/13 三解锁（IP/GRVT/LAB）**。",
     "_freshness_note": null
   },
   "watchlist": {},
@@ -1363,17 +1374,17 @@
     {
       "severity": "warning",
       "rule": "event_within_48h",
-      "message": "⏰ VELVET 解锁（8/10，**今日**）——连续 2 日 24h 转负（-4.9%）、7d +14.2%，抢跑动能消退，解锁前回吐已开始；规模连续第 5 期未获 tokenomist 确认。今明两日直接验证「抢跑→解锁回吐」形态深度"
+      "message": "⏰48h 事件窗：**美国 7 月 CPI 明日（8/12 8:30 ET）发布**——加息定价背景下的关键读数；8/13 三连解锁 IP（Story）/GRVT 分发/LAB（均无精确数量口径）。周内后续：YZY 8/16 **占供应 40.6%** 月内最大 cliff、CONX 8/17 占供应 36.8%、ETH Hoodi 分叉 8/17（已锁定）"
     },
     {
       "severity": "warning",
       "rule": "large_cap_mover",
-      "message": "📊 4 只币 24h 异动 >15%：TUT **+128.7%**（$154M，Aster 永续轧空、换手 453%、前 5 钱包持仓 86.6%——极端赌场结构）、BEAT **+35.1%**（$1.22B，销毁循环二次拉升回崩盘前水位）、CASHCAT **+21.1%**（$141M，Robinhood 8/6 官方上币）、CYS **+15.3%**（$179M，InferBench 抛物线第 4 期、RSI~90）"
+      "message": "📊 4 只币 24h 异动 >15%：BEAT **-51.8%**（$537M，二次崩盘：8/1 解锁消化失败 + 链上交易数腰斩，距峰值 -88%）、TIBBIR **+30.9%**（$126M，Virtuals 生态联动弱归因）、B **+20.8%**（$165M，鲸鱼突破反转）、CYS **+18.0%**（$198M，Upbit 8/10 上线、抛物线第 5 期、换手 44.9%）。另：KAU +111.6% 判定为**数据坏打印**（报价源同期 -1.2%），不作行情解读"
     },
     {
       "severity": "info",
       "rule": "tvl_weekly_drop",
-      "message": "ℹ️ CoinGecko RWA 板块口径 **-34.78%** 为分类调整失真（top3 变为 figure-heloc/LINK/XLM，约 $21.5B 成分移出），非真实下跌——成分币仅温和走弱；本期已重置基线，下期起按新口径对比"
+      "message": "CoinGecko RWA 板块口径 **+53.65%** 再度为分类调整失真（top3 仍为 figure-heloc/LINK/XLM，约 $21.7B 成分回流，与上期 -34.78% 同源镜像）——成分币实际温和走弱；基线连续第 2 期重置，该板块轮动信号暂不可用"
     }
   ],
   "_sources": {
@@ -1385,25 +1396,29 @@
     "btc.resistance": "derived|coingecko sparkline_7d max",
     "btc.fear_greed": "api|alternative.me/fng",
     "btc.fear_greed_label": "api|alternative.me/fng",
-    "btc.mvrv_ratio": "api|coinmetrics CapMVRVCur (2026-08-08)",
+    "btc.mvrv_ratio": "api|coinmetrics CapMVRVCur (2026-08-09)",
     "btc.funding_rate": "api|coingecko/derivatives Binance(Futures) BTCUSDT",
     "btc.open_interest": "api|coingecko/derivatives Binance(Futures) BTCUSDT",
     "btc.dominance": "api|coingecko/global",
     "global.total_market_cap_usd": "api|coingecko/global",
     "global.stablecoin_total_supply": "api|defillama/stablecoinchains",
     "market_scan.movers": "api|coingecko/coins/markets (250)",
-    "market_scan.sector_rotation": "api|coingecko/coins/categories (RWA -34.78% 为分类调整口径失真、gaming +5.16% 为 BEAT 单币效应，均已标注)",
+    "market_scan.movers.kau_anomaly": "flagged|API 快照 +111.6% 与 Forbes/Kraken 报价页（-1.2%）矛盾，判定为源数据坏打印，未作行情解读",
+    "market_scan.sector_rotation": "api|coingecko/coins/categories (RWA +53.65% 为分类调整口径失真第 2 期、gaming -14.87% 为 BEAT 单币效应，均已标注)",
     "market_scan.trending": "api|coingecko/search/trending",
     "market_scan.chains_tvl_delta": "api|defillama/v2/chains",
-    "opportunities.uniswap.revenue": "api|defillama/summary/fees/uniswap (7d avg $231.2k, 30d avg $168.6k)",
-    "opportunities.morpho.tvl": "api|defillama/protocol/morpho-blue (RH Chain $348.7M, Arbitrum $23.6M 序列正常)",
-    "opportunities.monad.tvl": "api|defillama/v2/chains (Monad $875.0M, +3.18%)",
-    "opportunities.curve.llamalend": "webfetch_failed|defillama llamalend slug 无数据，CRV 条目暂无数值验证",
-    "opportunities.akash.status": "webfetch|akash.network/roadmap/aep-49 (Draft, est 8/30/2026, updated 5/1/2026, 6th unchanged check)",
-    "events.unlocks": "webfetch|tokenomist.ai (7 日窗口口径：CONX $12.55M/41.0%、AVAX $10.90M/0.4%、APT $6.77M/1.3%、CYBER $4.44M/9.4%，周度 cliff 合计 $57.64M；KAITO 解锁数字为 ccn 媒体口径)",
+    "opportunities.uniswap.revenue": "api|defillama/summary/fees/uniswap (7d avg $233.7k, 30d avg $169.1k, 8/10 $248.1k)",
+    "opportunities.pump.revenue": "api|defillama/summary/fees/pump.fun (7d avg $979k, 8/9 $1.12M — 首次 API 核验)",
+    "opportunities.morpho.tvl": "api|defillama/protocol/morpho-blue (RH Chain $345.8M -0.8%, Monad $157.7M +3.3%, Arbitrum $21.8M)",
+    "opportunities.monad.tvl": "api|defillama/v2/chains (Monad $883.0M, +0.90%, 连续 2 期 > $850M)",
+    "opportunities.curve.llamalend": "api|defillama/protocols (curve-llamalend-v2 $1.98M -39.8%/7d 落空; curve-dex $1.414B +10.9%/7d; llamalend v1 $62.2M)",
+    "opportunities.akash.status": "not_checked|本期未复查官方页（预算外），沿用上期 Draft 状态",
+    "events.unlocks": "webfetch|tokenomist.ai (7 日窗口口径：YZY $35.58M/40.6% 供应/22.82% 流通、CONX $11.28M/36.8%、AVAX $10.80M/0.4%、ARB $7.46M/1.4%，周 cliff 合计 $97.64M；KAITO 细则为 coinmarketcal/tradingview 媒体口径)",
+    "events.hoodi_fork": "websearch|everstake/datawallet 日程口径 8/17 锁定、Sepolia 8/3 已分叉，qualitative only",
+    "macro.cpi_date": "websearch|BLS 发布日程（8/12 8:30 ET），qualitative only, no numeric into JSON",
     "macro.fomc_date": "websearch|qualitative only, no numeric into JSON",
     "etf_qualitative": null,
-    "market_context.btc.eth_btc_ratio_30d_range": "api|coingecko/coins/ethereum/market_chart vs_currency=btc days=30 (0.029594, 区间 0.02731-0.03011)"
+    "market_context.btc.eth_btc_ratio_30d_range": "api|coingecko/coins/ethereum/market_chart vs_currency=btc days=30 (0.028928, 区间 0.02731-0.03011)"
   },
   "_freshness": {}
 }
