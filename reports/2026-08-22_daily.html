@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>加密货币机会发现简报</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+/* ===== CSS Reset & Variables ===== */
+:root {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-card-hover: #1c2129;
+  --border: #21262d;
+  --border-light: #30363d;
+  --text: #c9d1d9;
+  --text-secondary: #8b949e;
+  --text-muted: #484f58;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --yellow: #e3b341;
+  --purple: #bc8cff;
+  --radius: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Layout ===== */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+/* ===== Typography ===== */
+h1 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 4px;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 700;
+  border-left: 4px solid var(--accent);
+  padding-left: 12px;
+  margin: 40px 0 16px;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 24px 0 10px;
+}
+
+h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 20px 0 8px;
+}
+
+p, li {
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* ===== Inline Value Colors ===== */
+.up { color: var(--green); }
+.down { color: var(--red); }
+.warn { color: var(--orange); }
+.neutral { color: var(--text-secondary); }
+.accent { color: var(--accent); }
+
+/* ===== Header ===== */
+.report-header {
+  text-align: center;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.report-header .meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ===== Alert / Key Changes Box ===== */
+.alert-box {
+  border-left: 4px solid var(--red);
+  background: rgba(248, 81, 73, 0.06);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 18px;
+  margin: 20px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.alert-box.warning {
+  border-left-color: var(--orange);
+  background: rgba(210, 153, 34, 0.06);
+}
+
+.alert-box.info {
+  border-left-color: var(--accent);
+  background: rgba(88, 166, 255, 0.04);
+}
+
+.key-changes {
+  border-left: 4px solid var(--accent);
+  background: rgba(88, 166, 255, 0.04);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.key-changes ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.key-changes li {
+  margin-bottom: 4px;
+}
+
+/* ===== Card ===== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+/* ===== Tables ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+.data-table th {
+  text-align: left;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.data-table tr:hover td {
+  background: var(--bg-card-hover);
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table .meaning {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* Compact table variant */
+.data-table.compact td,
+.data-table.compact th {
+  padding: 5px 8px;
+}
+
+/* ===== Signal / Analysis Boxes ===== */
+.signal-box {
+  border-left: 4px solid var(--green);
+  background: rgba(63, 185, 80, 0.06);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.65;
+  margin: 12px 0;
+}
+
+.signal-box.bearish {
+  border-left-color: var(--red);
+  background: rgba(248, 81, 73, 0.06);
+}
+
+.signal-box.neutral {
+  border-left-color: var(--orange);
+  background: rgba(210, 153, 34, 0.06);
+}
+
+.analysis-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 12px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.analysis-block .conclusion {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(88, 166, 255, 0.06);
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ===== Charts (inline, compact) ===== */
+.chart-inline {
+  position: relative;
+  height: 180px;
+  margin: 12px 0;
+}
+
+.chart-inline canvas {
+  max-height: 100%;
+}
+
+.chart-small {
+  position: relative;
+  height: 150px;
+  margin: 10px 0;
+}
+
+.chart-small canvas {
+  max-height: 100%;
+}
+
+.no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 80px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+/* ===== ETF Text Summary ===== */
+.etf-text-summary {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 8px 0 4px;
+  line-height: 1.6;
+}
+
+/* ===== Macro Calendar ===== */
+.macro-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+.macro-table th {
+  text-align: left;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 6px 8px;
+  border-bottom: 2px solid var(--border);
+}
+
+.macro-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ===== Recommendation Cards ===== */
+.rec-card {
+  border-left: 4px solid var(--text-muted);
+  background: var(--bg-card);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.rec-card.buy { border-left-color: var(--green); }
+.rec-card.hold { border-left-color: var(--yellow); }
+.rec-card.sell { border-left-color: var(--red); }
+.rec-card.watch { border-left-color: var(--purple); }
+
+.rec-card .rec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.rec-card .rec-coin {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.rec-card .rec-action {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+.rec-card .rec-action.buy { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+.rec-card .rec-action.hold { background: rgba(227, 179, 65, 0.15); color: var(--yellow); }
+.rec-card .rec-action.sell { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+.rec-card .rec-action.watch { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+
+.rec-card .rec-body {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== Checklist ===== */
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 13px;
+}
+
+.checklist-item::before {
+  content: "\2610";
+  font-size: 15px;
+  line-height: 1.2;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.checklist-item.done::before {
+  content: "\2611";
+  color: var(--green);
+}
+
+/* ===== Score Bars (4-dimension) ===== */
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.score-row .label {
+  width: 90px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.score-track {
+  flex: 1;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.score-row .val {
+  width: 30px;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== Progress Bar (FGI) ===== */
+.progress-track {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fgi {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--red) 0%, var(--orange) 25%, var(--yellow) 50%, var(--green) 100%);
+}
+
+/* ===== Heatmap ===== */
+.heatmap-grid {
+  display: grid;
+  gap: 4px;
+}
+
+.heatmap-cell {
+  border-radius: 4px;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ===== Divider ===== */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0 8px;
+}
+
+/* ===== Footer ===== */
+.report-footer {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 24px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* ===== Grid Helpers ===== */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .container { padding: 20px 16px 32px; }
+  h1 { font-size: 20px; }
+  h2 { font-size: 16px; padding-left: 10px; border-left-width: 3px; }
+  h3 { font-size: 13px; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .chart-inline { height: 160px; }
+  .chart-small { height: 130px; }
+  .rec-card { padding: 12px; }
+  .rec-grid { grid-template-columns: 1fr !important; }
+  .watchlist-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 12px 10px 24px; }
+  body { font-size: 14px; line-height: 1.6; -webkit-text-size-adjust: 100%; }
+  h1 { font-size: 18px; }
+  h2 { font-size: 15px; margin-top: 20px; }
+  h3 { font-size: 12px; margin: 12px 0 6px; }
+
+  /* Tables: force horizontal scroll, prevent text wrapping */
+  .data-table { font-size: 11px; white-space: nowrap; }
+  .data-table th, .data-table td { padding: 6px 8px; }
+  .table-wrap { margin: 0 -10px; padding: 0 10px; }
+
+  /* Cards */
+  .card { padding: 10px; border-radius: 4px; }
+  .signal-box { padding: 10px 12px; font-size: 12px; }
+  .analysis-block { padding: 10px 12px; font-size: 13px; }
+
+  /* Charts smaller on phone */
+  .chart-inline { height: 140px; }
+  .chart-small { height: 110px; }
+
+  /* Heatmap: 3-4 columns on phone instead of 7 */
+  .heatmap-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .heatmap-cell { padding: 6px 4px; font-size: 11px; }
+
+  /* Recommendation cards */
+  .rec-grid { grid-template-columns: 1fr !important; }
+  .rec-card { margin-bottom: 8px; }
+
+  /* Score bars */
+  .score-row .label { width: 60px; font-size: 11px; }
+  .score-row .val { font-size: 11px; }
+
+  /* Key changes list */
+  .key-changes ul { padding-left: 16px; }
+  .key-changes li { font-size: 13px; margin-bottom: 4px; }
+
+  /* Meta info */
+  .meta { font-size: 11px; }
+  .report-footer { font-size: 10px; }
+
+  /* Progress bar touch-friendly */
+  .progress-track { height: 8px; }
+
+  /* Watchlist */
+  .watchlist-row { grid-template-columns: 1fr; }
+}
+
+/* ===== Overflow ===== */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===== Alpha Signal Cards ===== */
+.alpha-card {
+  border-left: 3px solid var(--border);
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  background: var(--bg-card);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 13px;
+}
+.alpha-card.red    { border-left-color: #f85149; }
+.alpha-card.yellow { border-left-color: #e3b341; }
+.alpha-card.green  { border-left-color: #3fb950; }
+.alpha-card.gray   { border-left-color: var(--text-muted); }
+.alpha-card .coin-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 6px;
+}
+.alpha-card.red .coin-tag    { background: rgba(248,81,73,.15); color: #f85149; }
+.alpha-card.yellow .coin-tag { background: rgba(227,179,65,.15); color: #e3b341; }
+.alpha-card.green .coin-tag  { background: rgba(63,185,80,.15); color: #3fb950; }
+.alpha-card.gray .coin-tag   { background: rgba(72,79,88,.2); color: var(--text-muted); }
+.alpha-card .source { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+/* ===== Watchlist Row ===== */
+.watchlist-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.watchlist-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 13px;
+}
+.watchlist-item .ticker { font-weight: 700; color: var(--accent); }
+
+/* ===== Freshness Warning ===== */
+.freshness-warn { color: var(--orange); font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="report-header">
+    <h1>加密货币机会发现</h1>
+    <div class="meta">2026-08-22 | daily | 2026-08-22 04:12 UTC+8</div>
+  </div>
+
+  <!-- ALERTS (顶部告警，无告警时为空字符串) -->
+  <div class="alert-box">🔥 <strong>[critical] 高分新机会：STX — Genesis Bond 9/10 注册 + Bitcoin Staking（15/20，🟡）</strong>——首个有明确日期（BTC 区块 966,350）与上限（100-200 BTC 试点）的 BTC 原生收益催化剂；+23.1%/24h 但 30d 仅 +3.7%，定价刚启动</div>
+<div class="alert-box warning">⚠️ <strong>[warning] 14 币破 15% 线（全部上涨）</strong>：BCH <strong>+30.5%</strong>（$5.7B 无专属催化剂补涨）| ENA <strong>+30.5%</strong>（FalconX $1B 设施）| KMNO <strong>+24.8%</strong>（⚠️8/30 解锁前拉升）| STX <strong>+23.1%</strong> | PEPE <strong>+22.3%</strong>（meme 五连升）| CRV <strong>+19.3%</strong>（$0.30 突破）| BTW <strong>+19.2%</strong>（⚠️口径混乱）| THETA +18.4% | ZEC <strong>+18.0%</strong>（市值 #12）| ENS +17.8% | DRV/WBT/STABLE/ANSEM +15.5~17.5%</div>
+<div class="alert-box warning">⏰ <strong>[warning] 48h 事件：MET 8/23 解锁</strong> 7.33M 枚（$1.44M/0.73% 供应）——7d +31.4% 拉升后回踩试金石（今日 +1.5% 已显疲态）；3 天后 8/25 双事件（H 解锁 $21.07M/13.4% + ZANO 升级）</div>
+<div class="alert-box info">🚀 <strong>[info] BTC $77,029 三连大阳</strong>：盘中 $79,400（媒体）、7d 新高 $78,282——ETF 两日 $800M 流入确认真实需求；⚠️FGI 一周 34→72 + dominance 五连升 59.27 + ETH/BTC 回落 0.0314——<strong>$72.8k/$70k 回踩为进场区，不追高</strong></div>
+<div class="alert-box info">✅ <strong>[info] 验证线密集命中日</strong>：AAVE 破 $100✓ | ETHFI 破 $0.55✓ | VELVET 收复 $0.75✓（9→10）| ARB 30d 弹性转正✓ | ZEC 13→14 | CRV 12→13 | LIT 信息补齐恢复 tracking | UNI 收入两连跳 $346k/$442k（差 1-2 日达恢复线）| KAITO/ZRO 解锁承接 day 2 双✓ | 反向：MNT 普涨日逆市 -1.3% 首日、POL ssp=4 距 stale 1 期</div>
+
+  <!-- SECTION 1: OPPORTUNITY BOARD -->
+  <h2>一、机会看板</h2>
+  <!-- 机会卡片复用 .alpha-card CSS：red/yellow/green 对应扩散度，gray 对应无新机会占位 -->
+  <h3>🆕 本期新发现</h3>
+<div class="alpha-card yellow"><span class="coin-tag">STX</span><strong>Stacks：Genesis Bond 9/10 注册 + Bitcoin Staking（15/20）🔥</strong><br>首个「Bitcoin Protocol Bond」：注册 9/10 开启（BTC 区块 966,350），STX+BTC 配对经 PoX 赚 BTC 计价收益、BTC 不离主网；PoX-5 硬分叉 7/29 已激活，Bitcoin Staking 年内上线；首期 100-200 BTC 试点。$0.1746（+23.1%/+42.0%）但 <strong>30d 仅 +3.7% = 定价刚启动</strong>。验证：9/10 注册如期 + 认购规模 + 主网时间表<div class="source">来源: cryptobriefing.com/stacks-genesis-bond-bitcoin-staking/</div></div>
+<div class="alpha-card green"><span class="coin-tag">ENA</span><strong>Ethena：FalconX $1B USDe 机构信贷设施（12/20）</strong><br>FalconX 任发起人/服务商/抵押管理人，超额抵押贷款回充 USDe 储备；叠加 Hayes「5-10x」檄文，两日 +58% 自压缩区放量突破（量 $1.09B）。风险：7d +66% 追高/扩散已入主流。验证：USDe 供应数据 + $0.12 回测不破 + 设施使用率<div class="source">来源: cryptotimes.io</div></div>
+<h3>📌 持续跟踪（16 项取前 10，按评分降序）</h3>
+<div class="alpha-card green"><span class="coin-tag">AAVE</span><strong>Aavenomics 回购 + V4（17/20，本板最高）</strong><br>✅$100 突破：$109.98（+12.9%/+26.8%）放量破反头肩颈线（媒体目标 $113/$120）；新增：稳定币供应 $8.98B/借出 $7.40B（利用率 82.46%）、V4 供应 $389.1M（媒体口径）。验证：$100 回测不破 + V4 TVL + 回购披露<div class="source">来源: cryptorank.io</div></div>
+<div class="alpha-card green"><span class="coin-tag">LINK</span><strong>CCIP 机构集群（15/20）</strong><br>本期预算外未检索；$11.62（+7.5%/+30.0%/30d +33.9%）大市值最强档延续。验证：CCIP 量披露 + DTCC 推进<div class="source">来源: genfinity.io</div></div>
+<div class="alpha-card red"><span class="coin-tag">MORPHO</span><strong>Robinhood Earn 导流（15/20）</strong><br>RH $416.9M（+1.8%）九连升；Ethereum $4.23B（+5.3%）/Base $3.88B（+5.7%）/Monad $174.0M（-0.7% 首降）；$2.31 普涨日横盘。验证：RH 增势 + 弹性持续<div class="source">来源: api.llama.fi/protocol/morpho-blue</div></div>
+<div class="alpha-card green"><span class="coin-tag">ZEC</span><strong>$500 突破加速（14/20，↑1）</strong><br>$681.64（+18.0%/+38.0%）：市值 $11.5B 升至 #12、量 $1.13B、居 trending；$680.82 上方卖侧流动性为阻力。验证：$650-680 留存 + ETF 审批反馈<div class="source">来源: coingecko.com/en/coins/zcash</div></div>
+<div class="alpha-card yellow"><span class="coin-tag">ARB</span><strong>Robinhood Chain 费用分成（14/20）</strong><br>✅30d 弹性转正 +6.8%（背离修复第 3 期）；RH $574M（+3.0%）九连升；$0.0952（+8.1%/+29.1%）。验证：TVL 增势 + 费用分成一手披露（仍缺）<div class="source">来源: api.llama.fi/v2/chains</div></div>
+<div class="alpha-card yellow"><span class="coin-tag">MNT</span><strong>Super Portal + RWA L2（14/20）</strong><br>⚠️普涨日唯一逆市 -1.3%（$0.5030），$0.50 勉强站稳；单日不改分，连续 2 日逆市降时间窗。验证：$0.50 得失 + Portal 量数据<div class="source">来源: coinedition.com</div></div>
+<div class="alpha-card yellow"><span class="coin-tag">CRV</span><strong>LlamaLend V2 + 排放削减（13/20，↑1）</strong><br>$0.30 + 趋势线双突破（$0.330 +19.3%）：年排放 8/13 降 97.2M 首次 + V2 隔离借贷媒体确认 + OI +15%；DEX $1.316B✓/v2 $2.3M 未起量。验证：$0.30 站稳 + v2 起量<div class="source">来源: coinpedia.org</div></div>
+<div class="alpha-card yellow"><span class="coin-tag">ETHFI</span><strong>Summer 升级三催化剂（13/20）</strong><br>✅$0.55 突破：$0.5861（+3.4%/+30.5%）LRT 板块最强档；回购一手仍缺。验证：$0.55 回测不破 + 回购披露<div class="source">来源: coinpedia.org</div></div>
+<div class="alpha-card green"><span class="coin-tag">PUMP</span><strong>回购飞轮（13/20）</strong><br>收入 8/21 $1.341M（7d 均 $1.138M 续升）$1M 上方第 4 期；$0.00388（+4.7%/+39.1%/30d +103%）居 trending。验证：$1M 上方连续 2 周（将达成）<div class="source">来源: api.llama.fi</div></div>
+<div class="alpha-card yellow"><span class="coin-tag">MON</span><strong>Monad DeFi 拐点（13/20）</strong><br>$0.0285（+8.3%/+32.7%）双跑赢；TVL $947M（+0.89% 增速回升）守 $900M✓；Morpho-on-Monad 首降需跟踪。验证：持续跑赢 + 守 $900M<div class="source">来源: api.llama.fi/v2/chains</div></div>
+<div class="alpha-card gray"><strong>21 项机会持续静默跟踪（见 JSON，不逐条展示）</strong><br>溢出 6：LIT 13（恢复 tracking：量 top-3 + LLP 现货库存）、POL 13（ssp=4 距 stale 1 期）、HYPE 12、KAITO 12（day2✓）、ZRO 11（day2✓✓ +14%）、VELVET 10（↑1 收复 $0.75）；stale 15：TAO 16（8/31 剩 9 天无裁决则 expired）、UNI 15（收入两连跳临近恢复）、ONDO 15、AKT 14（8/30 剩 8 天）、CC/VVV/AVAX/GNO/LDO/EDGE/PYTH 13、ZAMA/XLM/SYRUP 12、JTO 11</div>
+
+  <h3>值得深挖（优先级排序）</h3>
+  <!-- 复用 .rec-card CSS：buy=高优先级 hold=中 watch=观察 sell=证伪/放弃 -->
+  <div class="rec-card buy"><div class="rec-header"><span class="rec-coin">① STX — Genesis Bond（新 15 分🔥）</span><span class="rec-action buy">高优先级</span></div><div class="rec-body">9/10 硬日期催化剂（区块 966,350、100-200 BTC 上限）+ 30d 仅 +3.7% 定价刚启动。验证：注册如期 + 认购规模</div></div>
+<div class="rec-card buy"><div class="rec-header"><span class="rec-coin">② AAVE — 回购 + V4（17 分本板最高）</span><span class="rec-action buy">高优先级</span></div><div class="rec-body">$100 颈线突破 + 利用率 82.46% 基本面同向（媒体口径）。验证：$100 回测不破</div></div>
+<div class="rec-card hold"><div class="rec-header"><span class="rec-coin">③ CRV — 排放削减 + LlamaLend V2（↑13）</span><span class="rec-action hold">中优先级</span></div><div class="rec-body">$0.30 + 趋势线双突破日，排放 8/13 降 97.2M 历史首次。验证：$0.30 站稳 + v2 起量</div></div>
+<div class="rec-card hold"><div class="rec-header"><span class="rec-coin">④ ZEC — 动量 + ETF 审批线（↑14）</span><span class="rec-action hold">中优先级</span></div><div class="rec-body">市值 #12、量 $1.13B；$680.82 上方卖侧流动性。验证：$650-680 留存</div></div>
+<div class="rec-card watch"><div class="rec-header"><span class="rec-coin">⑤ UNI — 收入两连跳（stale 临近恢复）</span><span class="rec-action watch">观察</span></div><div class="rec-body">8/20 $346.4k、8/21 $441.9k 远超 $240k 线，7d 均值差 1-2 日达标即回看板</div></div>
+<div class="rec-card watch"><div class="rec-header"><span class="rec-coin">⑥ ENA — FalconX $1B 设施（新 12 分）</span><span class="rec-action watch">观察</span></div><div class="rec-body">实锤催化剂但 7d +66% 追高风险自控。验证：USDe 供应 + $0.12 回测</div></div>
+<div class="rec-card sell"><div class="rec-header"><span class="rec-coin">规避：KMNO / BTW / H / MNT</span><span class="rec-action sell">规避</span></div><div class="rec-body">KMNO 8/30 解锁前 +42% 拉升；BTW 口径混乱；H 失效线下阴跌迎解锁；MNT 普涨日逆市首日观察</div></div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 2: MARKET SCAN -->
+  <h2>二、全市场扫描</h2>
+
+  <h3>异动榜</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table compact"><thead><tr><th>币种</th><th>价格</th><th>24h</th><th>7d</th><th>30d</th><th>市值</th><th>原因</th></tr></thead><tbody><tr><td><strong>ENA</strong></td><td>$0.1365</td><td class="up">+30.5%</td><td class="up">+66.2%</td><td class="up">+53.0%</td><td>$1.34B</td><td class="meaning">FalconX $1B USDe 设施 + Hayes 檄文，两日 +58% 升设机会条目</td></tr><tr><td><strong>BCH</strong></td><td>$283.33</td><td class="up">+30.5%</td><td class="up">+44.4%</td><td class="up">+32.6%</td><td>$5.69B</td><td class="meaning">无专属催化剂：财政部回购驱动补涨，$235-240 放量突破</td></tr><tr><td><strong>KMNO</strong></td><td>$0.0252</td><td class="up">+24.8%</td><td class="up">+42.3%</td><td class="up">+42.3%</td><td>$135M</td><td class="meaning">原因未明；⚠️8/30 解锁 229.17M 枚，拉升后 8 天迎解锁</td></tr><tr><td><strong>STX</strong></td><td>$0.1746</td><td class="up">+23.1%</td><td class="up">+42.0%</td><td class="up">+3.7%</td><td>$325M</td><td class="meaning">Genesis Bond 9/10 注册 + PoX-5 已激活，升设机会条目 🆕</td></tr><tr><td><strong>PEPE</strong></td><td>$0.0000038</td><td class="up">+22.3%</td><td class="up">+45.1%</td><td class="up">+33.9%</td><td>$1.60B</td><td class="meaning">meme 五连升主力，无专属催化剂（WIF/FLOKI 同步）</td></tr><tr><td><strong>BTW</strong></td><td>$0.4803</td><td class="up">+19.2%</td><td class="up">+57.0%</td><td class="up">+620.7%</td><td>$1.30B</td><td class="meaning">质押激励延续；⚠️数据口径混乱高波动警示维持</td></tr><tr><td><strong>CRV</strong></td><td>$0.3303</td><td class="up">+19.3%</td><td class="up">+33.8%</td><td class="up">+49.3%</td><td>$511M</td><td class="meaning">$0.30+趋势线双突破：排放降 97.2M 首次 + LlamaLend V2</td></tr><tr><td><strong>ZEC</strong></td><td>$681.64</td><td class="up">+18.0%</td><td class="up">+38.0%</td><td class="up">+31.0%</td><td>$11.51B</td><td class="meaning">无新催化剂，动量加速至市值 #12、居 trending</td></tr><tr><td><strong>THETA</strong></td><td>$0.1916</td><td class="up">+18.4%</td><td class="up">+40.9%</td><td class="up">+37.9%</td><td>$192M</td><td class="meaning">原因未明（预算外未检索）</td></tr><tr><td><strong>ENS</strong></td><td>$5.26</td><td class="up">+17.8%</td><td class="up">+31.7%</td><td class="up">+15.0%</td><td>$221M</td><td class="meaning">8/11 治理通过基金会改组（$65M 基金）+ ETH 贝塔</td></tr><tr><td><strong>WBT</strong></td><td>$71.20</td><td class="up">+17.2%</td><td class="up">+30.6%</td><td class="up">+23.8%</td><td>$8.40B</td><td class="meaning">原因未明（预算外未检索），平台币解释力弱</td></tr><tr><td><strong>LIT</strong></td><td>$3.09</td><td class="up">+13.4%</td><td class="up">+37.7%</td><td class="up">+31.7%</td><td>$775M</td><td class="meaning">重回 trending：perp DEX 量 top-3 + LLP 现货 ETH 库存</td></tr></tbody></table>
+    </div>
+    <div class="etf-text-summary">三连普涨再加速：24h 上涨 181/250（72.4%）、7d 207/250（82.8%）。BTC 周涨 +22.4% 为 2023 年 3 月以来最佳；ETF 两日 $800M 流入（媒体口径）确认真实需求。结构切换：领涨从 BTC 转向大市值山寨——BCH/ZEC/ENA +18-30%，DeFi 复兴主线与 meme 五连升并行；ETH/BTC 回落 0.0314。⚠️稳定币 -0.57% 回撤 + FGI 一周 34→72 为两大过热预警。</div>
+  </div>
+
+  <h3>板块轮动</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table compact"><thead><tr><th>板块</th><th>市值</th><th>24h</th><th>连续同向</th><th>备注</th></tr></thead><tbody><tr><td><strong>Meme</strong></td><td>$31.1B</td><td class="up">+6.41%</td><td>↑5</td><td class="meaning">五连升最强档（+6.41%）——PEPE +22%/WIF/FLOKI 接力，FGI 72 的投机温度计</td></tr><tr><td><strong>Gaming</strong></td><td>$3.4B</td><td class="up">+6.29%</td><td>↑3</td><td class="meaning">三连升加速（+6.29%）——仍为跟随性板块</td></tr><tr><td><strong>AI</strong></td><td>$15.9B</td><td class="up">+6.27%</td><td>↑1</td><td class="meaning">成分调整后新基线首期（+6.27%）——TAO 重回 trending，轮动计数自 1 重启</td></tr><tr><td><strong>DeFi</strong></td><td>$69.9B</td><td class="up">+6.20%</td><td>↑5</td><td class="meaning">五连升加速（+6.20%）——AAVE 破 $100/CRV 破 $0.30/ENA 机构信贷，本轮主线板块</td></tr><tr><td><strong>Layer-1</strong></td><td>$2.21T</td><td class="up">+5.86%</td><td>↑5</td><td class="meaning">五连升（+5.86%）——BTC/BCH/ZEC PoW 集群与 L1 普涨双引擎</td></tr><tr><td><strong>Layer-2</strong></td><td>$7.8B</td><td class="up">+3.34%</td><td>↑3</td><td class="meaning">三连升（+3.34%）——ARB 7d +29% 领涨，板块独立叙事仍弱</td></tr><tr><td><strong>RWA</strong></td><td>$70.4B</td><td class="up">+2.17%</td><td>↑5</td><td class="meaning">五连升但连续 3 期垫底（+2.17%）——资金持续偏向 DeFi/meme/L1</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <h3>热搜 Trending</h3>
+  <div class="card">
+    <p style="font-size:13px;">ALIGN、<strong class="accent">ENA✦</strong>、<strong class="accent">LIT✦</strong>、BTC、<strong class="accent">HYPE✦</strong>、PIPEDOG、<strong class="accent">PUMP✦</strong>、ETH、<strong class="accent">ZEC✦</strong>、<strong class="accent">TAO✦</strong>、POD、AERO、DRB、PI、XRP</p><p style="font-size:12px;color:var(--text-secondary);margin-top:6px;">✦=机会条目在列（ENA 🆕、LIT 回归；MON 跌出）。BTC/ETH/XRP 主流币霸榜 = 普涨期资金关注集中主线。</p>
+  </div>
+
+  <h3>链 TVL 动量</h3>
+  <div class="card">
+    <div class="chart-small">
+      <canvas id="chartTVL"></canvas>
+      <div id="noDataTVL" class="no-data" style="display:none;">数据暂缺 — DeFiLlama 链 TVL 数据未获取</div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 3: EVENT CALENDAR -->
+  <h2>三、事件日历</h2>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table compact"><thead><tr><th>日期</th><th>倒计时</th><th>币种</th><th>类型</th><th>事件</th><th>机会角度</th></tr></thead><tbody><tr style="background:rgba(210,153,34,.08);"><td><strong>08/23</strong></td><td>⏰1 天</td><td><strong>MET</strong></td><td>解锁</td><td class="meaning">⏰MET 解锁 7.33M 枚（$1.44M/0.73% 总供应，常规量级）——落在 7d +31.4% 拉升后；今日 +1.5% 已显疲态</td><td class="meaning">常规量级非事件驱动；明日解锁回踩为动能试金石</td></tr><tr><td><strong>08/25</strong></td><td>3 天</td><td><strong>H</strong></td><td>解锁</td><td class="meaning">H 解锁 266.47M 枚、tokenomist 现值 $21.07M/13.4% 供应；价格 $0.0768（-2.9%/24h、7d -31.4%）失效线 $0.10 下方续阴跌</td><td class="meaning">机会条目已 expired；解锁落地后深跌企稳可作反转观察（新论点需新条目）</td></tr><tr><td><strong>08/25</strong></td><td>3 天</td><td><strong>ZANO</strong></td><td>升级</td><td class="meaning">Zano 主网升级（沿用记录）。$7.94（-0.7%/24h、7d -10.3%）、量 $1.2M 跌破门槛——市场不期待</td><td class="meaning">升级前抢跑 vs sell-the-news；量价齐弱提示规避</td></tr><tr><td><strong>08/26</strong></td><td>4 天</td><td><strong>CEX</strong></td><td>上所</td><td class="meaning">BitMart 部分交易对停牌（沿用记录）</td><td class="meaning">流动性迁移，关注受影响标的深度变化</td></tr><tr><td><strong>08/26</strong></td><td>4 天</td><td><strong>KII</strong></td><td>上所</td><td class="meaning">KiiChain TGE 窗口尾段（沿用记录，本期未复检）</td><td class="meaning">上期换手 5x+ 纯赌场阶段，规避</td></tr><tr><td><strong>08/27</strong></td><td>5 天</td><td><strong>MACRO</strong></td><td>宏观</td><td class="meaning">Jackson Hole 8/27-29「金融创新：支付与政策的影响」；Warsh 首秀定档周五 8/28 10:00 ET（Newsquawk 日历确认）；同周三重磅：NVDA 财报 8/26 盘后 + 7 月 PCE 8/28 早间与演讲同日；Warsh 7/29 口径：谈长期结构不给近期指引、Fed 独立于市场定价行事</td><td class="meaning">FGI 72 + 周涨 22% 后的最大双向波动源；支付/稳定币主题积极表述利好 POL/XLM 支付线</td></tr><tr><td><strong>08/30</strong></td><td>8 天</td><td><strong>AKT</strong></td><td>升级</td><td class="meaning">Akash AEP-49 虚拟机目标日（上期复查仍 Draft/最后更新 5/1）——落空概率高，最后观察窗口</td><td class="meaning">8/30 落空则条目转 expired</td></tr><tr><td><strong>08/30</strong></td><td>8 天</td><td><strong>KMNO</strong></td><td>解锁</td><td class="meaning">KMNO 解锁 229.17M 枚（核心贡献者 83.33M + 关键股东/顾问 145.83M，dropstab 口径；tokenomist 首页未列出）——7d +42.3% 拉升后 8 天迎解锁</td><td class="meaning">解锁前拉升的追高规避样本；解锁后吸收情况可作观察</td></tr><tr><td><strong>09/01</strong></td><td>10 天</td><td><strong>SUI</strong></td><td>解锁</td><td class="meaning">Sui 月度解锁（量级参考：上次 $9.76M/占流通 0.34%，常规可吸收）</td><td class="meaning">常规量级，非事件驱动机会</td></tr><tr><td><strong>09/10</strong></td><td>19 天</td><td><strong>STX</strong></td><td>升级</td><td class="meaning">Stacks Genesis Bond 注册开启（BTC 区块 966,350）；首期上限 100-200 BTC 试点；PoX-5 硬分叉 7/29 已激活铺路 Bitcoin Staking</td><td class="meaning">注册规模为 Bitcoin Staking 需求的首个可量化验证点；超额认购 = 论点强化</td></tr><tr><td><strong>09/15</strong></td><td>24 天</td><td><strong>MACRO</strong></td><td>宏观</td><td class="meaning">CLARITY cloture 投票 9/15（周二）14:15 ET 就 motion to proceed 表决；需 60 票——约需 6 名民主党议员倒戈；未决：稳定币收益禁令、官员持币限制条款</td><td class="meaning">最大确定性宏观催化剂排期；60 票门槛为主要变数</td></tr><tr><td><strong>09/23</strong></td><td>32 天</td><td><strong>CEX</strong></td><td>上所</td><td class="meaning">BitMEX 关停（沿用记录）</td><td class="meaning">流动性迁移与衍生品持仓再分配</td></tr><tr><td><strong>11/01</strong></td><td>71 天</td><td><strong>CEX</strong></td><td>上所</td><td class="meaning">Bitget 停止接受新日本用户，存量账户 11/1 起转只可平仓</td><td class="meaning">司法辖区退出的流动性迁移观察</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 4: MARKET CONTEXT (进场时机参考) -->
+  <h2>四、市场环境（进场时机参考）</h2>
+
+  <h3>市场阶段评估</h3>
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;flex-wrap:wrap;">
+      <span style="font-size:13px;color:var(--text-secondary);">综合评分</span>
+      <span style="font-size:22px;font-weight:700;">16<span style="font-size:14px;color:var(--text-secondary);">/20</span></span>
+      <span style="font-size:14px;font-weight:600;">强牛下限（↑1：突破确认 + ETF 资金转向；FGI 斜率与 Warsh 风险要求入场纪律）</span>
+    </div>
+    <div class="score-row">
+      <span class="label">BTC 趋势</span>
+      <div class="score-track"><div class="score-fill" id="bar-btc-trend"></div></div>
+      <span class="val">5</span>
+    </div>
+    <div class="score-row">
+      <span class="label">资金面</span>
+      <div class="score-track"><div class="score-fill" id="bar-funding"></div></div>
+      <span class="val">4</span>
+    </div>
+    <div class="score-row">
+      <span class="label">市场情绪</span>
+      <div class="score-track"><div class="score-fill" id="bar-sentiment"></div></div>
+      <span class="val">4</span>
+    </div>
+    <div class="score-row">
+      <span class="label">宏观环境</span>
+      <div class="score-track"><div class="score-fill" id="bar-macro"></div></div>
+      <span class="val">3</span>
+    </div>
+  </div>
+
+  <h3>BTC 核心指标</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>指标</th><th>当前值</th><th>24h 变化</th><th>信号</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>价格</td>
+            <td><strong>$77,029</strong></td>
+            <td><span class="up">+6.04%</span>（7d <span class="up">+22.41%</span>）</td>
+            <td>三连大阳、周线级突破；盘中 $79,400 后 $77k 整固</td>
+          </tr>
+          <tr>
+            <td>恐惧贪婪</td>
+            <td><strong>72</strong></td>
+            <td>Greed（上期 62）</td>
+            <td><span class="warn">⚠️一周 34→72 翻倍斜率，距 Extreme Greed 3 点</span></td>
+          </tr>
+          <tr>
+            <td>BTC 主导率</td>
+            <td><strong>59.27%</strong></td>
+            <td>+0.57pt</td>
+            <td>五连升——BTC/大市值主导，ETH/BTC 回落 0.0314</td>
+          </tr>
+          <tr>
+            <td>总市值</td>
+            <td><strong>$2.605T（+5.05%）</strong></td>
+            <td>--</td>
+            <td>--</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-bottom:3px;">
+        <span>Extreme Fear</span><span>Fear</span><span>Neutral</span><span>Greed</span><span>Extreme Greed</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fgi" style="width:72%"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>BTC 7 日价格走势</h3>
+  <div class="card">
+    <div class="chart-inline">
+      <canvas id="chartSparkline"></canvas>
+      <div id="noDataSparkline" class="no-data" style="display:none;">数据暂缺 — CoinGecko sparkline API 未返回有效数据</div>
+    </div>
+  </div>
+
+  <h3>ETF 资金流向（定性）</h3>
+  <div class="card">
+    <div class="etf-text-summary">BTC ETF: 定性转向确认：CoinDesk 8/21 报道 BTC/ETH ETF 两日合计净流入 $800M、连续第 2 日放量流入——上周净流出后资金面首次转正；Fidelity 客户 8/20 单日买入 $134M BTC（techtimes 口径）。farside/sosovalue 仍 403，无日度数值入 JSON。</div>
+    <div class="etf-text-summary">ETH ETF: 数据暂缺（无免费 API）。定性：ETH $2,414（+3.3%/24h、7d +28.9% 大市值前列）今日休整；Ethereum 链 TVL +3.34% 至 $48.5B 续创阶段新高；ETH/BTC 回落至 0.0314（30d 高点 0.0326）。⚠️无任何数值进入 JSON。</div>
+  </div>
+
+  <h3>周期指标</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table"><thead><tr><th>指标</th><th>数值</th><th>信号</th><th>新鲜度</th></tr></thead><tbody><tr><td>MVRV 比率</td><td><strong>1.386</strong>（8/20）</td><td class="meaning">低位续升，距 2.0+ 过热区远——周期位置仍健康</td><td>✓</td></tr><tr><td>资金费率</td><td><strong>+0.010%</strong></td><td class="meaning">低位——大涨中多头未拥挤，挤空后杠杆未重建</td><td>✓</td></tr><tr><td>未平仓合约</td><td><strong>$8.21B</strong></td><td class="meaning">+4.7% 温和跟涨，杠杆结构健康</td><td>--</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <h3>技术面</h3>
+  <div class="card">
+    <table class="data-table compact">
+      <tbody>
+        <tr><td style="width:80px;font-weight:600;">支撑</td><td><strong>$72,785</strong>（前 7d 高点/突破回踩位）、$70,000 心理位；7d 低点 $62,780 为深度支撑</td></tr>
+        <tr><td style="font-weight:600;">阻力</td><td><strong>$78,282</strong>（7d 新高）、$80,000 整数关（媒体目标）</td></tr>
+        <tr><td style="font-weight:600;">趋势</td><td>三连大阳强势整固——垂直拉升未经回测，回踩进场优于追高；费率 +0.01% 低位 + OI 温和 = 杠杆未拥挤</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>宏观日历</h3>
+  <div class="card">
+    <div class="table-wrap">
+      <table class="macro-table"><thead><tr><th>日期</th><th>事件</th><th>预期影响</th></tr></thead><tbody><tr><td>8/26</td><td>NVDA 财报（盘后）</td><td>AI 板块与风险资产联动源</td></tr><tr><td><strong>8/27-29</strong></td><td><strong>Jackson Hole</strong>：Warsh 首秀 8/28 周五 10:00 ET + 同日 7 月 PCE</td><td>FGI 72 高位下最大单点风险：鹰派意外可一夜逆转</td></tr><tr><td>9/15</td><td>CLARITY cloture 14:15 ET（60 票门槛）</td><td>最大确定性监管催化剂</td></tr><tr><td>9/16</td><td>FOMC（25 天）</td><td>降息预期验证节点</td></tr></tbody></table>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- SECTION 5: WATCHLIST (config/watchlist.json 为空时输出空字符串并省略标题) -->
+  
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    Generated by Crypto Monitor | Data: CoinGecko, DeFiLlama, CoinMetrics, Alternative.me, Tokenomist
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS                                                       -->
+<!-- ============================================================ -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ---------- Chart.js Defaults ---------- */
+  Chart.defaults.color = '#8b949e';
+  Chart.defaults.borderColor = '#21262d';
+  Chart.defaults.font.family = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+  Chart.defaults.font.size = 11;
+
+  /* ---------- Score Bars ---------- */
+  function colorBar(id, rawScore) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var v = parseFloat(rawScore);
+    if (isNaN(v)) return;
+    el.style.width = (v / 5 * 100) + '%';
+    el.style.background = v <= 2 ? 'var(--red)' : v <= 3.5 ? 'var(--orange)' : 'var(--green)';
+  }
+  colorBar('bar-btc-trend', '5');
+  colorBar('bar-funding',   '4');
+  colorBar('bar-sentiment', '4');
+  colorBar('bar-macro',     '3');
+
+  /* ---------- BTC 7d Sparkline ---------- */
+  (function () {
+    var data = [62925.42, 62852.4, 62889.9, 62833.64, 62996.4, 62950.23, 62985.28, 63075.01, 63017.31, 63066.93, 63029.84, 63057.98, 63011.18, 62868.55, 62946.68, 62969.26, 62949.86, 62968.4, 62985.36, 62984.46, 63037.33, 63036.62, 63008.73, 63000.45, 63062.36, 63041.54, 63098.26, 63075.67, 63017.07, 63016.33, 63012.11, 63068.05, 63074.54, 63035.76, 63015.11, 63010.58, 63009.35, 63016.65, 62928.09, 62952.37, 62958.05, 62966.61, 63004.71, 63056.25, 63088.59, 63196.87, 63101.04, 63088.26, 63060.2, 63009.73, 62780.24, 62914.44, 62852.86, 62999.83, 63035.31, 63359.51, 63430.97, 63477.48, 63449.15, 63553.1, 63451.5, 63336.52, 63264.5, 63625.94, 63575.44, 63469.9, 63584.61, 63834.36, 64128.53, 64047.1, 64256.29, 64296.87, 64220.97, 64353.76, 64271.83, 64243.0, 64455.38, 64299.6, 64170.18, 64075.78, 64043.49, 64139.41, 64147.56, 64263.01, 64150.87, 64208.55, 64079.58, 64208.89, 64271.49, 64116.0, 64265.89, 64694.84, 64833.58, 64745.04, 64625.45, 64723.93, 64601.61, 64564.51, 64555.11, 64632.57, 64664.43, 64405.44, 64336.11, 64305.86, 64277.38, 64283.77, 64177.45, 64266.48, 64249.21, 64387.02, 64357.9, 64415.52, 64453.28, 64762.76, 64995.97, 65914.16, 68631.82, 68350.42, 68202.97, 68369.11, 68396.29, 69064.02, 69597.49, 69223.87, 69418.44, 69456.19, 69759.56, 69171.65, 69165.62, 69458.2, 69348.47, 69766.18, 69808.27, 71533.2, 71776.38, 72048.37, 71904.51, 71913.58, 71692.74, 72019.42, 72426.36, 72803.66, 72633.26, 72371.13, 72657.97, 72610.65, 72617.73, 72686.98, 73097.55, 73784.54, 74844.99, 74402.82, 74686.91, 75000.11, 75343.39, 75736.71, 76470.0, 78281.72, 77781.71, 77643.51, 76598.4, 77100.6, 76871.0, 77406.82, 77191.73, 77463.76, 77375.11, 77076.68];  /* DATA_PLACEHOLDER */
+    if (!Array.isArray(data) || data.length === 0) {
+      document.getElementById('chartSparkline').style.display = 'none';
+      document.getElementById('noDataSparkline').style.display = 'flex';
+      return;
+    }
+    var support = parseFloat('62780');
+    var resistance = parseFloat('78282');
+    var labels = data.map(function (_, i) { return i; });
+    var datasets = [{
+      data: data,
+      fill: true,
+      borderColor: '#58a6ff',
+      backgroundColor: 'rgba(88,166,255,.08)',
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.3
+    }];
+    if (!isNaN(support)) {
+      datasets.push({
+        data: Array(data.length).fill(support),
+        borderColor: 'rgba(63,185,80,.5)',
+        borderWidth: 1,
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false,
+        label: 'Support $' + support.toLocaleString()
+      });
+    }
+    if (!isNaN(resistance)) {
+      datasets.push({
+        data: Array(data.length).fill(resistance),
+        borderColor: 'rgba(248,81,73,.5)',
+        borderWidth: 1,
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false,
+        label: 'Resistance $' + resistance.toLocaleString()
+      });
+    }
+    new Chart(document.getElementById('chartSparkline'), {
+      type: 'line',
+      data: { labels: labels, datasets: datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: 'top', labels: { boxWidth: 10, padding: 10, font: { size: 11 } } }
+        },
+        scales: {
+          x: { display: false },
+          y: {
+            grid: { color: '#21262d' },
+            ticks: { callback: function (v) { return '$' + v.toLocaleString(); }, font: { size: 10 } }
+          }
+        }
+      }
+    });
+  })();
+
+  /* ---------- TVL Horizontal Bar ---------- */
+  (function () {
+    var labels = ["Ethereum +3.3%", "BSC +3.2%", "Solana +2.7%", "Base +4.9%", "Tron +1.7%", "Bitcoin +6.7%", "Provenance +0.9%", "Hyperliquid L1 +1.8%"];  /* DATA_PLACEHOLDER */
+    var data = [48.49, 5.5, 5.44, 5.43, 5.18, 4.19, 1.81, 1.47];      /* DATA_PLACEHOLDER */
+    if (!Array.isArray(labels) || labels.length === 0) {
+      document.getElementById('chartTVL').style.display = 'none';
+      document.getElementById('noDataTVL').style.display = 'flex';
+      return;
+    }
+    new Chart(document.getElementById('chartTVL'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          backgroundColor: ['#f7931a','#627eea','#14f195','#375bd2','#28a0f0','#836ef9'],
+          borderRadius: 4
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: '#21262d' }, ticks: { callback: function (v) { return '$' + v + 'B'; }, font: { size: 10 } } },
+          y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+        }
+      }
+    });
+  })();
+
+});
+</script>
+</body>
+</html>
