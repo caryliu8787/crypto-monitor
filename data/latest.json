@@ -1,215 +1,215 @@
 {
-  "timestamp": "2026-09-23T04:00:00+08:00",
+  "timestamp": "2026-09-24T04:00:00+08:00",
   "session": "daily",
   "market_scan": {
     "movers": [
       {
-        "coin_id": "bedrock-token",
-        "symbol": "BR",
-        "price_usd": 1.18,
-        "price_change_24h": 1.93,
-        "price_change_7d": 350.01,
-        "price_change_30d": 402.61,
-        "market_cap": 351087610,
-        "volume_24h": 22797386,
-        "reason": "本期未单独检索（调用预算优先分配给新面孔异动）。沿用上期已记录背景：9/20 那笔占已释放供应 18.68% 的解锁被完整吸收。7d +350.01%、30d +402.61% 均为过滤池第一，24h 仅 +1.93% —— 涨幅已完全前置，本期是横盘消化。",
-        "narrative_tag": "unlock-absorbed",
-        "source_url": null
-      },
-      {
         "coin_id": "derive",
         "symbol": "DRV",
-        "price_usd": 0.419623,
-        "price_change_24h": 1.9,
-        "price_change_7d": 197.2,
-        "price_change_30d": 226.5,
-        "market_cap": 419553627,
-        "volume_24h": 40104898,
-        "reason": "协议侧无新增一手，沿用上期记录。24h +1.90%，连续第 2 期近乎不动，而 7d 仍 +197.20%。上期写下的反向判据（若仍在 trending 且无协议侧进展则转 expired）本期部分触发：DRV 本期已跌出 trending。",
-        "narrative_tag": "tokenized-gold-derivatives",
-        "source_url": "https://www.coingecko.com/en/coins/derive"
+        "price_usd": 0.476394,
+        "price_change_24h": 13.46241,
+        "price_change_7d": 169.0984,
+        "price_change_30d": 211.4447,
+        "market_cap": 474288585,
+        "volume_24h": 72876211,
+        "reason": "V3 迁移提案（9/13 DIP：托管迁回以太坊主网 zkVM 结算 + 关停 Derive Chain + 拆分风险账本以加速 RWA/山寨上架），并上线 DRV/$F 永续 5x 杠杆。⚠️30d 收入仅 $51.2 万，年化约 $620 万对应市值 $4.74 亿 ≈ 76x，现金流完全不支持 +169% 周涨幅",
+        "narrative_tag": "v3-migration",
+        "source_url": "https://www.kucoin.com/news/flash/derive-proposes-v3-deployment-and-derive-chain-shutdown"
       },
       {
-        "coin_id": "pearl-2",
-        "symbol": "PRL",
-        "price_usd": 1.33,
-        "price_change_24h": 46.47,
-        "price_change_7d": 124.17,
-        "price_change_30d": 363.7,
-        "market_cap": 339787124,
-        "volume_24h": 4589118,
-        "reason": "⚠️**原因未明，且是本期最该警惕的一条。** 检索得到的全部内容为：Pearl 是基于矩阵乘法 PoUW（有用工作量证明）的 AI L1，9/19 创历史新高约 $1.21。**没有任何对应 9/22-23 这轮 +46.47% 的一手事件。** 更关键的是流动性：24h 成交 $458.9 万 / 市值 $3.398 亿 = **1.35%**，全异动榜最薄；同为 AI 叙事的 KITE 成交市值比 8.2%、GRASS 20.8%。薄盘 + 已在 trending + 无催化剂 = 典型的拉升后接盘位。",
-        "narrative_tag": "ai-pouw-l1-thin-float",
-        "source_url": "https://www.coingecko.com/en/coins/pearl-2"
-      },
-      {
-        "coin_id": "mina-protocol",
-        "symbol": "MINA",
-        "price_usd": 0.156906,
-        "price_change_24h": 25.89,
-        "price_change_7d": 83.48,
-        "price_change_30d": 169.35,
-        "market_cap": 202669048,
-        "volume_24h": 55492431,
-        "reason": "原因未明（媒体明确写「本轮上涨没有清晰触发因素」）。唯一可核事实是 **Mesa 硬分叉已于 9/3 主网上线**（出块 180 秒→90 秒、扩展 zkApp 链上状态容量）——那是 20 天前的事件，不是本期催化剂。本系统内 MINA 的机会条目（mina-mesa-hardfork）仍为 stale，**+25.89% 的价格变动按规则不构成实质进展，不解除 stale**。",
-        "narrative_tag": "zk-l1-no-catalyst",
-        "source_url": "https://en.cryptonomist.ch/2026/09/22/mina-protocol-price-surge/"
-      },
-      {
-        "coin_id": "stonk-3",
-        "symbol": "STONK",
-        "price_usd": 0.327472,
-        "price_change_24h": -16.21,
-        "price_change_7d": 82.14,
-        "price_change_30d": 2638.51,
-        "market_cap": 270399114,
-        "volume_24h": 54292576,
-        "reason": "**创历史新高后的回吐，非负面事件。** STONK 于 9/21 创 ATH $0.394，本期 $0.327472（-16.21%），7d 仍 +82.14%、30d +2638.51%。协议侧数据支持「无恶化」：StonkFun 所属 Raydium LaunchLab 赛道的 Raydium dailyRevenue 9/21 $468,089 → 9/22 $258,113，同步回落，属全市场成交回落而非平台失速。",
-        "narrative_tag": "launchpad-ath-pullback",
-        "source_url": "https://pluang.com/en/news-feed/stonkfun-masuk-fase-koreksi-setelah-ats-tertinggi-0-35-dolar"
+        "coin_id": "akedo",
+        "symbol": "AKE",
+        "price_usd": 0.04573292,
+        "price_change_24h": -9.7563,
+        "price_change_7d": 143.7881,
+        "price_change_30d": 451.6699,
+        "market_cap": 1041333056,
+        "volume_24h": 29827671,
+        "reason": "平台整体重构（多模型 AI 接入 + 持久化对话）+ Bitget 于 9/2 上线 AKE USDT-M 永续（10x）。⚠️市值已 $10.4 亿而日成交仅 $2,983 万（v/mc 2.9%），mc/fdv 0.23，30d +451.67% 后今日 -9.76%——高市值薄流动性组合",
+        "narrative_tag": "ai-gaming-launchpad",
+        "source_url": "https://mudrex.com/learn/coin-of-the-week-akedo/"
       },
       {
         "coin_id": "zama",
         "symbol": "ZAMA",
-        "price_usd": 0.089757,
-        "price_change_24h": -2.12,
-        "price_change_7d": 92.01,
-        "price_change_30d": 58.23,
-        "market_cap": 220577410,
-        "volume_24h": 68790054,
-        "reason": "原因未明，**连续第 4 期检索不到一手事件**（上期已记录连续 3 期）。本期未单独再检索（预算纪律：同一标的连续 3 期查空后降低复查频率）。7d +92.01%、30d +58.23%，归于隐私/FHE 板块二线扩散。",
-        "narrative_tag": "privacy-fhe-beta",
+        "price_usd": 0.090381,
+        "price_change_24h": 0.71043,
+        "price_change_7d": 97.9557,
+        "price_change_30d": 48.9446,
+        "market_cap": 222414073,
+        "volume_24h": 66761267,
+        "reason": "9/15 隐私 DeFi 规模化（16 个私密金库 + 私密 swap）、9/17 接入 Merkl、9/16 CEO 播客阐述价值捕获；资金自 ZEC 领涨的隐私行情向 FHE 轮动。⚠️mc/fdv 0.22",
+        "narrative_tag": "fhe-privacy",
+        "source_url": "https://www.kucoin.com/news/flash/zama-scales-privacy-defi-with-16-new-vaults-and-secret-swap-protocol"
+      },
+      {
+        "coin_id": "stonk-3",
+        "symbol": "STONK",
+        "price_usd": 0.30654,
+        "price_change_24h": -6.84107,
+        "price_change_7d": 84.3092,
+        "price_change_30d": 3305.6919,
+        "market_cap": 252153639,
+        "volume_24h": 47629542,
+        "reason": "原因未明。30d +3305.69% 后本期 -6.84%，且已跌出 CoinGecko 全局热搜（上期在榜）",
+        "narrative_tag": "tokenized-equity",
+        "source_url": null
+      },
+      {
+        "coin_id": "meteora",
+        "symbol": "MET",
+        "price_usd": 0.34974,
+        "price_change_24h": 14.06099,
+        "price_change_7d": 75.6209,
+        "price_change_30d": 54.1319,
+        "market_cap": 193045213,
+        "volume_24h": 113258911,
+        "reason": "9/23 季度解锁（Ecosystem Reserve）已落地，tokenomist 一手复核下一次远至 10/23 → 29 天干净窗口；协议收入回购持续对冲稀释。解锁次日逆势 +14.06%",
+        "narrative_tag": "dex-revenue-buyback",
+        "source_url": "https://tokenomist.ai/meteora"
+      },
+      {
+        "coin_id": "aioz-network",
+        "symbol": "AIOZ",
+        "price_usd": 0.119822,
+        "price_change_24h": -5.58971,
+        "price_change_7d": 83.7643,
+        "price_change_30d": 118.1412,
+        "market_cap": 153374785,
+        "volume_24h": 10178263,
+        "reason": "原因未明。7d +83.76% 后今日 -5.59%，v/mc 6.6%",
+        "narrative_tag": "ai-depin",
         "source_url": null
       },
       {
         "coin_id": "backpack",
         "symbol": "BP",
-        "price_usd": 0.840624,
-        "price_change_24h": -10.53,
-        "price_change_7d": 80.94,
-        "price_change_30d": 81.28,
-        "market_cap": 210181673,
-        "volume_24h": 9686613,
-        "reason": "**创历史新高后的回吐。** BP 于 9/21 创 ATH $0.9798，本期 $0.840624（-10.53%），7d 仍 +80.94%。平台侧检出新增永续市场 MU-PERP / SNDK-PERP / SPY-PERP / QQQ-PERP（Backpack 官方公告口径），**但该公告无可核实日期，按规则不计为本期进展、不进事件日历**，仅记录为论点方向的补强。",
-        "narrative_tag": "tokenized-equity-ath-pullback",
-        "source_url": "https://cryptorank.io/price/backpack"
-      },
-      {
-        "coin_id": "aioz-network",
-        "symbol": "AIOZ",
-        "price_usd": 0.127724,
-        "price_change_24h": 2.54,
-        "price_change_7d": 82.76,
-        "price_change_30d": 129.85,
-        "market_cap": 163271792,
-        "volume_24h": 35592777,
-        "reason": "原因未明，连续第 2 期。本期未单独再检索（上期检索仅得价格预测类内容与引用价与实况不符的滞后行情）。24h +2.54%、7d +82.76%。",
-        "narrative_tag": "depin-ai-unexplained",
-        "source_url": null
-      },
-      {
-        "coin_id": "akedo",
-        "symbol": "AKE",
-        "price_usd": 0.050614,
-        "price_change_24h": -7.0,
-        "price_change_7d": 77.96,
-        "price_change_30d": 482.94,
-        "market_cap": 1153113741,
-        "volume_24h": 45139849,
-        "reason": "9/21 解锁落地后**连续第 2 日回吐**（-11.98% → -7.00%）。7d 仍 +77.96%、30d +482.94%，市值 $11.53 亿为异动榜第 2 大。解锁吸收论点未被证伪，但抛压消化尚未结束。",
-        "narrative_tag": "post-unlock-digestion",
+        "price_usd": 0.804228,
+        "price_change_24h": -4.27371,
+        "price_change_7d": 77.9659,
+        "price_change_30d": 95.7854,
+        "market_cap": 200978735,
+        "volume_24h": 7673888,
+        "reason": "原因未明，无新增一手信源。代币化股票论点自上期起无进展（ssp=3）",
+        "narrative_tag": "tokenized-equity",
         "source_url": null
       },
       {
         "coin_id": "near",
         "symbol": "NEAR",
-        "price_usd": 4.34,
-        "price_change_24h": 4.43,
-        "price_change_7d": 80.02,
-        "price_change_30d": 120.29,
-        "market_cap": 5682274696,
-        "volume_24h": 1708550758,
-        "reason": "无新增一手事件。**但扩散结构有变化值得记：NEAR 与 AURORA 本期同时出现在 CoinGecko 热搜**（AURORA 24h +114.47%，市值排名 390 属池外，走 trending bypass）——同一生态两个标的同时进热搜，是生态级资金聚集而非单币叙事。AURORA 侧检索结论为「超跌资产重定价 + 大盘回暖」，未找到对应量级的一手催化剂。",
-        "narrative_tag": "near-ecosystem-cluster",
-        "source_url": "https://www.kucoin.com/news/flash/aurora-surges-163-29-to-0-05616-usdt-as-the-crypto-recovery-reprices-oversold-altcoins"
+        "price_usd": 4.41,
+        "price_change_24h": 1.4986,
+        "price_change_7d": 80.4384,
+        "price_change_30d": 127.0404,
+        "market_cap": 5769463722,
+        "volume_24h": 2639832148,
+        "reason": "9/15 开启里程碑激励份额领取窗口 + 9/17 经 Hyperliquid 上线机密永续 + AI agent/chain abstraction 叙事。⚠️领取窗口在供给侧为负面，且 NEAR 已 100% 流通",
+        "narrative_tag": "ai-l1",
+        "source_url": "https://coinpedia.org/price-analysis/near-protocol-price-surges-80-in-a-week-can-the-breakout-push-near-toward-5/"
       },
       {
-        "coin_id": "marscoin-4",
-        "symbol": "MARSCOIN",
-        "price_usd": 0.134821,
-        "price_change_24h": 33.99,
-        "price_change_7d": 50.26,
-        "price_change_30d": 346.87,
-        "market_cap": 134317424,
-        "volume_24h": 106072158,
-        "reason": "Binance 于 **9/8 现货上线（附 Seed Tag，标记为早期高风险资产）** 后的 meme 动能延续，本期**无新增事件**。风险特征极端：24h 成交 $1.061 亿 / 市值 $1.343 亿 = **79.0%**，即一天换手接近整个流通市值，纯博弈盘。",
-        "narrative_tag": "meme-listing-momentum",
-        "source_url": "https://en.cryptonomist.ch/2026/09/04/marscoin-binance-listing/"
+        "coin_id": "arweave",
+        "symbol": "AR",
+        "price_usd": 4.41,
+        "price_change_24h": 1.75287,
+        "price_change_7d": 78.5736,
+        "price_change_30d": 94.2203,
+        "market_cap": 289260697,
+        "volume_24h": 30349938,
+        "reason": "原因未明。7d +78.57%，未查到一手催化剂",
+        "narrative_tag": "decentralized-storage",
+        "source_url": null
       },
       {
-        "coin_id": "bitcoin-cash",
-        "symbol": "BCH",
-        "price_usd": 335.73,
-        "price_change_24h": 25.75,
-        "price_change_7d": 52.46,
-        "price_change_30d": 24.18,
-        "market_cap": 6740657342,
-        "volume_24h": 1088776354,
-        "reason": "✅**本期唯一带一手信源且可验证的催化剂。** CME Group 于 **9/22 发布正式新闻稿**：BCH 与 UNI 期货计划 **10/19 上线**（pending regulatory review），BCH 合约 250 BCH/张、微型 25 BCH/张；UNI 合约 10,000 UNI/张、微型 1,000 UNI/张。BCH 由此加入 CME 已有的 BTC/ETH/XRP/SOL/ADA/LINK/XLM/AVAX/SUI 期货序列。BCH $335.73、24h +25.75%、市值 $67.41 亿——**是本期异动榜内唯一的十亿美元级标的，且涨幅由确定性事件驱动**。同族 BSV +18.61%、XEC +10.30% 为无催化剂的联动。",
-        "narrative_tag": "cme-regulated-futures",
-        "source_url": "https://www.prnewswire.com/news-releases/cme-group-to-expand-crypto-derivatives-suite-with-bitcoin-cash-and-uniswap-futures-302886066.html"
+        "coin_id": "bedrock-token",
+        "symbol": "BR",
+        "price_usd": 1.15,
+        "price_change_24h": -2.65143,
+        "price_change_7d": 74.0207,
+        "price_change_30d": 419.7347,
+        "market_cap": 340582946,
+        "volume_24h": 48976828,
+        "reason": "原因未明。7d +74.02%、30d +419.73%，未查到一手催化剂",
+        "narrative_tag": "btc-liquid-staking",
+        "source_url": null
+      },
+      {
+        "coin_id": "raydium",
+        "symbol": "RAY",
+        "price_usd": 2.12,
+        "price_change_24h": 19.64547,
+        "price_change_7d": 56.7303,
+        "price_change_30d": 180.4367,
+        "market_cap": 571017596,
+        "volume_24h": 153482379,
+        "reason": "9/16 15:25 UTC 宣布代币化 AMD 股票上线交易；DeFiLlama 日收入由 9/16-9/20 均值约 $26.5 万抬升至 9/22 $46.8 万、9/23 $41.9 万（+67%）。今日 +19.65% 为 250 池最大涨幅",
+        "narrative_tag": "tokenized-equity",
+        "source_url": "https://coinmarketcap.com/top-stories/6aaacc9e84f8f4387e48cafa/"
+      },
+      {
+        "coin_id": "mina-protocol",
+        "symbol": "MINA",
+        "price_usd": 0.141653,
+        "price_change_24h": -10.06205,
+        "price_change_7d": 66.2176,
+        "price_change_30d": 136.4684,
+        "market_cap": 182493843,
+        "volume_24h": 39876789,
+        "reason": "原因未明，连续第 2 期查无触发因素。上期 +25.89%、本期 -10.06%，双向都无归因——本系统内仍为 stale",
+        "narrative_tag": "zk-l1",
+        "source_url": null
       }
     ],
-    "movers_narrative": "**本期扫描的核心结论：普涨结束，市场重新开始区分标的——而区分的依据只有一条是硬的。** 全池 250 只中 151 只上涨（广度 **60.4%**，上期 87.6%，单期回落 27.2pp），|24h|>15% 触发数 13 → **10**；BTC -0.38%、ETH -0.47%、SOL -0.23% 全部微跌。上期写下的判断「87.6% 都在涨的一天，涨幅本身不再是筛选信号」在本期自动解除：**当大盘归零时，还在涨 25% 以上的东西必须有自己的理由。**\n> **有理由的只有一只：BCH（+25.75%，市值 $67.41 亿）**——CME 9/22 官方新闻稿确认 BCH/UNI 期货 10/19 上线。这是连续多期以来异动榜上第一次出现「十亿美元级市值 + 一手公告 + 明确日期」三者齐备的标的，同时它把一个已有跟踪项（UNI）的论点基础整个换掉了（见机会看板）。\n> **其余大涨全部无一手催化剂**：PRL +46.47%（原因未明，成交/市值仅 1.35%，全榜最薄）、MARSCOIN +33.99%（9/8 Binance Seed Tag 上线后的动能，换手率 79%）、MINA +25.89%（媒体明确写「无清晰触发」，其 Mesa 硬分叉是 20 天前的旧事）。**这三只按本系统规则都不升级为机会条目。**\n> **跌的一侧信息量更大。** 最大单日跌幅 **龙虾 LOBSTER -43.77%**（未入前 12，因 7d 仅 -26.37%）：检索显示前列持币人控制约 40% 供应，是 4 月已出现过一次的「拉升后巨鲸出货」重演——**集中度风险兑现的标准样本，记录在案作为薄盘标的的反面判据。** STONK -16.21%、BP -10.53% 则同为「9/21 创 ATH 次日回吐」，两者 7d 分别 +82.14%、+80.94%，属获利了结而非事件恶化。\n> **板块层面出现明确切换**：L1（-0.04%）、L2（-0.37%）、DeFi（-0.26%）三大板块**同时中断连续 5-6 期的上行**，唯一显著上涨的是 **AI +3.42%（连续第 6 期同向）**。热搜侧 TAO、PRL、KITE、GRASS 同时在列，与板块数据相互印证——**本期唯一在数据上成立的轮动是资金从 L1/L2/DeFi 流向 AI。**",
+    "movers_narrative": "**本期异动榜的读法与上期相反：排序被上周的 7d 涨幅主导，但信息几乎全在 24h 一列。** 全市场总市值 -4.87%、上涨广度 17.2%（180 只中 31 只，跟踪以来最低），在这种背景下 7d 涨幅只记录了「上周涨过」，**真正的新信息是谁在今天逆势上涨**。\n**逆势且两位数上涨的只有 7 只：RAY +19.65%、LOBSTER +17.31%、BTW +15.09%、ZRO +14.85%、MET +14.06%、DRV +13.46%、LIT +12.08%。其中 5 只（RAY / ZRO / MET / DRV / LIT）在本期被归因到具体的一手或准一手催化剂**——对照上期 11 只异动币 0 只带一手催化剂，**筛选信号的有效性发生了质变**。\n**三条可归因主线：**（1）**Solana DEX 收入线**——RAY（代币化 AMD 股票 9/16 上线，日收入抬升约 67%）与 MET（9/23 解锁落地 + 收入回购）同日逆势大涨，两者都是「有真实现金流的 DEX」；（2）**跨链/基础设施代币经济学线**——ZRO（正式成为 Zero L1 原生 gas 代币，主网 Q4）与 DRV（V3 迁回以太坊主网 zkVM + 关停自有链）都是把代币从治理用途改成结构性需求；（3）**隐私/FHE 轮动线**——ZAMA 7d +97.96%、今日 +0.71% 站稳，媒体口径为资金从 ZEC 领涨的隐私行情向 FHE 转移。\n**⚠️反向清单同样重要，本期有 4 只高市值薄流动性标的必须标出：AKE（市值 $10.41 亿 / 日成交 $2,983 万，v/mc 2.9%）、BTW（$27.20 亿 / $2,370 万，v/mc 0.9%，且有公开的流通供应口径争议）、BP（v/mc 3.8%，论点 ssp=3 无进展）、PIEVERSE（v/mc 1.6%）。** 上期被特别标为「风险最集中」的 **PRL 本期已完全跌出 250 币池**——该预判成立，同类结构（涨幅大 + 流动性薄 + 已在热搜 + 零一手催化剂）本期由 BTW 承担。\n**MINA 连续第 2 期双向异动无归因**（上期 +25.89%、本期 -10.06%），本系统内维持 stale，不因波动升级。",
     "sector_rotation": [
       {
-        "category": "layer-1",
-        "market_cap": 2519382643051.2656,
-        "market_cap_change_24h": -0.03718148413744094,
-        "trend_sessions": 1,
-        "note": "⚠️**连续 6 期上行中断。** 上期 +5.80%，本期转负。L1 是市值最大的板块（$2.52 万亿），它转平即意味着大盘 beta 停摆。"
-      },
-      {
-        "category": "layer-2",
-        "market_cap": 10939744652.862665,
-        "market_cap_change_24h": -0.3736520155882444,
-        "trend_sessions": 1,
-        "note": "⚠️**连续 6 期上行中断**（上期 +4.10%）。与 L1 同步转向，非个别现象。"
-      },
-      {
-        "category": "artificial-intelligence",
-        "market_cap": 24788257093.06657,
-        "market_cap_change_24h": 3.415401941314634,
-        "trend_sessions": 6,
-        "note": "✅**本期唯一显著上涨板块，连续第 6 期同向。** +3.42% 在全部 7 个追踪板块中排第一，且是唯一超过 +2% 的。热搜侧 TAO/PRL/KITE/GRASS 同时在列交叉印证。"
-      },
-      {
-        "category": "real-world-assets-rwa",
-        "market_cap": 73922972442.1684,
-        "market_cap_change_24h": 1.2694556202141827,
-        "trend_sessions": 3,
-        "note": "连续第 3 期上行，但 +1.27% 属温和。⚠️成分口径问题未解除：该板块上期 +50.52%、上上期 -32.28%，连续两期 30%+ 反向跳变，**本板块的单期百分比不可用作判据**，只看方向。"
-      },
-      {
-        "category": "decentralized-finance-defi",
-        "market_cap": 85536273017.05737,
-        "market_cap_change_24h": -0.25601855772115223,
-        "trend_sessions": 1,
-        "note": "⚠️连续 5 期上行中断（上期 +1.74%）。"
-      },
-      {
-        "category": "meme-token",
-        "market_cap": 37804286442.045334,
-        "market_cap_change_24h": 0.38033989246569705,
+        "category": "Layer 1 (L1)",
+        "market_cap": 2462196638797.8423,
+        "market_cap_change_24h": -2.2698419555738636,
         "trend_sessions": 2,
-        "note": "连续第 2 期上行，但 +0.38% 已近乎归零（上期 +7.99%）。MARSCOIN/USELESS 的个股大涨未带动板块，属个别换手。"
+        "note": "连续 2 期下行。但 -2.27% 与大盘 -4.87% 相比是**跑赢**的，L1 在本期下跌中属抗跌一侧"
       },
       {
-        "category": "gaming",
-        "market_cap": 3801798480.655987,
-        "market_cap_change_24h": 1.7795875765962348,
+        "category": "Decentralized Finance (DeFi)",
+        "market_cap": 83576947227.29117,
+        "market_cap_change_24h": -2.290637317545367,
         "trend_sessions": 2,
-        "note": "连续第 2 期上行，+1.78%。板块市值仅 $38.0 亿，全追踪池最小，单期变化噪声大。"
+        "note": "连续 2 期下行，-2.29%。⚠️注意板块指数掩盖了内部分化：同期 RAY +19.65%、MET +14.06%、ZRO +14.85% 逆势大涨"
+      },
+      {
+        "category": "Real World Assets (RWA)",
+        "market_cap": 72210284067.87808,
+        "market_cap_change_24h": -2.316855393808993,
+        "trend_sessions": 1,
+        "note": "连续 3 期上行中止，-2.32%，回到下行第 1 期。RWA 抗跌（跑赢大盘 2.5pp）但不再领涨"
+      },
+      {
+        "category": "Layer 2 (L2)",
+        "market_cap": 10680745292.965862,
+        "market_cap_change_24h": -2.367508274784358,
+        "trend_sessions": 2,
+        "note": "连续 2 期下行，-2.37%，与 L1 几乎同步，无独立方向"
+      },
+      {
+        "category": "Gaming (GameFi)",
+        "market_cap": 3702040156.3023877,
+        "market_cap_change_24h": -2.6239771745183647,
+        "trend_sessions": 1,
+        "note": "2 期上行中止，-2.62%，跟随大盘，无独立信号"
+      },
+      {
+        "category": "Artificial Intelligence (AI)",
+        "market_cap": 23779750146.05031,
+        "market_cap_change_24h": -4.0684867162296285,
+        "trend_sessions": 1,
+        "note": "⚠️**连续 6 期上行的记录本期中止**，单期 -4.07%，是 7 个追踪板块中第二差。AI 是本期唯一一个「趋势被打断」的板块，降级为下行第 1 期"
+      },
+      {
+        "category": "Meme",
+        "market_cap": 35111986715.89322,
+        "market_cap_change_24h": -7.121678464370595,
+        "trend_sessions": 1,
+        "note": "⚠️**-7.12%，7 个板块中最差，为大盘跌幅的 1.46 倍**。上期 2 期上行记录中止。同族细分板块同步崩塌：Murad Picks -14.78%、PolitiFi -9.18%、Frog-Themed -8.85%、The Boy's Club -9.08%。**风险偏好从 meme 端最先撤离**"
       }
     ],
     "trending": [
@@ -224,19 +224,9 @@
         "name": "Edel"
       },
       {
-        "coin_id": "pearl-2",
-        "symbol": "PRL",
-        "name": "Pearl"
-      },
-      {
         "coin_id": "pudgy-penguins",
         "symbol": "PENGU",
         "name": "Pudgy Penguins"
-      },
-      {
-        "coin_id": "pear-protocol",
-        "symbol": "PEAR",
-        "name": "Pear Protocol"
       },
       {
         "coin_id": "near",
@@ -244,19 +234,24 @@
         "name": "NEAR Protocol"
       },
       {
-        "coin_id": "aurora-near",
-        "symbol": "AURORA",
-        "name": "Aurora"
+        "coin_id": "uniswap",
+        "symbol": "UNI",
+        "name": "Uniswap"
       },
       {
-        "coin_id": "pons",
-        "symbol": "PONS",
-        "name": "Pons"
+        "coin_id": "raydium",
+        "symbol": "RAY",
+        "name": "Raydium"
       },
       {
-        "coin_id": "stonk-3",
-        "symbol": "STONK",
-        "name": "STONK"
+        "coin_id": "bitcoin",
+        "symbol": "BTC",
+        "name": "Bitcoin"
+      },
+      {
+        "coin_id": "lighter",
+        "symbol": "LIT",
+        "name": "Lighter"
       },
       {
         "coin_id": "bittensor",
@@ -264,111 +259,116 @@
         "name": "Bittensor"
       },
       {
-        "coin_id": "zcash",
-        "symbol": "ZEC",
-        "name": "Zcash"
-      },
-      {
-        "coin_id": "chainlink",
-        "symbol": "LINK",
-        "name": "Chainlink"
-      },
-      {
-        "coin_id": "ripple",
-        "symbol": "XRP",
-        "name": "XRP"
-      },
-      {
         "coin_id": "hyperliquid",
         "symbol": "HYPE",
         "name": "Hyperliquid"
       },
       {
-        "coin_id": "hedera-hashgraph",
-        "symbol": "HBAR",
-        "name": "Hedera"
+        "coin_id": "arbitrum",
+        "symbol": "ARB",
+        "name": "Arbitrum"
+      },
+      {
+        "coin_id": "pons",
+        "symbol": "PONS",
+        "name": "Pons"
+      },
+      {
+        "coin_id": "derive",
+        "symbol": "DRV",
+        "name": "Derive"
+      },
+      {
+        "coin_id": "venice-token",
+        "symbol": "VVV",
+        "name": "Venice Token"
+      },
+      {
+        "coin_id": "peaq-2",
+        "symbol": "PEAQ",
+        "name": "peaq"
       }
     ],
     "chains_tvl_delta": [
       {
-        "chain": "Hyperliquid L1",
-        "tvl": 1345057575.3854277,
-        "tvl_change_pct_vs_prev": 5.1
-      },
-      {
         "chain": "Arc",
-        "tvl": 354689911.32381874,
-        "tvl_change_pct_vs_prev": 2.66
-      },
-      {
-        "chain": "Avalanche",
-        "tvl": 635980491.076181,
-        "tvl_change_pct_vs_prev": 1.75
-      },
-      {
-        "chain": "Robinhood Chain",
-        "tvl": 1007897135.0926274,
-        "tvl_change_pct_vs_prev": 1.28
-      },
-      {
-        "chain": "Base",
-        "tvl": 6264949843.903369,
-        "tvl_change_pct_vs_prev": 1.04
+        "tvl": 384799452.1970921,
+        "tvl_change_pct_vs_prev": 8.49
       },
       {
         "chain": "Provenance",
-        "tvl": 164173684.2272719,
-        "tvl_change_pct_vs_prev": 0.87
-      },
-      {
-        "chain": "Tron",
-        "tvl": 5726231648.45423,
-        "tvl_change_pct_vs_prev": 0.79
-      },
-      {
-        "chain": "Arbitrum",
-        "tvl": 1485880760.1690109,
-        "tvl_change_pct_vs_prev": 0.72
-      },
-      {
-        "chain": "Ethereum",
-        "tvl": 54497402040.58713,
-        "tvl_change_pct_vs_prev": 0.59
-      },
-      {
-        "chain": "Polygon",
-        "tvl": 787760813.372964,
-        "tvl_change_pct_vs_prev": 0.52
-      },
-      {
-        "chain": "Monad",
-        "tvl": 1033458046.0356388,
-        "tvl_change_pct_vs_prev": 0.33
-      },
-      {
-        "chain": "Solana",
-        "tvl": 6492758812.848029,
-        "tvl_change_pct_vs_prev": 0.26
+        "tvl": 163617756.94753835,
+        "tvl_change_pct_vs_prev": -0.34
       },
       {
         "chain": "Sui",
-        "tvl": 535137825.2001262,
-        "tvl_change_pct_vs_prev": -0.28
+        "tvl": 532079679.1324388,
+        "tvl_change_pct_vs_prev": -0.57
+      },
+      {
+        "chain": "Robinhood Chain",
+        "tvl": 1001883419.6038512,
+        "tvl_change_pct_vs_prev": -0.6
+      },
+      {
+        "chain": "Polygon",
+        "tvl": 782361548.4992552,
+        "tvl_change_pct_vs_prev": -0.69
       },
       {
         "chain": "BSC",
-        "tvl": 5877600434.362739,
-        "tvl_change_pct_vs_prev": -0.3
-      },
-      {
-        "chain": "Bitcoin",
-        "tvl": 4619635604.079435,
-        "tvl_change_pct_vs_prev": -0.98
+        "tvl": 5813110792.095097,
+        "tvl_change_pct_vs_prev": -1.1
       },
       {
         "chain": "Plasma",
-        "tvl": 547149165.0033119,
-        "tvl_change_pct_vs_prev": -1.89
+        "tvl": 540763631.1136329,
+        "tvl_change_pct_vs_prev": -1.17
+      },
+      {
+        "chain": "Solana",
+        "tvl": 6387170775.383027,
+        "tvl_change_pct_vs_prev": -1.63
+      },
+      {
+        "chain": "Tron",
+        "tvl": 5631688223.124968,
+        "tvl_change_pct_vs_prev": -1.65
+      },
+      {
+        "chain": "Base",
+        "tvl": 6155287822.349748,
+        "tvl_change_pct_vs_prev": -1.75
+      },
+      {
+        "chain": "Monad",
+        "tvl": 1015129106.0013855,
+        "tvl_change_pct_vs_prev": -1.77
+      },
+      {
+        "chain": "Ethereum",
+        "tvl": 53402085475.10546,
+        "tvl_change_pct_vs_prev": -2.01
+      },
+      {
+        "chain": "Arbitrum",
+        "tvl": 1450316669.2600842,
+        "tvl_change_pct_vs_prev": -2.39
+      },
+      {
+        "chain": "Bitcoin",
+        "tvl": 4493222466.262103,
+        "tvl_change_pct_vs_prev": -2.74
+      },
+      {
+        "chain": "Hyperliquid L1",
+        "tvl": 1287550521.760278,
+        "tvl_change_pct_vs_prev": -4.28
+      },
+      {
+        "chain": "Avalanche",
+        "tvl": 603375356.8495845,
+        "tvl_change_pct_vs_prev": -5.13
       }
     ]
   },
@@ -376,7 +376,7 @@
     {
       "id": "aave-aavenomics-buyback",
       "coin": "AAVE",
-      "title": "AAVE：维持 stale（ssp=6）",
+      "title": "AAVE：维持 stale（ssp=7）",
       "thesis": "dailyRevenue 9/17 $152,566 → 9/18 $153,873 → 9/19 $155,371 → 9/20 $157,127 → 9/21 $170,639。最后一日 +8.6%，是 6 日来首次离开 $15.2–15.7 万的平台区，但仍不到 9/14 尖峰 $334,641 的 52%。单日收入抬升不属于催化剂状态变化，按 4.7(a) 机械降 stale。AAVE $145.21（24h +5.89%、7d +13.22%）。恢复条件：dailyRevenue 连续 3 日站上 $25 万。",
       "diffusion": "green",
       "score": {
@@ -389,14 +389,14 @@
       "status": "stale",
       "first_seen": "2026-07-06_morning",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 78,
-      "sessions_since_progress": 6,
+      "sessions_tracked": 79,
+      "sessions_since_progress": 7,
       "source_url": "https://api.llama.fi/summary/fees/aave?dataType=dailyRevenue"
     },
     {
       "id": "chainlink-ccip-institutional",
       "coin": "LINK",
-      "title": "LINK：维持 stale（ssp=25）",
+      "title": "LINK：维持 stale（ssp=26）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "green",
       "score": {
@@ -409,15 +409,15 @@
       "status": "stale",
       "first_seen": "2026-07-19_morning",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 54,
-      "sessions_since_progress": 25,
+      "sessions_tracked": 55,
+      "sessions_since_progress": 26,
       "source_url": "https://genfinity.io/2026/08/11/chainlink-johann-eid-dtcc-collateral-appchain-ccip-tokenization/"
     },
     {
       "id": "filecoin-onchain-cloud-mainnet",
       "coin": "FIL",
-      "title": "FIL：维持 15（ssp=2）—— 「论点强而价格弱」连续第 3 期成立",
-      "thesis": "10/15 归属结束，**22 天后**。本期无新增一手。FIL $1.002（24h +3.59%、7d +18.08%、30d +29.67%，市值 $8.32 亿）。**相对表现仍是这条论点最值得记的部分**：在大盘归零的一天 FIL +3.59%，7d +18.08% 首次高于 BTC 的 +12.46%——上期「7d +0.28% 几乎垫底」的极端钝化本期解除了一半。供给侧论点（vesting 约 6,670 万 FIL/年 vs 区块奖励约 2,170 万 FIL/年，gross issuance 削减约 75%）未被定价的判断未变。验证：归属结束的链上确认 + FIP-0118（Solstice）排入哪次网络升级。",
+      "title": "FIL：维持 15（ssp=3）",
+      "thesis": "10/15 归属结束，**21 天后**。本期无新增一手。FIL $0.928566（24h **-7.40%**、7d +20.02%、30d +22.94%，市值 $7.72 亿）。⚠️**上期刚刚解除的「论点强而价格弱」钝化，本期回来了一半**：上期 FIL 在大盘归零日 +3.59%、7d 首次跑赢 BTC；本期 24h **-7.40%**，跑输大盘 -4.87% 达 2.5pp，是本板前十里今日最弱的一只。7d +20.02% 仍高于 BTC +11.41%，因此论点未被证伪，但「开始被定价」的迹象本期不成立。供给侧论点（vesting 约 6,670 万 FIL/年 vs 区块奖励约 2,170 万 FIL/年，gross issuance 削减约 75%）未被定价的判断未变。验证：10/15 归属结束的链上确认 + FIP-0118（Solstice）排入哪次网络升级。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 5,
@@ -429,14 +429,14 @@
       "status": "tracking",
       "first_seen": "2026-09-14_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 10,
-      "sessions_since_progress": 2,
+      "sessions_tracked": 11,
+      "sessions_since_progress": 3,
       "source_url": "https://www.kucoin.com/blog/fil-issuance-drops-75-percent-in-october-2026-as-filecoin-paid-onchain-demand-grows"
     },
     {
       "id": "morpho-robinhood-earn-distribution",
       "coin": "MORPHO",
-      "title": "MORPHO：维持 stale（ssp=16）",
+      "title": "MORPHO：维持 stale（ssp=17）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -449,14 +449,14 @@
       "status": "stale",
       "first_seen": "2026-07-10_morning",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 71,
-      "sessions_since_progress": 16,
+      "sessions_tracked": 72,
+      "sessions_since_progress": 17,
       "source_url": "https://api.llama.fi/protocol/morpho-blue"
     },
     {
       "id": "ondo-dtcc-tokenization",
       "coin": "ONDO",
-      "title": "ONDO：维持 15（ssp=4）",
+      "title": "ONDO：维持 stale（ssp=5）",
       "thesis": "连续第 4 期无新增一手。ONDO $0.435359（24h -1.78%、7d +25.94%、30d +13.74%，市值 $21.17 亿）。RWA 板块本期 +1.27%（连续第 3 期上行），但该板块成分口径问题未解除（连续两期 30%+ 反向跳变），仍不可用作相对表现判据。验证：Ondo Global Markets 面向美国用户的产品路径。**下期 ssp 达 5 将机械降 stale。**",
       "diffusion": "green",
       "score": {
@@ -466,18 +466,18 @@
         "risk": 4,
         "total": 15
       },
-      "status": "tracking",
+      "status": "stale",
       "first_seen": "2026-07-12_evening",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 67,
-      "sessions_since_progress": 4,
+      "sessions_tracked": 68,
+      "sessions_since_progress": 5,
       "source_url": "https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment"
     },
     {
       "id": "uniswap-fee-switch-revenue",
       "coin": "UNI",
-      "title": "UNI：🔺14→15，🔄论点基础更换 —— CME 受监管期货 10/19（一手），同时上期的收入判据被证伪",
-      "thesis": "**本期同时发生一正一负，且负的那条是上期自己写下的判据被开出否定结果——先记负的。**\n❌**收入论点证伪。** 上期把催化剂 3→4 复位，依据是 dailyRevenue 单日 +115%，并写下验证条件「能否连续 3 日站上 $40 万」。实测：9/20 $244,435 → 9/21 **$646,331** → 9/22 **$430,090**。第 2 日即从峰值回落 33.5%，3 日连续站上 $40 万只完成 2 日。**更致命的是同日对照：Raydium dailyRevenue 9/20 $246,114 → 9/21 $468,089（+90.2%）→ 9/22 $258,113，形态完全一致。**两个无关协议在同一天同幅跳升再同幅回落，说明 9/21 的收入尖峰是全市场成交量事件（BTC 突破日）的映射，**不是 Uniswap 的结构性变化**。上期的升级依据本期作废。\n✅**但一条更硬的催化剂替代了它。** CME Group 9/22 官方新闻稿：**UNI 期货 10/19 上线**（pending regulatory review），合约 10,000 UNI/张、微型 1,000 UNI/张，与 BCH 同批。这是 UNI 首次获得受监管美国衍生品市场准入，为机构持仓提供对冲工具——**性质上属于一次性、有明确日期、不依赖链上活跃度的准入型催化剂**，与「收入拐点」这类需要持续验证的论点完全不同。\n**评分变动拆解（为什么净升 1 分）：** 催化剂 4 维持（收入腿失效 −，CME 腿确立 +，相抵）；**时间窗 3→5**（从无硬日期变为 26 天后的确定日期）；**拥挤度 3→2**（CME 公告已被 PRNewswire/CoinDesk 级主流全面覆盖，扩散度升到 🟢）；风险 4 维持（大市值、流动性充足，24h 仅 +4.36% 未出现抢跑式拉升）。\nUNI $9.20（24h +4.36%、7d +41.18%、30d +101.32%，市值 $57.11 亿）。\n**验证方式：** ① 10/19 前后 CME 是否发布正式合约规格上线确认（监管审核是唯一不确定项）；② 上线首周 CME UNI 期货未平仓量——这是判断机构需求真实与否的唯一免费可观测量；③ dailyRevenue 不再作为本条目的主判据，降为背景指标。",
+      "title": "UNI：维持 15（ssp=1）—— 逆势最强的主流币（-0.14% vs 大盘 -4.87%），但收入未结构性抬升，CME 仍是唯一硬催化剂",
+      "thesis": "论点内核自上期起已换为 **CME 10/19 受监管 UNI 期货（一手新闻稿，25 天后）**：10,000 UNI/张、微型 1,000 UNI/张。UNI $9.20（24h **-0.14%**、7d +48.48%、30d +113.83%，市值 $57.10 亿）。**本期最强的单一事实是相对强度：在全市场 -4.87%、广度 17.2% 的一天，UNI 只跌 0.14%，是主流币中最抗跌的一只**（对照 ETH -2.72%、SOL -2.92%、LINK -5.36%、XRP -5.23%）。⚠️**上期被证伪的收入论点本期继续被证伪，不得回填**：DeFiLlama 日收入近 7 日为 $49.5万 / $54.5万 / $46.1万 / $27.7万 / $24.4万 / $64.6万 / $45.1万，**9/22 的 $64.6 万尖峰次日即回落至 $45.1 万，30 日合计 $1,600.8 万，没有任何结构性抬升**。因此本条 15/20 的分数**完全由 CME 事件支撑，与协议收入无关**。验证：10/19 CME 上线后的持仓增长；证伪：CME 推迟或 pending regulatory review 未通过。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 4,
@@ -488,15 +488,35 @@
       },
       "status": "tracking",
       "first_seen": "2026-07-10_evening",
-      "last_updated": "2026-09-23",
-      "sessions_tracked": 70,
-      "sessions_since_progress": 0,
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 71,
+      "sessions_since_progress": 1,
       "source_url": "https://www.prnewswire.com/news-releases/cme-group-to-expand-crypto-derivatives-suite-with-bitcoin-cash-and-uniswap-futures-302886066.html"
+    },
+    {
+      "id": "meteora-revenue-buyback-unlock-window",
+      "coin": "MET",
+      "title": "MET：本期新发现 15/20 —— 季度解锁已于 9/23 落地，下一次远在 10/23，29 天干净窗口 + 收入回购",
+      "thesis": "**结构是「解锁后企稳吸筹」的教科书形态，且本期已用一手数据确认了窗口边界。** （1）**解锁已过去：** 上期记录的 9/23 MET 解锁（Meteora Ecosystem Reserve）已执行——本期 tokenomist MET 页面一手复核显示「下一次解锁为 2026-10-23」，即 9/23 那一笔已落地，**未来 29 天内无解锁**。（2）**解锁次日逆势 +14.06%**，发生在大盘 -4.87%、250 池仅 17.2% 上涨的日子，是「靴子落地」的典型价格反应。（3）**回购对冲稀释：** 团队在 2025 Q4 以 $1,000 万 USDC 回购了总量的 2.3%，并承诺以协议收入持续进行自由裁量回购，用以抵消每季度 2,200 万 MET 的解锁（以上为媒体/项目口径，不入 JSON 数值）。（4）**收入倍数是本期同业最低：** DeFiLlama 30d 收入 $324.6 万（年化约 $3,950 万）对应流通市值 $1.93 亿 ≈ **4.9x**，同期 RAY 约 7.8x、LIT 约 24x、DRV 约 76x。⚠️**风险三条：** 日换手率 **58.7%** 为候选中最高（$1.13 亿成交 / $1.93 亿市值），筹码极不稳定；总量已解锁 55.06%，季度稀释持续；回购是「自由裁量」而非协议强制，团队可随时停。**扩散度低**：仅 tokenomist / CryptoRank / Phemex / BitcoinWorld 等垂直源覆盖，未进入 CoinGecko 全局热搜，也无主流媒体标题。",
+      "diffusion": "yellow",
+      "score": {
+        "catalyst_strength": 3,
+        "time_window": 5,
+        "crowding": 4,
+        "risk": 3,
+        "total": 15
+      },
+      "status": "new",
+      "first_seen": "2026-09-24",
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 1,
+      "sessions_since_progress": 0,
+      "source_url": "https://tokenomist.ai/meteora"
     },
     {
       "id": "arbitrum-robinhood-fee-share",
       "coin": "ARB",
-      "title": "ARB：维持 14（ssp=4）",
+      "title": "ARB：维持 stale（ssp=5）",
       "thesis": "无新增一手。ARB $0.217622（24h -4.46%、7d +44.31%、30d +113.28%，市值 $14.76 亿）——24h -4.46% 是看板内最大跌幅。链上：Arbitrum TVL $14.86 亿 **+0.72%**、Robinhood Chain TVL $10.08 亿 **+1.28%**；**由于 ARB 今日 -4.46%，以代币计价的 TVL 实际增幅约 +5.4%，连续 2 期的「真实资金净流出」本期反转。** ⚠️风险仍压 2：10/16 解锁（23 天后）金额至今无法一手复核（tokenomist 页面仍只展示 2026-07-15 历史批次）+ Robinhood 员工刑事指控无进展。",
       "diffusion": "green",
       "score": {
@@ -506,37 +526,37 @@
         "risk": 2,
         "total": 14
       },
-      "status": "tracking",
+      "status": "stale",
       "first_seen": "2026-07-09_evening",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 72,
-      "sessions_since_progress": 4,
+      "sessions_tracked": 73,
+      "sessions_since_progress": 5,
       "source_url": "https://www.sec.gov/newsroom/press-releases/2026-90-sec-issues-innovation-exemption-facilitate-trading-tokenized-nms-stock-request-comment"
     },
     {
       "id": "bitcoin-cash-cme-futures",
       "coin": "BCH",
-      "title": "BCH：CME 受监管期货 10/19 上线（一手公告，26 天）",
-      "thesis": "**论点：** CME Group 于 9/22 发布正式新闻稿，计划 **10/19 上线 BCH 与 UNI 期货**（pending regulatory review）。BCH 标准合约 250 BCH/张、微型合约 25 BCH/张。BCH 将加入 CME 现有的 BTC/ETH/XRP/SOL/ADA/LINK/XLM/AVAX/SUI 期货序列。CME 给出的理由是「客户对高流动性山寨币的机构级风险管理工具需求强劲」，并披露 2026 年加密期货日均 279,800 张、新增山寨币产品累计名义成交超 $10 亿。\n**这是本期全市场扫描中唯一同时满足三个条件的标的：一手信源（交易所自己的新闻稿）、明确日期（10/19）、十亿美元级市值（$67.41 亿）。**\n⚠️**评分只给 14 而不是更高的三条压制：**\n（1）**催化剂 4 而非 5：** 期货上市是「准入扩展」而非「需求保证」。CME 上市不创造买盘，只降低机构建立多空仓位的摩擦——历史上它既可能带来配置资金，也可能首次为机构提供做空 BCH 的受监管工具。同时「pending regulatory review」是真实的未完成条件。\n（2）**拥挤度 2（🟢已扩散）：** 消息在 9/22 当天即由 PRNewswire 全网分发，CoinMarketCap 头条、CoinDesk 级媒体、多家交易所快讯同步覆盖。**早期发现的价值在本条目上已基本不存在，它的价值是「确定性」而非「信息差」。**\n（3）**风险 3：** 消息当日 BCH 已 +25.75%，入场价含已兑现涨幅；BCH 自身无独立基本面叙事（无 TVL、无协议收入），期货上市后若无后续，价格锚回大盘 beta 的概率高。同族 BSV +18.61%、XEC +10.30% 的无差别跟涨说明市场在按「比特币分叉族」整体定价，而非按 CME 事件精确定价——**这既是错误定价的机会，也是 sell-the-news 的风险来源。**\n**验证方式：** ① 10/19 前 CME 是否发布合约规格正式上线确认（监管审核通过与否）；② BCH 相对 BSV/XEC 的超额收益是否持续扩大——若 BCH 与 BSV 同步波动，说明市场没有对 CME 事件定价，论点未被验证；③ 上线首周 CME BCH 期货未平仓量。",
+      "title": "BCH：维持 14，🔄new→tracking —— 上期自设判据已结算（BCH 7d 超额 BSV +15.8pp / XEC +35.6pp），新增 Grayscale BCHG 转 ETF 申请",
+      "thesis": "CME 于 10/19 上线受监管 BCH 期货（一手新闻稿，pending regulatory review），标准合约 250 BCH、微型 25 BCH。**上期自设的判据本期已结算：** 若 BCH/BSV/XEC 同步上涨则说明市场没在给 CME 定价；实际 7d 为 BCH +61.86% > BSV +46.10% > XEC +26.24%，BCH 超额 BSV 15.8pp、超额 XEC 35.6pp，**判据给出正面结果——市场确实在给 BCH 单独定价**。今日「Bitcoin Fork」板块 +3.09%，是市值 >$5 亿板块中唯一显著上涨的一个（大盘 -4.87%）。**新增第二层催化剂：** Grayscale 已提交修订版 S-3，拟将 Bitcoin Cash Trust（BCHG）转为 NYSE Arca 现货 ETF——⚠️无生效或上市时间表，且取决于通用上市标准是否获批，**因此不进事件日历**。⚠️反向证据：今日 BSV +5.28% 反超 BCH +2.75%，同板块外溢开始，事件的标的特异性正在被稀释。",
       "diffusion": "green",
       "score": {
-        "catalyst_strength": 4,
+        "catalyst_strength": 5,
         "time_window": 5,
-        "crowding": 2,
+        "crowding": 1,
         "risk": 3,
         "total": 14
       },
-      "status": "new",
+      "status": "tracking",
       "first_seen": "2026-09-23",
-      "last_updated": "2026-09-23",
-      "sessions_tracked": 1,
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 2,
       "sessions_since_progress": 0,
-      "source_url": "https://www.prnewswire.com/news-releases/cme-group-to-expand-crypto-derivatives-suite-with-bitcoin-cash-and-uniswap-futures-302886066.html"
+      "source_url": "https://www.theblock.co/post/370107/grayscale-submits-litany-of-sec-filings-for-bitcoin-cash-hedera-and-litecoin-etf-proposals"
     },
     {
       "id": "coti-v2-sunset-buyback",
       "coin": "COTI",
-      "title": "COTI：⬇️tracking→stale（ssp=5，机械降级）",
+      "title": "COTI：维持 stale（ssp=6）",
       "thesis": "9/30 V1 日落还有 7 天。**连续第 6 期不在 CoinGecko 前 250 采集池内，价格与市值无主采集链路来源，按规则不填估算值。** 上期已预告本期降级，按 4.7(a) 机械执行，无例外。即使 9/30 论点兑现也无法用本系统的免费链路观测——这是降级的实质理由。",
       "diffusion": "yellow",
       "score": {
@@ -549,15 +569,15 @@
       "status": "stale",
       "first_seen": "2026-09-18",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 6,
-      "sessions_since_progress": 5,
+      "sessions_tracked": 7,
+      "sessions_since_progress": 6,
       "source_url": "https://cotinetwork.medium.com/sunset-of-coti-v1-essential-steps-to-secure-your-v2-tokens-5f33ff3e07f2"
     },
     {
       "id": "injective-rwa-institutional-cluster",
       "coin": "INJ",
-      "title": "INJ：维持 14（ssp=3）",
-      "thesis": "9/18 原生上线 Solana + 21Shares 现货 ETF 申请，连续第 3 期无后续。INJ $7.8（24h -0.48%、7d +38.69%、30d +48.12%，市值 $7.80 亿）。上期反证未解除：链上收入长期锁在 $6.5K 量级。",
+      "title": "INJ：维持 14（ssp=4）",
+      "thesis": "9/18 原生上线 Solana + 21Shares 现货 ETF 申请，**连续第 4 期无后续**。INJ $7.62（24h -2.47%、7d +43.84%、30d +32.84%，市值 $7.62 亿）。24h -2.47% 跑赢大盘 2.4pp。上期反证未解除：链上收入长期锁在 $6.5K 量级。⚠️ssp=4，**下期若仍无一手进展将机械降 stale**。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 5,
@@ -569,14 +589,14 @@
       "status": "tracking",
       "first_seen": "2026-09-13_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 11,
-      "sessions_since_progress": 3,
+      "sessions_tracked": 12,
+      "sessions_since_progress": 4,
       "source_url": "https://coinmarketcap.com/top-stories/6aae099518d5f96e3a16bf1e/"
     },
     {
       "id": "mantle-super-portal-rwa",
       "coin": "MNT",
-      "title": "MNT：维持 stale（ssp=18）",
+      "title": "MNT：维持 stale（ssp=19）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -589,14 +609,14 @@
       "status": "stale",
       "first_seen": "2026-08-13_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 30,
-      "sessions_since_progress": 18,
+      "sessions_tracked": 31,
+      "sessions_since_progress": 19,
       "source_url": "https://coinedition.com/mantle-price-prediction-august-2026-mnt-jumps-9-as-super-portal-goes-live-on-solana-with-chainlink-backing/"
     },
     {
       "id": "pump-fun-revenue-buyback",
       "coin": "PUMP",
-      "title": "PUMP：维持 14（ssp=4）—— 上期写下的验证线被打到了",
+      "title": "PUMP：维持 stale（ssp=5）",
       "thesis": "dailyRevenue 9/19 $1,053,951 → 9/20 $1,038,074 → **9/21 $1,254,867**。上期验证条件是「能否重回 $115 万」，**本期答案是可以（$125.5 万，为 7 日最高）**，连续 3 日下行的形态终结。⚠️但必须同记：9/21 是全市场成交尖峰日（UNI +164%、RAY +90% 同日跳升），PUMP 的 **+20.9% 涨幅远小于这两者，说明其收入对市场成交的弹性低**——这对「平台收入结构稳定」是正面证据，对「出现新增长」是否定证据。7d $778.3 万。PUMP $0.00443768（24h +3.22%、7d +24.95%、30d -13.46%，市值 $20.71 亿），**30 日维度由上期 -9.98% 进一步走低到 -13.46%，是看板内唯一 30 日为负的标的——收入回升与价格背离，这是本条目当前最值得盯的矛盾。****收入回到验证线之上属于「反证解除」而非「新增进展」，按规则不重置 ssp。**",
       "diffusion": "green",
       "score": {
@@ -606,37 +626,37 @@
         "risk": 3,
         "total": 14
       },
-      "status": "tracking",
+      "status": "stale",
       "first_seen": "2026-07-16_morning",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 60,
-      "sessions_since_progress": 4,
+      "sessions_tracked": 61,
+      "sessions_since_progress": 5,
       "source_url": "https://api.llama.fi/summary/fees/pump.fun?dataType=dailyRevenue"
     },
     {
       "id": "solana-etf-inflow-governance",
       "coin": "SOL",
-      "title": "SOL：维持 14（ssp=4）—— Alpenglow 剩 5 天，资金面本期首次不含价格干扰",
+      "title": "SOL：维持 14（ssp 归 0）—— Alpenglow 剩 4 天，Agave v4.3 已于 9/18 带惰性代码上主网，9/21 里程碑按期交付",
       "thesis": "Alpenglow 主网功能激活 **9/28 开始**（全网完成预计 10 月），**5 天后**，本期无新增一手。SOL $118.01（24h -0.23%、7d +17.93%、30d +24.19%，市值 $692.98 亿）。⚠️**上期的反对理由本期失效，需要明确更正方向**：上期指出 Solana TVL +4.94% 低于 SOL 自身 +6.95%，故「以 SOL 计价的 TVL 实际在下降」。本期 SOL **-0.23%** 而链 TVL **+0.26%**，价格干扰消失，**以 SOL 计价的 TVL 小幅净增**。幅度很小（约 +0.5%），不足以升分，但上期那条反对意见不能再引用。验证：9/28 当天可观测的是 BLS 公钥注册率，不是最终性数字。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 4,
-        "time_window": 4,
-        "crowding": 3,
+        "time_window": 5,
+        "crowding": 2,
         "risk": 3,
         "total": 14
       },
       "status": "tracking",
       "first_seen": "2026-08-28_daily",
-      "last_updated": "2026-09-23",
-      "sessions_tracked": 20,
-      "sessions_since_progress": 4,
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 21,
+      "sessions_since_progress": 0,
       "source_url": "https://solanacompass.com/news/anza-publishes-agave-43-release-schedule-alpenglow-consensus-targets-september-28-mainnet-activation"
     },
     {
       "id": "stacks-genesis-bond-genesis-bond",
       "coin": "STX",
-      "title": "STX：维持 stale（ssp=6）",
+      "title": "STX：维持 stale（ssp=7）",
       "thesis": "Genesis Bond 周度 BTC 分配首个分配日 9/17 已过 5 天，连续第 5 期无任何一手到账确认。STX $0.33584（24h +5.72%、7d +23.06%、30d +51.75%）——价格连续第 3 期在涨，涨的仍不是论点。按 4.7(a) 机械降 stale。恢复条件：21Shares / HashKey Cloud 等认购方披露到账。",
       "diffusion": "green",
       "score": {
@@ -649,14 +669,14 @@
       "status": "stale",
       "first_seen": "2026-08-22_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 24,
-      "sessions_since_progress": 6,
+      "sessions_tracked": 25,
+      "sessions_since_progress": 7,
       "source_url": "https://cryptoslate.com/hashkey-cloud-backs-stacks-genesis-bond-to-prove-institutional-appetite-for-native-bitcoin-yield/"
     },
     {
       "id": "avalanche-helicon-upgrade",
       "coin": "AVAX",
-      "title": "AVAX：✅tracking→triggered —— Helicon 已于 9/22 15:00 UTC 激活，自设的 TVL 判据开出正面结果",
+      "title": "AVAX：维持 triggered（ssp=1）—— 升级后跟进：美元 TVL 回落至 $6.03 亿，重新跌破自设的 $6.31 亿判据",
       "thesis": "✅**催化剂已兑现。** 第三方复核确认 Helicon 于 **9/22 15:00 UTC 主网激活**，AvalancheGo v1.15.0，六项 ACP 同时生效：ACP-194 连续执行、ACP-236 自动续期质押、ACP-267 在线率要求 80%→90%、ACP-273 最短质押期 336 小时（14 天）→48 小时、ACP-283 动态最低 gas 价、ACP-285 降低最低消耗率。\n**上期自己写死的 48 小时判据必须逐条结算，不含糊：**\n① **「链 TVL 是否守住 $6.31 亿」→ 通过。** Avalanche TVL **$6.36 亿、环比 +1.75%**，在 16 条追踪链中排第 3。上期该值为 $6.25 亿（-0.95%、第 12 名），**是在激活前跌破、激活后收复**。更强的一点是计价校正：AVAX 今日 -0.85%，即美元 TVL 的 +1.75% **不含价格重估成分，以 AVAX 计价的真实增幅约 +2.6%**——这是真实资金流入，不是标价变高。\n② **价格未出现 sell-the-news 崩塌。** AVAX $10.98（24h **-0.85%**、7d +46.66%、30d +45.84%），激活当日小幅回落，在大盘同步微跌（BTC -0.38%）的背景下属同步而非跑输。\n**状态改为 triggered 的理由：** 催化剂是一次性升级事件，已经发生，「发现机会」的窗口按定义关闭。**后续属于基本面跟踪而非机会发现，本系统不再为它递增跟踪期数。** 若下期 TVL 继续以 AVAX 计价净增，可另建一条独立的「质押规则改动带来的验证人经济学重定价」论点，但那需要新的一手证据，不能由本条延续。",
       "diffusion": "green",
       "score": {
@@ -668,15 +688,15 @@
       },
       "status": "triggered",
       "first_seen": "2026-09-20",
-      "last_updated": "2026-09-23",
-      "sessions_tracked": 4,
-      "sessions_since_progress": 0,
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 5,
+      "sessions_since_progress": 1,
       "source_url": "https://build.avax.network/blog/helicon-upgrade"
     },
     {
       "id": "canton-dtcc-tokenization",
       "coin": "CC",
-      "title": "CC：维持 stale（ssp=21）",
+      "title": "CC：维持 stale（ssp=22）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "green",
       "score": {
@@ -689,14 +709,14 @@
       "status": "stale",
       "first_seen": "2026-07-18_evening",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 56,
-      "sessions_since_progress": 21,
+      "sessions_tracked": 57,
+      "sessions_since_progress": 22,
       "source_url": "https://www.canton.network/dtc-and-fed-eligible-securities-on-canton"
     },
     {
       "id": "gnosis-gip151-redemption",
       "coin": "GNO",
-      "title": "GNO：维持 stale（ssp=42）",
+      "title": "GNO：维持 stale（ssp=43）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -709,14 +729,14 @@
       "status": "stale",
       "first_seen": "2026-07-15_evening",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 62,
-      "sessions_since_progress": 42,
+      "sessions_tracked": 63,
+      "sessions_since_progress": 43,
       "source_url": "https://thecurrencyanalytics.com/altcoins/gno-holders-face-170-redemption-offer-as-activists-target-220m-gnosis-treasury-256794"
     },
     {
       "id": "lido-nest-buyback",
       "coin": "LDO",
-      "title": "LDO：维持 stale（ssp=20）",
+      "title": "LDO：维持 stale（ssp=21）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -729,14 +749,14 @@
       "status": "stale",
       "first_seen": "2026-07-08_morning",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 75,
-      "sessions_since_progress": 20,
+      "sessions_tracked": 76,
+      "sessions_since_progress": 21,
       "source_url": "https://crypto.news/lido-dao-price-rebounds-5-as-nest-vote-goes-live/"
     },
     {
       "id": "monad-defi-inflection",
       "coin": "MON",
-      "title": "MON：维持 stale（ssp=22）",
+      "title": "MON：维持 stale（ssp=23）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -749,34 +769,14 @@
       "status": "stale",
       "first_seen": "2026-07-06_morning",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 78,
-      "sessions_since_progress": 22,
+      "sessions_tracked": 79,
+      "sessions_since_progress": 23,
       "source_url": "https://api.llama.fi/v2/chains"
-    },
-    {
-      "id": "near-etf-window-ai-l1",
-      "coin": "NEAR",
-      "title": "NEAR：维持 13（ssp=2）",
-      "thesis": "上期记录的三条已发生事实（9/17 confidential-by-default 永续上线、Confidential TVL 越 $7,000 万触发 NEAR@3.33 首次快照、Intents 层 TVL $1.69 亿）连续第 2 期无后续披露。NEAR $4.34（24h +4.43%、7d +80.02%、30d +120.29%，市值 $56.82 亿）。**本期唯一新增观察是扩散结构：NEAR 与 AURORA 同时进入 CoinGecko 热搜**（AURORA 24h +114.47%，市值排名 390）——生态级资金聚集。但 AURORA 侧检索未得一手催化剂（结论为超跌重定价），**不足以构成 NEAR 的实质进展，不重置 ssp，也不调拥挤度。** 验证：Intents TVL 能否守住 $1.6 亿以上，第二次快照是否按计划触发。",
-      "diffusion": "green",
-      "score": {
-        "catalyst_strength": 5,
-        "time_window": 4,
-        "crowding": 2,
-        "risk": 2,
-        "total": 13
-      },
-      "status": "tracking",
-      "first_seen": "2026-09-15",
-      "last_updated": "2026-09-23",
-      "sessions_tracked": 9,
-      "sessions_since_progress": 2,
-      "source_url": "https://ambcrypto.com/near-cryptos-15-rally-meets-70m-tvl-catalyst-is-3-33-within-reach/"
     },
     {
       "id": "pyth-network-nasdaq-totalview",
       "coin": "PYTH",
-      "title": "PYTH：维持 stale（ssp=45）",
+      "title": "PYTH：维持 stale（ssp=46）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -789,15 +789,35 @@
       "status": "stale",
       "first_seen": "2026-07-07_morning",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 79,
-      "sessions_since_progress": 45,
+      "sessions_tracked": 80,
+      "sessions_since_progress": 46,
       "source_url": "https://coinmarketcap.com/cmc-ai/pyth-network/latest-updates/"
+    },
+    {
+      "id": "layerzero-zero-chain-gas-token",
+      "coin": "ZRO",
+      "title": "ZRO：🔺11→13，⬆️stale→tracking —— ZRO 正式成为 Zero L1 原生 gas 代币，主网 Q4；逆势 +14.85%",
+      "thesis": "ZRO 已正式成为 Zero L1 的原生 gas 与质押代币（此前仅用于协议治理与验证），Zero 链上每笔交易都消耗 ZRO——**这是从「治理代币」到「需求沉降」的性质变化**。Zero 于 2026-02-10 公布，背后为 Citadel Securities、DTCC、Google Cloud；ARK Invest 与 Citadel Securities 对项目及 ZRO 代币做了战略投资。主网目标 **fall 2026 / Q4**，⚠️**无确切日期，因此不进事件日历**。同期 Stargate 自 9 月起以 OFT 手续费回购。价格侧：今日 +14.85%、7d +57.43%，是大盘 -4.87% 中的逆势标的，并新进入 CoinGecko 全局热搜。⚠️**基本面反证：** DeFiLlama 口径 LayerZero 协议 24h 收入 $0、30d 仅 $191,090，当前定价完全建立在 Q4 主网兑现之上；流通市值 $5.43 亿 / FDV $15.37 亿（mc/fdv 0.35）。",
+      "diffusion": "yellow",
+      "score": {
+        "catalyst_strength": 4,
+        "time_window": 4,
+        "crowding": 3,
+        "risk": 2,
+        "total": 13
+      },
+      "status": "tracking",
+      "first_seen": "2026-08-05_daily",
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 38,
+      "sessions_since_progress": 0,
+      "source_url": "https://www.kucoin.com/news/articles/zro-layerzero-launches-zero-l1-blockchain-as-tether-strategic-investment-reshapes-the-market"
     },
     {
       "id": "backpack-securities-tokenized-equity",
       "coin": "BP",
-      "title": "BP：维持 12（ssp=2）",
-      "thesis": "BP 于 **9/21 创历史新高 $0.9798**，本期 $0.840624（24h -10.53%、7d +80.94%、30d +81.28%，市值 $2.10 亿），24h -10.53% 为 ATH 次日回吐。检出平台侧新增永续市场 MU-PERP / SNDK-PERP / SPY-PERP / QQQ-PERP（Backpack 官方公告口径），方向对「代币化股票标的从 GoPro 单只扩展」这条验证条件有利，**但该公告无可核实日期，按规则不计为本期进展、不重置 ssp**。三条压制未变：入场价仍在历史高位附近、无单一硬日期、受监管经纪业务合规不确定性。",
+      "title": "BP：维持 12（ssp=3）",
+      "thesis": "BP $0.804228（24h -4.27%、7d +77.97%、30d +95.79%，市值 $2.01 亿），距 9/21 的历史新高 $0.9798 已回落约 18%。**连续第 3 期无可核实日期的新进展（ssp=3）。** 上期检出的平台侧新增永续市场（MU-PERP / SNDK-PERP / SPY-PERP / QQQ-PERP，Backpack 官方公告口径）仍无可核实日期，按规则继续不计为进展。⚠️**本期新增一条压制：日成交 $767 万 / 市值 $2.01 亿 = v/mc 3.8%**，是本板前十里最薄的一只，与本期被标出的薄流动性名单（AKE / BTW / PIEVERSE）同类。三条旧压制未变：入场价仍在历史高位附近、无单一硬日期、受监管经纪业务合规不确定性。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 4,
@@ -809,14 +829,14 @@
       "status": "tracking",
       "first_seen": "2026-09-21",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 3,
-      "sessions_since_progress": 2,
+      "sessions_tracked": 4,
+      "sessions_since_progress": 3,
       "source_url": "https://www.mexc.com/news/1127400"
     },
     {
       "id": "edgex-buyback-burn",
       "coin": "EDGE",
-      "title": "EDGE：维持 stale（ssp=13）",
+      "title": "EDGE：维持 stale（ssp=14）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -829,14 +849,14 @@
       "status": "stale",
       "first_seen": "2026-07-12_morning",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 68,
-      "sessions_since_progress": 13,
+      "sessions_tracked": 69,
+      "sessions_since_progress": 14,
       "source_url": "https://coinmarketcap.com/cmc-ai/edgex/latest-updates/"
     },
     {
       "id": "hyperliquid-preipo-futures",
       "coin": "HYPE",
-      "title": "HYPE：维持 stale（ssp=24）",
+      "title": "HYPE：维持 stale（ssp=25）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -849,14 +869,14 @@
       "status": "stale",
       "first_seen": "2026-08-21_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 25,
-      "sessions_since_progress": 24,
+      "sessions_tracked": 26,
+      "sessions_since_progress": 25,
       "source_url": "https://cryptoticker.io/en/hyperliquid-hype-sec-pre-ipo-push/"
     },
     {
       "id": "lighter-perp-dex-listing",
       "coin": "LIT",
-      "title": "LIT：维持 stale（ssp=17）",
+      "title": "LIT：维持 12，⬆️stale→tracking —— 新增二元期权/预测市场产品线；EVM 主网 Q2-Q3 2026 窗口已临近失效",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -866,17 +886,17 @@
         "risk": 3,
         "total": 12
       },
-      "status": "stale",
+      "status": "tracking",
       "first_seen": "2026-07-06_morning",
-      "last_updated": "2026-09-23",
-      "sessions_tracked": 78,
-      "sessions_since_progress": 17,
-      "source_url": "https://www.datawallet.com/crypto/lighter-explained"
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 79,
+      "sessions_since_progress": 0,
+      "source_url": "https://coinmarketcap.com/cmc-ai/lighter/latest-updates/"
     },
     {
       "id": "maple-syrup-kraken-lending",
       "coin": "SYRUP",
-      "title": "SYRUP：维持 stale（ssp=44）",
+      "title": "SYRUP：维持 stale（ssp=45）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -889,14 +909,14 @@
       "status": "stale",
       "first_seen": "2026-07-10_evening",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 70,
-      "sessions_since_progress": 44,
+      "sessions_tracked": 71,
+      "sessions_since_progress": 45,
       "source_url": "https://www.coingecko.com/en/coins/syrup"
     },
     {
       "id": "polygon-staking-reform",
       "coin": "POL",
-      "title": "POL：维持 stale（ssp=18）",
+      "title": "POL：维持 stale（ssp=19）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -909,14 +929,14 @@
       "status": "stale",
       "first_seen": "2026-08-18_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 28,
-      "sessions_since_progress": 18,
+      "sessions_tracked": 29,
+      "sessions_since_progress": 19,
       "source_url": "https://www.coingabbar.com/en/price-prediction/polygon-price-prediction-august-2026"
     },
     {
       "id": "stellar-protocol27-bitwise",
       "coin": "XLM",
-      "title": "XLM：维持 stale（ssp=53）",
+      "title": "XLM：维持 stale（ssp=54）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -929,14 +949,14 @@
       "status": "stale",
       "first_seen": "2026-07-12_morning",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 68,
-      "sessions_since_progress": 53,
+      "sessions_tracked": 69,
+      "sessions_since_progress": 54,
       "source_url": "https://www.coingecko.com/en/coins/stellar"
     },
     {
       "id": "venice-vvv-emission-cut",
       "coin": "VVV",
-      "title": "VVV：维持 stale（ssp=8）",
+      "title": "VVV：维持 stale（ssp=9）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "green",
       "score": {
@@ -949,35 +969,15 @@
       "status": "stale",
       "first_seen": "2026-07-08_evening",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 75,
-      "sessions_since_progress": 8,
+      "sessions_tracked": 76,
+      "sessions_since_progress": 9,
       "source_url": "https://api.llama.fi/summary/fees/venice?dataType=dailyRevenue"
-    },
-    {
-      "id": "zama-confidential-rfq",
-      "coin": "ZAMA",
-      "title": "ZAMA：维持 stale（ssp=42）",
-      "thesis": "本期无新信息，不编造进展。",
-      "diffusion": "yellow",
-      "score": {
-        "catalyst_strength": 3,
-        "time_window": 3,
-        "crowding": 4,
-        "risk": 2,
-        "total": 12
-      },
-      "status": "stale",
-      "first_seen": "2026-07-28_daily",
-      "last_updated": "2026-09-23",
-      "sessions_tracked": 44,
-      "sessions_since_progress": 42,
-      "source_url": "https://www.cryptotimes.io/2026/07/24/zama-token-jumps-32-as-confidential-swap-protocol-goes-live/"
     },
     {
       "id": "zcash-privacy-etf-rotation",
       "coin": "ZEC",
-      "title": "ZEC：维持 12（ssp=2）",
-      "thesis": "9/17 社区投票通过提速升级后连续第 2 期无新增一手。ZEC $1,519.22（24h +3.20%、7d +34.06%、30d +77.93%，市值 $257.34 亿），市值 $257.34 亿。**上期「普涨日逆向下跌」的异常本期消失**：ZEC +3.20% 在大盘归零的一天反而跑赢，且重新进入 CoinGecko 热搜（排名第 9）。隐私组同向：ZAMA -2.12% 跑输。拥挤度维持 1（热搜在榜 = 已充分扩散）。",
+      "title": "ZEC：维持 12（ssp=3）",
+      "thesis": "9/17 社区投票通过提速升级后**连续第 3 期无新增一手**。ZEC $1,517.68（24h **-0.07%**、7d +21.71%、30d +87.23%，市值 $257.13 亿）。**本期两个正面观察：**（1）在大盘 -4.87%、广度 17.2% 的一天 ZEC 基本零波动，$257 亿市值的抗跌性罕见；（2）**ZEC 本期已退出 CoinGecko 全局热搜（上期排名第 9）**，拥挤度在改善方向。隐私组内部本期分化：ZAMA 7d +97.96% 明显跑赢 ZEC +21.71%，媒体口径称资金正从 ZEC 领涨的隐私行情向 FHE 轮动——**这对 ZEC 是资金分流的负面，对 ZAMA 条目是正面**。拥挤度暂维持 1（30d +87.23% 已充分定价）。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 5,
@@ -989,14 +989,54 @@
       "status": "tracking",
       "first_seen": "2026-09-04_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 14,
-      "sessions_since_progress": 2,
+      "sessions_tracked": 15,
+      "sessions_since_progress": 3,
       "source_url": "https://www.kucoin.com/blog/zcash-price-prediction-2026-why-zec-just-hit-a-new-multi-year-high"
+    },
+    {
+      "id": "raydium-launchlab-stonkfun-revenue",
+      "coin": "RAY",
+      "title": "RAY：🔺11→12，⬆️stale→tracking —— 代币化 AMD 股票 9/16 上线，链上收入日均抬升约 67%，今日全池最大涨幅 +19.65%",
+      "thesis": "Raydium 于 9/16 15:25 UTC 宣布代币化 AMD 股票可在 Raydium 交易，把自己变成 RWA/代币化股票的交易场所。**本期可验算的进展在收入端：** DeFiLlama 日收入 9/16–9/20 五日均值约 $26.5 万，9/22 $46.8 万、9/23 $41.9 万，后两日较前五日均值抬升约 **+67%**；30 日收入 $604.6 万（年化约 $7,360 万）对应流通市值 $5.71 亿，约 **7.8x**。价格侧今日 **+19.65%，是 250 币池中最大涨幅**，且发生在大盘 -4.87% 的日子。⚠️风险：单日收入尖峰在本系统已有先例被证伪（9/21 UNI），需要看连续 5 个交易日是否稳定在 $40 万以上才能认定为结构性抬升；30d 已 +180%，信息差小。",
+      "diffusion": "green",
+      "score": {
+        "catalyst_strength": 4,
+        "time_window": 4,
+        "crowding": 2,
+        "risk": 2,
+        "total": 12
+      },
+      "status": "tracking",
+      "first_seen": "2026-09-10_daily",
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 13,
+      "sessions_since_progress": 0,
+      "source_url": "https://coinmarketcap.com/top-stories/6aaacc9e84f8f4387e48cafa/"
+    },
+    {
+      "id": "zama-confidential-rfq",
+      "coin": "ZAMA",
+      "title": "ZAMA：⬇️12→11，⬆️stale→tracking —— 9/15 上线 16 个隐私金库 + 私密 swap、9/17 接入 Merkl；⚠️流通仅占 FDV 22%",
+      "thesis": "论点更新为「FHE 机密 DeFi 规模化」：**9/15 宣布隐私保护 DeFi 进入规模化阶段，上线 16 个私密金库并推出私密 swap 协议；9/17 接入 Merkl 以便向隐私代币分发激励；9/16 联合创始人兼 CEO Rand Hindi 在 The Rollup 播客阐述机密金融的价值捕获模型。** 媒体口径称其为以太坊主网上最大的 FHE 部署（21 个金库、$7.8 亿 TVL），并是 ERC-7984 标准提案方，B 轮估值 $10 亿、累计融资 >$1.5 亿（以上为媒体口径，不入 JSON 数值）。资金面叙事为「ZEC 领涨的隐私行情向 FHE 轮动」。价格侧 7d +97.96%，今日 +0.71% 在大盘 -4.87% 中站稳。⚠️**两条硬风险：**（1）流通市值 $2.22 亿 / FDV $10.22 亿，**mc/fdv 仅 0.22，78% 的供应尚未流通**；（2）9/23 刚创 ATH $0.107368，现价距 ATH -15.82%，且日换手率 30.0%。",
+      "diffusion": "yellow",
+      "score": {
+        "catalyst_strength": 4,
+        "time_window": 3,
+        "crowding": 2,
+        "risk": 2,
+        "total": 11
+      },
+      "status": "tracking",
+      "first_seen": "2026-07-28_daily",
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 45,
+      "sessions_since_progress": 0,
+      "source_url": "https://www.kucoin.com/news/flash/zama-scales-privacy-defi-with-16-new-vaults-and-secret-swap-protocol"
     },
     {
       "id": "argus-arc-mainnet-launchpad",
       "coin": "ARGUS",
-      "title": "ARGUS：⬇️tracking→stale（ssp=5，机械降级）",
+      "title": "ARGUS：维持 stale（ssp=6）",
       "thesis": "连续第 5 期无新信息，且不在前 250 池。Arc 链 TVL $3.55 亿、+2.66%（16 链第 2）——**Arc 生态本期的正面数据没有任何一条落在 ARGUS 自身**。上期已预告本期降级，按 4.7(a) 机械执行。",
       "diffusion": "yellow",
       "score": {
@@ -1009,14 +1049,14 @@
       "status": "stale",
       "first_seen": "2026-09-17",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 7,
-      "sessions_since_progress": 5,
+      "sessions_tracked": 8,
+      "sessions_since_progress": 6,
       "source_url": "https://www.coingecko.com/en/coins/argus"
     },
     {
       "id": "curve-llamalend-v2-incentives",
       "coin": "CRV",
-      "title": "CRV：维持 stale（ssp=14）",
+      "title": "CRV：维持 stale（ssp=15）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -1029,15 +1069,15 @@
       "status": "stale",
       "first_seen": "2026-08-10_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 33,
-      "sessions_since_progress": 14,
+      "sessions_tracked": 34,
+      "sessions_since_progress": 15,
       "source_url": "https://blockworks.co/news/yield-basis-curve-dao-vote"
     },
     {
       "id": "ethena-falconx-lending",
       "coin": "ENA",
-      "title": "ENA：维持 11（ssp=3）",
-      "thesis": "Ethena Pay 产品化后连续第 3 期无新一手。ENA $0.207497（24h -2.83%、7d +40.87%、30d +23.93%，市值 $20.91 亿）。⚠️关联事件：FF（Falcon Finance）解锁 9/29，6 天后。",
+      "title": "ENA：维持 11（ssp=4）",
+      "thesis": "Ethena Pay 产品化后**连续第 4 期无新一手**。ENA $0.205579（24h -0.88%、7d +46.46%、30d +36.43%，市值 $20.75 亿），24h 跑赢大盘 4.0pp。⚠️关联事件：FF（Falcon Finance）解锁 **9/29，5 天后**，日期已一手复核、数量仍为 null。⚠️ssp=4，下期若仍无一手进展将机械降 stale。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 4,
@@ -1049,14 +1089,14 @@
       "status": "tracking",
       "first_seen": "2026-08-22_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 24,
-      "sessions_since_progress": 3,
+      "sessions_tracked": 25,
+      "sessions_since_progress": 4,
       "source_url": "https://coinmarketcap.com/top-stories/6a9cca3698f4795d490fd4c1/"
     },
     {
       "id": "etherfi-restaking-recovery",
       "coin": "ETHFI",
-      "title": "ETHFI：⬇️tracking→stale（ssp=5，机械降级）",
+      "title": "ETHFI：维持 stale（ssp=6）",
       "thesis": "连续第 5 期无新信息。ETHFI $0.689341（24h -4.76%、7d +15.49%、30d +11.32%，市值 $6.65 亿），24h -4.76%。上期已预告本期降级，按 4.7(a) 机械执行。",
       "diffusion": "yellow",
       "score": {
@@ -1069,14 +1109,14 @@
       "status": "stale",
       "first_seen": "2026-07-09_evening",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 72,
-      "sessions_since_progress": 5,
+      "sessions_tracked": 73,
+      "sessions_since_progress": 6,
       "source_url": "https://api.llama.fi/summary/fees/ether.fi?dataType=dailyRevenue"
     },
     {
       "id": "four-4stock-stock-paired-launchpad",
       "coin": "FORM",
-      "title": "FORM：维持 stale（ssp=12）",
+      "title": "FORM：维持 stale（ssp=13）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -1089,14 +1129,14 @@
       "status": "stale",
       "first_seen": "2026-09-09_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 13,
-      "sessions_since_progress": 12,
+      "sessions_tracked": 14,
+      "sessions_since_progress": 13,
       "source_url": "https://www.cryptopolitan.com/cea-industries-jumps-four-meme-bnc4-token/"
     },
     {
       "id": "jito-jtx-perp-launch",
       "coin": "JTO",
-      "title": "JTO：维持 stale（ssp=50）",
+      "title": "JTO：维持 stale（ssp=51）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -1109,34 +1149,14 @@
       "status": "stale",
       "first_seen": "2026-07-08_evening",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 75,
-      "sessions_since_progress": 50,
+      "sessions_tracked": 76,
+      "sessions_since_progress": 51,
       "source_url": "https://coinmarketcap.com/cmc-ai/jito/price-analysis/"
-    },
-    {
-      "id": "layerzero-zero-chain-gas-token",
-      "coin": "ZRO",
-      "title": "ZRO：维持 stale（ssp=21）",
-      "thesis": "24h +13.02%、7d +39.14%。本期检索得两条信息，**均不足以解除 stale**：（1）LayerZero 于 9/8 取得 SOC 2 安全认证——已过去 15 天的次要事件；（2）Zero 链计划「2026 年秋季」上线三个初始 zone，**无精确日期，按规则不进事件日历、不重置 ssp**。",
-      "diffusion": "green",
-      "score": {
-        "catalyst_strength": 4,
-        "time_window": 3,
-        "crowding": 2,
-        "risk": 2,
-        "total": 11
-      },
-      "status": "stale",
-      "first_seen": "2026-08-05_daily",
-      "last_updated": "2026-09-23",
-      "sessions_tracked": 37,
-      "sessions_since_progress": 21,
-      "source_url": "https://ambcrypto.com/examining-layerzeros-breakout-odds-as-new-short-term-price-target-emerges-for-zro/"
     },
     {
       "id": "mina-mesa-hardfork",
       "coin": "MINA",
-      "title": "MINA：维持 stale（ssp=10）—— ⚠️本期 +25.89% 不构成进展",
+      "title": "MINA：维持 stale（ssp=11）",
       "thesis": "**本期异动榜第 4 名，24h +25.89%、7d +83.48%，但按 4.1 规则「单纯价格波动不算进展」，维持 stale 不解除。** 检索结论支持这一处理：媒体明确写本轮上涨「没有清晰触发因素」，唯一可核事实 Mesa 硬分叉已于 9/3 上线（20 天前）。**这是本期防止机会看板被价格噪声污染的关键一条，特别记录。**",
       "diffusion": "yellow",
       "score": {
@@ -1149,14 +1169,14 @@
       "status": "stale",
       "first_seen": "2026-09-13_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 11,
-      "sessions_since_progress": 10,
+      "sessions_tracked": 12,
+      "sessions_since_progress": 11,
       "source_url": "https://www.bitrue.com/blog/major-blockchain-upgrades-in-september-2026"
     },
     {
       "id": "pendle-fee-inflection",
       "coin": "PENDLE",
-      "title": "PENDLE：维持 stale（ssp=8）",
+      "title": "PENDLE：维持 stale（ssp=9）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -1169,34 +1189,14 @@
       "status": "stale",
       "first_seen": "2026-08-24_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 22,
-      "sessions_since_progress": 8,
+      "sessions_tracked": 23,
+      "sessions_since_progress": 9,
       "source_url": "https://api.llama.fi/summary/fees/pendle?dataType=dailyRevenue"
-    },
-    {
-      "id": "raydium-launchlab-stonkfun-revenue",
-      "coin": "RAY",
-      "title": "RAY：维持 stale（ssp=6）",
-      "thesis": "Raydium dailyRevenue 9/17 $244,377 → 9/18 $220,358 → 9/19 $348,591 → 9/20 $267,574 → 9/21 $225,763，30 日 $528.6 万，无拐点。⚠️同期 LaunchLab 侧的 StonkFun 反而在扩张（STONK 24h +18.08%、7d +90.82%、30d +5336%，媒体记录其日收入已超过 PONS）——**平台在放量，费用没有传导到 RAY 的协议收入**，这是比「无进展」更负面的读数。RAY $1.83（24h +9.83%、7d +27.41%）。按 4.7(a) 机械降 stale。",
-      "diffusion": "yellow",
-      "score": {
-        "catalyst_strength": 4,
-        "time_window": 4,
-        "crowding": 2,
-        "risk": 1,
-        "total": 11
-      },
-      "status": "stale",
-      "first_seen": "2026-09-10_daily",
-      "last_updated": "2026-09-23",
-      "sessions_tracked": 12,
-      "sessions_since_progress": 6,
-      "source_url": "https://coinmarketcap.com/top-stories/6aaacc9e84f8f4387e48cafa/"
     },
     {
       "id": "vechain-vip255-upgrade",
       "coin": "VET",
-      "title": "VET：维持 stale（ssp=10）",
+      "title": "VET：维持 stale（ssp=11）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -1209,15 +1209,35 @@
       "status": "stale",
       "first_seen": "2026-08-28_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 20,
-      "sessions_since_progress": 10,
+      "sessions_tracked": 21,
+      "sessions_since_progress": 11,
       "source_url": "https://www.coincarp.com/events/vechaincom-interstellar-upgrade/"
     },
     {
       "id": "derive-tokenized-gold-derivatives",
       "coin": "DRV",
-      "title": "DRV：维持 10（ssp=1）—— 上期写下的 expired 判据部分触发",
-      "thesis": "协议侧连续第 2 期无一手进展。**上期写下的反向判据是「若下期仍在 trending 且无协议侧进展，直接转 expired」。本期实测：DRV 已跌出 CoinGecko trending**，条件的前半句不成立，故**按字面规则不转 expired**，但这不是好消息——它意味着热度退潮与基本面沉默同时发生。DRV $0.419623（24h +1.90%、7d +197.20%、30d +226.50%，市值 $4.20 亿），24h +1.90% 连续第 2 期近乎不动，7d 仍 +197.20%。**修订后的判据：下期若协议侧仍无一手进展，无论是否在 trending 一律转 expired。**",
+      "title": "DRV：🔺10→11，🔄论点基础更换 —— V3 迁移以太坊主网 zkVM + Derive Chain 关停提案；⚠️收入端完全不支持 +169% 的周涨幅",
+      "thesis": "**论点基础本期整体更换（与 UNI 上期同类操作，必须说清否则会被误读为原论点被验证）。** 原「代币化黄金衍生品」论点无新进展；驱动当前价格的是 **9/13 提交的 DIP 提案：部署 Derive V3、把托管迁回以太坊主网（zkVM 结算）、关停 Derive Chain，并拆分风险账本使 RWA 与更多山寨币可更快上架**。9/19 公告称迁移前至少提前 14 天通知，**据此迁移最早落在 10/3 之后，但无确切日期 → 不进事件日历**。同时上线 DRV 与 $F（福特股票代币）永续，5x 杠杆。协议 35% 手续费用于回购，67.63% 供应处于质押地址。⚠️**收入端完全不支持当前定价：** 近 8 日日收入区间 $1.76–4.41 万，30d 合计 $51.2 万（年化约 $620 万），对应流通市值 $4.74 亿 ≈ **76x**；按 35% 回购率折算年回购额约 $217 万 = 市值的 **0.46%/年**，对价格影响可忽略。7d +169.10%、30d +211.44%，距 9/19 的 ATH 仅 -6.38%。**这是本期「叙事与现金流背离最大」的标的。**",
+      "diffusion": "green",
+      "score": {
+        "catalyst_strength": 4,
+        "time_window": 4,
+        "crowding": 2,
+        "risk": 1,
+        "total": 11
+      },
+      "status": "tracking",
+      "first_seen": "2026-08-27_daily",
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 22,
+      "sessions_since_progress": 0,
+      "source_url": "https://www.kucoin.com/news/flash/derive-proposes-v3-deployment-and-derive-chain-shutdown"
+    },
+    {
+      "id": "near-etf-window-ai-l1",
+      "coin": "NEAR",
+      "title": "NEAR：⬇️13→10（ssp 归 0）—— +80% 周涨幅归因查实：9/15 里程碑激励领取窗口 + 9/17 Hyperliquid 机密永续，扩散度已耗尽",
+      "thesis": "**本期把 +80.44% 的周涨幅归因查实，结果是降分而不是升分。** 驱动因素三条：（1）**9/15 开启里程碑激励计划的份额领取窗口**，用户可在 NEAR 官网直接领取；（2）**9/17 经 Hyperliquid 上线机密永续合约**；（3）AI agent / chain abstraction 叙事回潮。⚠️**（1）在供给侧是负面的**——激励领取窗口意味着新筹码进入可流通状态，而 NEAR 已是 100% 流通（circ = total = 13.07 亿），领取即抛压。⚠️**扩散度已耗尽**：NEAR 同时出现在 CoinGecko 全局热搜与多家媒体的「一周涨 80%」标题中，信息差为零。原「ETF 窗口 + AI L1」论点本期无任何新进展。综合把 crowding 与 catalyst 两维同时下调，13 → 10。",
       "diffusion": "green",
       "score": {
         "catalyst_strength": 3,
@@ -1227,16 +1247,16 @@
         "total": 10
       },
       "status": "tracking",
-      "first_seen": "2026-08-27_daily",
-      "last_updated": "2026-09-23",
-      "sessions_tracked": 21,
-      "sessions_since_progress": 1,
-      "source_url": "https://www.coingecko.com/en/coins/derive"
+      "first_seen": "2026-09-15",
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 10,
+      "sessions_since_progress": 0,
+      "source_url": "https://coinpedia.org/price-analysis/near-protocol-price-surges-80-in-a-week-can-the-breakout-push-near-toward-5/"
     },
     {
       "id": "helium-city-carrier-adoption",
       "coin": "HNT",
-      "title": "HNT：维持 stale（ssp=13）",
+      "title": "HNT：维持 stale（ssp=14）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -1249,14 +1269,14 @@
       "status": "stale",
       "first_seen": "2026-08-31_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 18,
-      "sessions_since_progress": 13,
+      "sessions_tracked": 19,
+      "sessions_since_progress": 14,
       "source_url": "https://en.coinotag.com/helium-hnt-short-squeeze-170-percent-surge"
     },
     {
       "id": "lisk-chain-sunset-supply-burn",
       "coin": "LSK",
-      "title": "LSK：⬇️tracking→stale（ssp=5，机械降级）",
+      "title": "LSK：维持 stale（ssp=6）",
       "thesis": "连续第 5 期无新信息，不在前 250 池。10/21 迁移截止（28 天）、10/31 链关停（38 天）两个硬日期不变，**事件仍留在日历中，但机会条目按 4.7(a) 机械降 stale**——硬日期存在不等于有进展。",
       "diffusion": "green",
       "score": {
@@ -1269,14 +1289,14 @@
       "status": "stale",
       "first_seen": "2026-09-14_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 10,
-      "sessions_since_progress": 5,
+      "sessions_tracked": 11,
+      "sessions_since_progress": 6,
       "source_url": "https://www.coingecko.com/en/coins/lisk"
     },
     {
       "id": "monero-thorchain-native-swaps",
       "coin": "XMR",
-      "title": "XMR：维持 stale（ssp=14）",
+      "title": "XMR：维持 stale（ssp=15）",
       "thesis": "本期无新信息，不编造进展。",
       "diffusion": "yellow",
       "score": {
@@ -1289,15 +1309,15 @@
       "status": "stale",
       "first_seen": "2026-09-01_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 17,
-      "sessions_since_progress": 14,
+      "sessions_tracked": 18,
+      "sessions_since_progress": 15,
       "source_url": "https://en.coinotag.com/monero-xmr-nears-520-thorchain-upgrade-rally"
     },
     {
       "id": "pieverse-arc-mainnet-agent-payments",
       "coin": "PIEVERSE",
-      "title": "PIEVERSE：维持 10，🔄new→tracking（ssp=1）",
-      "thesis": "9/16 Arc Mainnet 上线 Pieverse 后无新增一手。PIEVERSE $1.77（24h -3.43%、7d +52.65%、30d +83.98%，市值 $4.85 亿）。生态侧：Arc 链 TVL $3.55 亿、环比 **+2.66%**，在 16 链中排第 2，是本期 Arc 生态唯一的正面数据点。四条压制未变：催化剂已在 7 天前落地、约 $570 万解锁临近（日期不精确，不进事件日历）、入场价在历史高位、首批投资者解锁预计 11 月中。",
+      "title": "PIEVERSE：维持 10（ssp=2）",
+      "thesis": "9/16 Arc Mainnet 上线 Pieverse 后无新增一手。PIEVERSE $1.73（24h -1.94%、7d +48.29%、30d +69.07%，市值 $4.75 亿）。**生态侧本期是全表最强的单一数据点：Arc 链 TVL $3.85 亿、环比 +8.49%，是 16 条追踪链中唯一上涨的一条**（其余 15 条全跌）。这对「Arc 生态」这条线是明确正面，但⚠️**对 PIEVERSE 本身不构成进展**——PIEVERSE 自身无新增一手信源，且日成交仅 $765 万 / 市值 $4.75 亿 = **v/mc 1.6%，是异动池内最薄的标的之一**。四条压制未变：催化剂已在 8 天前落地、约 $570 万解锁临近（日期不精确，不进事件日历）、入场价在历史高位、首批投资者解锁预计 11 月中。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 3,
@@ -1309,15 +1329,15 @@
       "status": "tracking",
       "first_seen": "2026-09-22_daily",
       "last_updated": "2026-09-23",
-      "sessions_tracked": 2,
-      "sessions_since_progress": 1,
+      "sessions_tracked": 3,
+      "sessions_since_progress": 2,
       "source_url": "https://coinmarketcap.com/cmc-ai/pieverse/latest-updates/"
     },
     {
       "id": "pons-robinhood-launchpad",
       "coin": "PONS",
-      "title": "PONS：维持 9（ssp=1）",
-      "thesis": "上期检出的反证（StonkFun 日收入超过 PONS）无后续。PONS $0.670193（24h +13.77%、7d -4.48%、30d +1348.66%，市值 $4.59 亿）——24h +13.77% 且仍在 CoinGecko 热搜（排名第 8），但 **7d -4.48% 是异动池内少数 7 日为负的标的**。同赛道对照：STONK 本期 -16.21%（ATH 次日回吐），两者本期走势互换，**不足以判定竞争格局反转**。验证：PONS 自身日收入能否在 DeFiLlama 上恢复相对位置；下期若仍无反转则转 expired。",
+      "title": "PONS：❌tracking→expired —— 上期写下的判据本期查实，结果是证伪：StonkFun 收入领先幅度扩大而非收窄",
+      "thesis": "**上期写下的判据本期执行并得到否定答案，按预先声明转 expired。** 上期原文：「验证：PONS 自身日收入能否在 DeFiLlama 上恢复相对位置；下期若仍无反转则转 expired。」本期 DeFiLlama 实测：**PONS 24h $376,906 / 7d $297.7 万，StonkFun 24h $1,268,952 / 7d $812.6 万——StonkFun 的 24h 领先达 3.4 倍、7d 领先 2.7 倍，领先幅度扩大而非收窄。** 唯一对 PONS 有利的口径是 30 日合计（PONS $2,528.8 万 vs StonkFun $2,009.3 万），但这反映的是月初的旧领先，**近 7 日的方向是明确反转向 StonkFun**。价格侧 PONS $0.662808（24h -1.25%、7d +15.21%、30d +702.03%，市值 $4.53 亿）仍在 CoinGecko 热搜在榜，**价格与基本面的方向本期明确背离**。按规则转 expired，JSON 保留条目以维持连续性，不再占用跟踪看板位置。",
       "diffusion": "yellow",
       "score": {
         "catalyst_strength": 2,
@@ -1326,56 +1346,45 @@
         "risk": 2,
         "total": 9
       },
-      "status": "tracking",
+      "status": "expired",
       "first_seen": "2026-08-29_daily",
-      "last_updated": "2026-09-23",
-      "sessions_tracked": 19,
-      "sessions_since_progress": 1,
-      "source_url": "https://www.kucoin.com/news/flash/stonkfun-surpasses-pons-in-daily-revenue-hits-200m-market-cap"
+      "last_updated": "2026-09-24",
+      "sessions_tracked": 20,
+      "sessions_since_progress": 0,
+      "source_url": "https://api.llama.fi/summary/fees/pons?dataType=dailyRevenue"
     }
   ],
   "events": [
-    {
-      "id": "avalanche-helicon-20260922",
-      "coin": "AVAX",
-      "event_type": "upgrade",
-      "date": "2026-09-22",
-      "days_away": -1,
-      "description": "✅**已激活。** Helicon 于 9/22 15:00 UTC 主网激活，AvalancheGo v1.15.0，六项 ACP 同时生效（ACP-194 连续执行 / ACP-236 自动续期质押 / ACP-267 在线率 80%→90% / ACP-273 最短质押期 14 天→48 小时 / ACP-283 动态最低 gas 价 / ACP-285 降低最低消耗率）。",
-      "opportunity_angle": "结算：激活当日 AVAX -0.85%（大盘 BTC -0.38%），**无 sell-the-news 崩塌**；Avalanche 链 TVL $6.36 亿、+1.75%（16 链第 3），收复上期跌破的 $6.31 亿判据线，且因 AVAX 当日下跌，以 AVAX 计价的真实增幅约 +2.6%。机会条目已转 triggered。",
-      "source_url": "https://build.avax.network/blog/helicon-upgrade",
-      "status": "passed"
-    },
     {
       "id": "meteora-unlock-20260923",
       "coin": "MET",
       "event_type": "unlock",
       "date": "2026-09-23",
-      "days_away": 0,
-      "description": "⏰**今日落地。** tokenomist MET 页面本期一手复核：下一次解锁日期为 **2026-09-23**，分配类别 **Meteora Ecosystem Reserve**；**具体数量与美元金额页面未披露，按规则写 null，不沿用上期的媒体口径数字。**",
-      "opportunity_angle": "生态储备类解锁通常不直接进入二级市场抛售，但 MET 本期 +7.78%、7d +50.76%，解锁前已有明显涨幅。观察角度：解锁后 1-2 日能否守住，是判断「生态储备解锁被市场忽略」还是「利好出尽」的分界。",
+      "days_away": -1,
+      "description": "✅**已执行并已一手确认。** 本期 tokenomist MET 页面显示「下一次解锁为 2026-10-23」，据此 9/23 那一笔（Meteora Ecosystem Reserve）已落地。数量与金额该页始终未披露，保持 null。解锁次日 MET 逆势 **+14.06%**（大盘 -4.87%）。",
+      "opportunity_angle": "已结算：靴子落地形态成立，机会转入 MET 机会条目（15/20），本条下期删除。",
       "source_url": "https://tokenomist.ai/meteora",
-      "status": "upcoming"
+      "status": "passed"
     },
     {
       "id": "bitmex-shutdown-20260923",
       "coin": "CEX",
       "event_type": "listing",
       "date": "2026-09-23",
-      "days_away": 0,
-      "description": "⏰**明日。** BitMEX 关停（沿用记录）。同类背景：CoinEx 自 9/15 起有序停止运营并清盘。",
-      "opportunity_angle": "二线衍生品所连续退出，流动性向头部与链上永续集中。受益方向指向链上永续（HYPE、LIT、EDGE 等），但三者本期均无独立表现（HYPE +0.05%、LIT +2.10%、EDGE +7.51%），映射未被市场执行。",
+      "days_away": -1,
+      "description": "BitMEX 关停（沿用记录）。同类背景：CoinEx 自 9/15 起有序停止运营并清盘。",
+      "opportunity_angle": "已过去，下期删除。",
       "source_url": null,
-      "status": "upcoming"
+      "status": "passed"
     },
     {
       "id": "plasma-unlock-20260925",
       "coin": "XPL",
       "event_type": "unlock",
       "date": "2026-09-25",
-      "days_away": 2,
-      "description": "⏰**48 小时内，本期新建。** tokenomist XPL 页面一手复核：下一次解锁日期 **2026-09-25**，分配类别 **Ecosystem and Growth**；数量与金额页面未披露 → null。⚠️**口径冲突已记录**：第三方日历口径为「XPL 最大规模供应解锁在 9/28」，与 tokenomist 的 9/25 不符，**按一手信源优先原则采用 9/25**，并在 9/25-9/28 区间整体保持警戒。",
-      "opportunity_angle": "XPL 本期 $0.2575、24h **-7.69%**（全池跌幅前列），7d +13.35%——**解锁前已开始下跌，属于「提前定价」形态**。若 9/25 当天跌幅收敛，是解锁抛压被吸收的信号（参照本期 BR 与 AKE 两个已落地样本：BR 完整吸收、AKE 连续 2 日回吐）。Plasma 链 TVL $5.47 亿、-1.89%，是 16 链中本期跌幅最大的一条，资金面不支持提前布局。",
+      "days_away": 1,
+      "description": "⏰**24 小时内。本期第 2 次一手复核通过**：tokenomist XPL 页面仍显示下一次解锁日期 **2026-09-25**，分配类别 **Ecosystem and Growth**；数量、美元金额、占比三项页面均未显示 → 全部写 null。⚠️**口径冲突继续记录**：第三方日历口径称 XPL 最大规模解锁在 9/28，与 tokenomist 的 9/25 不符，按一手信源优先采用 9/25，并在 9/25–9/28 整段保持警戒。XPL 现价 $0.088693（24h -4.56%、30d -7.38%），是少数 30d 仍为负的候选。",
+      "opportunity_angle": "解锁前避险 vs 解锁后企稳吸筹。**MET 刚在本期给出了这套剧本的正面样本**（9/23 解锁 → 次日 +14.06%），XPL 可用同一判据检验：若 9/25-9/26 放量不破 $0.085，则「靴子落地」成立；若跌穿则是真实抛压。",
       "source_url": "https://tokenomist.ai/plasma",
       "status": "upcoming"
     },
@@ -1384,9 +1393,9 @@
       "coin": "GT",
       "event_type": "unlock",
       "date": "2026-09-26",
-      "days_away": 3,
-      "description": "⚠️**媒体口径，连续第 2 期未能一手复核**（tokenomist gatetoken 页面本期返回 404）：GateToken 于 9/26 解锁。**数量与金额保持 null。** 若下期仍无法复核，按规则转为不可验证条目处理。",
-      "opportunity_angle": "交易所平台币的大额解锁，属本周体量最大的一笔。若 BR/AKE 两次都被吸收，这一笔将是第三个同类样本。",
+      "days_away": 2,
+      "description": "⏰**48 小时内，但⚠️已连续第 3 期无法一手复核**（tokenomist gatetoken 页面本期仍返回 404）。按上期写下的规则，本条正式转为**不可验证条目**：日期仅为媒体口径，数量与金额保持 null。GT 现价 $10.60（24h -4.35%），日成交仅 $198 万 / 市值 $11.32 亿，**v/mc 0.2% 为全池最薄之一，任何真实解锁抛压都会被放大**。",
+      "opportunity_angle": "不建仓、只观察：GT 流动性极薄，解锁日的价格反应本身就是「媒体口径日期是否真实」的判据。若 9/26 前后无异常成交，则该日期大概率不实，下期删除。",
       "source_url": "https://commstrader.com/business/crypto/massive-token-unlocks-for-22-altcoins-this-week-complete-day-by-day-hour-by-hour-schedule/",
       "status": "upcoming"
     },
@@ -1395,9 +1404,9 @@
       "coin": "SOL",
       "event_type": "upgrade",
       "date": "2026-09-28",
-      "days_away": 5,
-      "description": "Solana Alpenglow 主网功能激活**开始**（非全网完成，完成预计落在 10 月）：以 Votor 取代 Tower BFT + PoH，最终性约 12.8 秒→100-150ms，容错率 33%→40%，同步上线 SHA512 syscalls 与大整数模幂。Anza Agave 4.3 排期，本期复核未变。",
-      "opportunity_angle": "升级前抢跑 vs sell-the-news。⚠️Solana 链 TVL 连续 2 期下行（本期 -1.10%），资金面未提前配合。验证：9/28 当天可观测的是 BLS 公钥注册率，不是最终性数字。",
+      "days_away": 4,
+      "description": "**剩 4 天，本期复核进度全部按期。** Anza 于 8/12 发布的 Agave 4.3 排期以 9/28 为主网激活日；**Agave v4.3 自 9/18 起已在主网运行并携带处于惰性状态的 Alpenglow 代码**；9/21 的「general adoption」里程碑（激活前最后一个计划节点）已按期交付。媒体口径称至今每个里程碑都在计划日或其后 1 天内完成。内容：Votor 取代 Tower BFT + PoH，最终性约 12.8 秒 → 100-150ms，容错率 33% → 40%，同步上线 SHA512 syscalls、大整数模幂与 CPI 深度提升。⚠️Anza 明确其时间表为 tentative，日期可变。",
+      "opportunity_angle": "升级前抢跑 vs sell-the-news。**本期 SOL 24h -2.92%、7d +17.92%，跑输大盘跌幅但未获升级溢价**——如果 9/28 前 4 天仍无相对强度，则市场已把升级视为「工程事件而非定价事件」，sell-the-news 风险下降、事后重估的可能性上升。",
       "source_url": "https://solanacompass.com/news/anza-publishes-agave-43-release-schedule-alpenglow-consensus-targets-september-28-mainnet-activation",
       "status": "upcoming"
     },
@@ -1406,7 +1415,7 @@
       "coin": "FF",
       "event_type": "unlock",
       "date": "2026-09-29",
-      "days_away": 6,
+      "days_away": 5,
       "description": "**日期已一手复核（升级）：** tokenomist FF 页面显示下一次解锁为 2026-09-29，分配类别 Ecosystems (Remaining)；**数量与金额该页处于加载态、未显示，JSON 数量仍写 null**。媒体口径为 7,714 万枚 FF / 约 $955 万 / 占总量 0.77%（未经一手复核）。",
       "opportunity_angle": "⚠️**本期最值得注意的价格信号：FF -15.10%，是过滤池内跌幅第 1，发生在全市场 87.6% 上涨的一天。** 解锁还有 7 天，市场已明显提前定价——与 AKE/BR 两次「解锁前避险失败」的样本方向相反。观察角度：若 9/29 当日不再下跌，则解锁抛压已被提前消化，属「解锁后企稳」型。",
       "source_url": "https://www.coingabbar.com/en/price-prediction/ff-price-prediction-2026-falcon-finance-outlook",
@@ -1417,10 +1426,21 @@
       "coin": "COTI",
       "event_type": "upgrade",
       "date": "2026-09-30",
-      "days_away": 7,
+      "days_away": 6,
       "description": "COTI V1 → V2 迁移截止日，V1 与 gCOTI V1 于 Q3 末日落。交易所持有者与 ERC-20 持有者无需操作；仍持有 VIPER/Ledger 原生 COTI/gCOTI 的用户必须手动迁移。",
       "opportunity_angle": "迁移完成后的销毁执行是论点核心。⚠️COTI 连续第 4 期不在前 250 币池，即使兑现也缺乏观测链路。",
       "source_url": "https://cotinetwork.medium.com/sunset-of-coti-v1-essential-steps-to-secure-your-v2-tokens-5f33ff3e07f2",
+      "status": "upcoming"
+    },
+    {
+      "id": "macro-pce-20260930",
+      "coin": "MACRO",
+      "event_type": "macro",
+      "date": "2026-09-30",
+      "days_away": 6,
+      "description": "**本期新建。** 美国个人收入与 **PCE 平减指数**（美东 08:30 发布）。⚠️**来源为经济日历聚合站，非 BEA 一手页面**，日期以此口径记录；同一检索内另有来源把本周重点列为零售销售与 FOMC，存在口径不一致，故仅作日期标记、不引用任何预期数值。背景：9/16 FOMC 已 12-0 一致加息 25bp 至 3.75%-4.00%，点阵图指向年内可能再加一次——**在加息而非降息的路径下，通胀数据的偏离方向对风险资产是双向而非单向利好**。",
+      "opportunity_angle": "这是 5 期以来宏观面第一个新增的带日期变量。角度不是方向性押注，而是**波动窗口标记**：9/30 与 XPL(9/25)/GT(9/26)/SOL(9/28) 三个链上事件同处一周，事件密度是近期最高的一周，任何仓位决策的时间点应避开或明确承担这一周。",
+      "source_url": "https://fedratecalc.com/economic-calendar-this-week/",
       "status": "upcoming"
     },
     {
@@ -1428,7 +1448,7 @@
       "coin": "VVV",
       "event_type": "upgrade",
       "date": "2026-10-01",
-      "days_away": 8,
+      "days_away": 7,
       "description": "VVV 年排放 250 万→200 万第二阶段削减——第一刀已确认执行，第二刀为通缩路径验证点。",
       "opportunity_angle": "供给侧确定性事件。VVV 本期 +7.97%/24h、+27.40%/7d，条目已于上期机械降 stale，10/1 是它能否回到 tracking 的唯一判据。",
       "source_url": null,
@@ -1439,7 +1459,7 @@
       "coin": "FIL",
       "event_type": "unlock",
       "date": "2026-10-15",
-      "days_away": 22,
+      "days_away": 21,
       "description": "Filecoin vesting 终止日（官方 X 一手）：Protocol Labs 与 Filecoin Foundation 归属结束。**本期新增可验算口径**：vesting 年释放约 6,670 万 FIL，区块奖励约 2,170 万 FIL，两者之比与「gross issuance 削减约 75%」自洽。",
       "opportunity_angle": "本期研究优先级第一。供给侧削减有硬日期、可提前验算、且 FIL 价格本期 -8.60% 意味着尚未被定价。验证：归属结束的链上确认 + FIP-0118（Solstice）排入哪次网络升级。",
       "source_url": "https://en.bloomingbit.io/feed/news/119735",
@@ -1450,7 +1470,7 @@
       "coin": "ARB",
       "event_type": "unlock",
       "date": "2026-10-16",
-      "days_away": 23,
+      "days_away": 22,
       "description": "tokenomist ARB 页面本期仍只展示 2026-07-15 的历史批次详情（$41.2M / 9,265 万枚 / 已释放供应 2.14%），**下一笔 10-16 的枚数、金额与占比仍未列出**，数值字段继续留空。",
       "opportunity_angle": "解锁前避险。金额未知本身是风险——无法提前量化压力。",
       "source_url": "https://tokenomist.ai/arbitrum",
@@ -1461,7 +1481,7 @@
       "coin": "BCH/UNI",
       "event_type": "listing",
       "date": "2026-10-19",
-      "days_away": 26,
+      "days_away": 25,
       "description": "**本期新建，一手信源。** CME Group 9/22 官方新闻稿：计划 **10/19 上线 BCH 与 UNI 期货**（pending regulatory review）。合约规格：BCH 250 BCH/张、微型 BCH 25 BCH/张；UNI 10,000 UNI/张、微型 UNI 1,000 UNI/张。两者将加入 CME 现有 BTC/ETH/XRP/SOL/ADA/LINK/XLM/AVAX/SUI 期货序列。CME 披露 2026 年加密期货日均 279,800 张，新增山寨币产品累计名义成交超 $10 亿。",
       "opportunity_angle": "**准入型催化剂，不是需求型催化剂**——CME 上市降低机构建仓摩擦，但同样首次为机构提供受监管的做空工具。两种读法：（a）上线前抢跑，赌配置资金提前布局；（b）等上线后看首周未平仓量再定，代价是错过事件前溢价。⚠️唯一的不确定项是 pending regulatory review，需在 10/19 前确认监管审核通过。",
       "source_url": "https://www.prnewswire.com/news-releases/cme-group-to-expand-crypto-derivatives-suite-with-bitcoin-cash-and-uniswap-futures-302886066.html",
@@ -1472,10 +1492,21 @@
       "coin": "LSK",
       "event_type": "unlock",
       "date": "2026-10-21",
-      "days_away": 28,
+      "days_away": 27,
       "description": "LSK 跨链迁移截止日：持币人须经 Superbridge 或 Lisk Bridge 将 LSK 迁至以太坊。",
       "opportunity_angle": "未迁移部分构成永久性供给缩减，但上期已验证 9 月那波 +538% 的主体是清算而非重定价。LSK 已跌出前 250 币池。",
       "source_url": null,
+      "status": "upcoming"
+    },
+    {
+      "id": "meteora-unlock-20261023",
+      "coin": "MET",
+      "event_type": "unlock",
+      "date": "2026-10-23",
+      "days_away": 29,
+      "description": "**本期新建，一手复核：** tokenomist MET 页面显示下一次解锁为 **2026-10-23**，分配类别 **Meteora Ecosystem Reserve**；数量、美元金额、占比三项未显示 → 全部写 null。媒体口径称季度解锁规模为 2,200 万 MET、总量已解锁 55.06%（未入 JSON 数值）。",
+      "opportunity_angle": "**这个日期定义了 MET 机会条目的时间窗上限：今天到 10/23 是 29 天的无解锁区间。** 验证方式：若期间协议收入维持在日均 $10 万以上且回购钱包持续买入，则「收入回购 > 稀释」的论点在下一次解锁前可被证实；反之在 10/23 前后减记。",
+      "source_url": "https://tokenomist.ai/meteora",
       "status": "upcoming"
     },
     {
@@ -1483,7 +1514,7 @@
       "coin": "MACRO",
       "event_type": "macro",
       "date": "2026-10-28",
-      "days_away": 35,
+      "days_away": 34,
       "description": "下次 FOMC 决议（10/27-28 会议，美东 10/28 14:00 公布）。9/16 已以 12-0 一致票加息 25bp 至 3.75%-4.00%；点阵图显示多数委员预期年内仍需再加一次。2026 年余下仅此次与 12/8-9 两场。",
       "opportunity_angle": "宏观面唯一的高确定性事件。当前距离 37 天，对 1-4 周时间窗的机会不构成直接约束。",
       "source_url": null,
@@ -1494,7 +1525,7 @@
       "coin": "LSK",
       "event_type": "upgrade",
       "date": "2026-10-31",
-      "days_away": 38,
+      "days_away": 37,
       "description": "Lisk Chain 正式关停（运行 10 年后），项目转型为以太坊/Base 上的企业财资管理平台。",
       "opportunity_angle": "供给侧终局事件，但流动性已不支持研究投入。",
       "source_url": null,
@@ -1505,7 +1536,7 @@
       "coin": "CEX",
       "event_type": "listing",
       "date": "2026-11-01",
-      "days_away": 39,
+      "days_away": 38,
       "description": "Bitget 停止接受新日本用户，存量账户 11/1 起转只可平仓（沿用记录）。",
       "opportunity_angle": "与 BitMEX/CoinEx 同属交易所地域性收缩序列。",
       "source_url": null,
@@ -1514,40 +1545,16 @@
   ],
   "market_context": {
     "btc": {
-      "price_usd": 86218,
-      "price_change_24h": -0.38088,
-      "price_change_7d": 12.4573,
-      "fear_greed": 78,
-      "fear_greed_label": "Extreme Greed",
-      "mvrv_ratio": 1.6209607997541753,
-      "funding_rate": -0.004390000000000001,
-      "open_interest": 9248211668.07,
-      "dominance": 58.82139254016333,
+      "price_usd": 84483,
+      "price_change_24h": -2.02228,
+      "price_change_7d": 11.4056,
+      "fear_greed": 71,
+      "fear_greed_label": "Greed",
+      "mvrv_ratio": 1.6121513106878018,
+      "funding_rate": -0.001917,
+      "open_interest": 8351226700.42,
+      "dominance": 58.867514624803476,
       "sparkline_7d": [
-        76112.81468027529,
-        75886.40225495906,
-        75383.70543389375,
-        75645.58490916989,
-        75590.24471973324,
-        75725.34326068543,
-        75446.75318883032,
-        75831.86578487034,
-        75772.47164617064,
-        75814.08003963677,
-        75915.8176573905,
-        75963.64384661049,
-        75698.67948617562,
-        75674.96622295785,
-        75930.76771866258,
-        75892.18304513379,
-        76193.42443204131,
-        75900.63404614376,
-        75608.32776166973,
-        75628.25325189572,
-        75746.91554787687,
-        75714.00801351186,
-        75709.45598384431,
-        75761.23608006895,
         76006.3523147599,
         76117.4361019963,
         75935.57796021894,
@@ -1691,100 +1698,127 @@
         86412.01623033184,
         86395.87649360926,
         86587.1444676524,
-        86476.73261291615
+        86476.73261291615,
+        86220.71105203898,
+        86250.64221068537,
+        86187.63078333685,
+        86120.19453430604,
+        86183.29442787907,
+        86450.1100863901,
+        86347.69317612112,
+        86527.61079359149,
+        86693.1515712143,
+        87158.43254422718,
+        86478.4432365406,
+        86458.90494964657,
+        86122.40386947783,
+        85890.48261159069,
+        85840.42472906392,
+        85904.75473339538,
+        85646.19147499696,
+        85476.40608139167,
+        85790.32559371383,
+        84470.52649714124,
+        83790.89567875945,
+        84058.64571541436,
+        84315.18573536711
       ],
-      "support": 75383.70543389375,
-      "resistance": 86968.79677586093,
-      "trend": "**突破后的第一次横盘消化，没有回吐。** 价格 $86,218（24h **-0.38%**、7d +12.46%、30d +12.05%），7d 区间 $75,383.71–$86,968.80，位于区间 **93.7% 分位**（上期 106.1%）。从 168 点序列读，最后 20 点在 $85,323–$86,597 之间窄幅震荡，**上期那根约 $2,000 的跳空缺口连续第 2 期未回补**。\n**技术面（WebSearch 定性，不入 JSON 数值）：** 媒体口径的 50 周均线（约 $78,700–78,800）与现价仍有约 9% 缓冲；上期记录的 $88,000 阻力本期未触及（最高 $86,968.80）。\n⚠️**三点必须同记：**\n(1) **资金费率首次转负：-0.004390%（上期 +0.003751%），为本系统跟踪以来第一次出现负值**，连续第 5 期下行。负费率 = 空头向多头付费，在价格距 7 日高点不足 1% 的位置出现，读作**空头仍在逆势加仓、多头杠杆持续缺席**。同期未平仓 **$92.48 亿、环比 -3.05%**（上期 +9.33%）——**OI 降而费率转负，是杠杆总量收缩下空头占比上升的组合**。该形态对多头有利的一面是轧空燃料仍在，不利的一面是现货买盘已经停了（价格 24h -0.38%）。⚠️注意：该值未触发 funding_rate_extreme 阈值（需 < -0.05%），差一个数量级，**不可当作极端信号使用**。\n(2) **BTC 主导率 58.82%，单期 -0.21pp，终结连续 3 期上升。** 同期广度从 87.6% 掉到 60.4%。**主导率下降 + 广度下降同时发生，意味着领涨从 BTC 转向少数山寨（BCH +25.75%、PRL +46.47%），而不是山寨普涨。这依然不是山寨季，是个别标的的独立行情。** ETH/BTC 0.031883，与上期持平，ETH 7d +12.81% 略高于 BTC +12.46%——**连续 3 期弱于 BTC 的记录本期中止**。\n(3) **MVRV 1.6210（上期 1.5242，+6.35%）** —— 上期预判的「下期应出现跳升」本期兑现，数据时点 2026-09-21（CoinMetrics 日频，滞后约 2 日）。估值端距 3.5 过热线仍远。"
+      "support": 75622.80385532479,
+      "resistance": 87158.43254422718,
+      "trend": "**上涨后的第一次真实回撤，而且是全市场的、不是 BTC 的。** 价格 $84,483（24h **-2.02%**、7d +11.41%、30d +7.11%），7d 区间 $75,622.8–$87,158.43，位于区间 **76.8% 分位**（上期 93.7%）。从 167 点序列读，最后 24 点由高点 $87,158 一路下行至 $83,791，随后小幅收回到 $84,315，**回撤幅度 -3.9%，上期连续 2 期未回补的约 $2,000 跳空缺口本期仍未回补**。\n**但关键在相对强度：BTC -2.02% vs 全市场总市值 -4.87%，BTC 跑赢 2.85pp。** 本期不是 BTC 领跌，是 BTC 抗跌而山寨崩塌。\n⚠️**三点必须同记：**\n(1) **杠杆被清洗，不是被建立。** 未平仓合约 **$83.51 亿、环比 -9.70%**（上期 $92.48 亿、-3.05%），**是本系统跟踪以来最大的单期 OI 降幅**；同时资金费率 **-0.001917%**，连续第 2 期为负但绝对值较上期 -0.004390% 收窄 56%。组合读法：**空头在获利了结（费率向 0 回归）而多头也在减仓（OI 大降）——这是双向去杠杆，不是单边挤压。** ⚠️费率距 funding_rate_extreme 阈值（< -0.05%）仍差一个数量级，**不可当作极端信号**。\n(2) **上涨广度崩塌到 17.2%（180 只中 31 只上涨），是本系统跟踪以来最低。** 上期 60.4%、上上期 87.6%，**三期连续腰斩**。BTC 主导率 58.87%、单期 **+0.05pp**（几乎持平），**主导率没怎么动而广度崩了，说明资金不是从山寨流向 BTC，是直接离场或转入稳定币/场外。** ETH/BTC **0.031675**（上期 0.031883，-0.65%），ETH 24h -2.72% 弱于 BTC。\n(3) **MVRV 1.6122（上期 1.6210，-0.54%）**，数据时点 2026-09-22（CoinMetrics 日频，滞后约 2 日，因此尚未反映今日下跌）。估值端距 3.5 过热线仍远，也距 1.0 低估线仍远——**周期位置本身没有给出任何行动信号，这一维本期是中性的。**\n**技术面（WebSearch 定性，不入 JSON 数值）：** 媒体口径的 50 周均线约 $78,700–78,800，现价仍有约 7.2% 缓冲；本期未触及上期记录的 $88,000 阻力（7d 最高 $87,158.43）。**本期未触发任何 BTC 价格告警**：支撑位（7d 低点 $75,622.80）与阻力位（$87,158.43）两端都未破。"
     },
     "macro": {
       "fomc_date": "2026-10-28",
-      "fomc_days_away": 35,
-      "note": "**宏观面连续第 4 期无新增变量。** 利率路径不变：9/16 已 12-0 一致加息 25bp 至 3.75%–4.00%，点阵图显示年内可能再加一次；下次 FOMC 为 10/27–28（35 天后），2026 年余下仅此次与 12/8–9 两场。\n⚠️「10 月 16 只加密 ETF 最终审批期限」本期**不再重复检索**（已连续 2 期检索、2 次得到同一结论：可检索来源的年份标记指向 2025 年，无法确认为 2026 年日期）。按预算纪律停止复查，若出现一手信源再行建条。\n**本期唯一的制度性变量来自交易所而非央行：CME 宣布 10/19 上线 BCH/UNI 期货。** 这属于市场基础设施扩容，不改变流动性总量或利率路径，**因此不计入宏观面评分**，只作为事件日历与机会条目处理。"
+      "fomc_days_away": 34,
+      "note": "**宏观面连续第 5 期无新增制度性变量，但本期第一次有了新的带日期数据变量。** 利率路径不变：9/16 已 12-0 一致加息 25bp 至 3.75%–4.00%，点阵图显示年内可能再加一次；下次 FOMC 为 10/27–28（34 天后），2026 年余下仅此次与 12/8–9 两场。\n**新增：9/30 美国个人收入与 PCE 平减指数**（美东 08:30）。⚠️来源为经济日历聚合站而非 BEA 一手页面，同一检索内另有来源给出不同的本周重点，**因此只作为日期标记进入事件日历，不引用任何预期数值，也不改变宏观面评分**（数据发布的方向未知，不是单向变量）。在加息路径下通胀数据对风险资产是双向的。\n⚠️「10 月 16 只加密 ETF 最终审批期限」继续按上期决定**不再检索**（已 2 次检索得同一结论：可检索来源的年份标记指向 2025 年）。\n上期记录的 CME 10/19 BCH/UNI 期货仍按市场基础设施处理，**不计入宏观面评分**，只在事件日历与 BCH/UNI 机会条目中体现。"
     },
     "etf_qualitative": {
-      "btc_etf_flow_text": "⚠️无免费 API 提供 ETF 日度流向（farside.co.uk / sosovalue.com 均 403，已列入废弃数据源），本期未取得可引用的新增日度数据，不填任何数值字段。**定性上本期的关键是资金结构而非流向**：BTC 价格 24h -0.38% 而链上资金面同时改善（16 链 12 涨 4 跌、以代币计价普遍净增），**这是价格与资金首次背离的一期——上期是价格涨而资金没跟，本期是资金进而价格不涨。** 在没有 ETF 流向数据的前提下无法归因到机构或散户，报告不做归因。",
-      "eth_etf_flow_text": "同样无免费 API 来源，本期无新增可引用数据。ETH $2,748.89（24h -0.47%、7d **+12.81%**、30d +12.78%），**7d 层面首次略微跑赢 BTC（+12.46%），连续 3 期弱于 BTC 的记录中止**；ETH/BTC 0.031883 与上期持平。Ethereum 链 TVL $544.97 亿、+0.59%，而 ETH 当日 -0.47%，**以 ETH 计价的 TVL 净增约 +1.06%**。"
+      "btc_etf_flow_text": "⚠️无免费 API 提供 ETF 日度流向（farside.co.uk / sosovalue.com 均 403，已列入废弃数据源），本期未取得可引用的新增日度数据，不填任何数值字段。**定性上本期的关键是「价格与资金的背离方向第二次翻转」：** 上上期是价格涨而链上资金没跟；上期是资金进而价格不涨；**本期是价格与资金同时退——16 条追踪链 1 涨 15 跌（上期 12 涨 4 跌），稳定币总供应 $3,052.56 亿（USD 锚定口径）较上期 $3,055.52 亿约 -0.10%，非美元锚定口径 $3,068.50 亿较上期 $3,071.53 亿同样约 -0.10%。** ⚠️**注意这次两种口径同向了**——上期两口径分居上期数值两侧（判为噪声），本期一致为小幅净减，方向一致但幅度（-0.10%）仍在近 6 期 $3,039–3,069 亿的区间噪声内，**因此结论是「没有新增外部资金进来，也没有明显撤出」，不是「资金外流」。** 在没有 ETF 流向数据的前提下无法归因到机构或散户，报告不做归因。",
+      "eth_etf_flow_text": "同样无免费 API 来源，本期无新增可引用数据。ETH $2,676.00（24h **-2.72%**、7d +11.80%、30d +8.16%），**24h 与 7d 两个口径都重新弱于 BTC（-2.02% / +11.41%），上期刚刚中止的「弱于 BTC」记录本期立刻恢复**；ETH/BTC 0.031675，较上期 0.031883 下滑 0.65%。Ethereum 链 TVL $534.02 亿、-2.01%，而 ETH 当日 -2.72%，**以 ETH 计价的 TVL 反而净增约 +0.73%——美元 TVL 的下跌主要是价格重估，不是资金撤出。** 这个折算对本期的 16 条链普遍成立，是本期资金面「没有崩」的核心证据。"
     },
     "global": {
-      "total_market_cap_usd": 2936336057730.6675,
-      "stablecoin_total_supply": 305551601058.1966
+      "total_market_cap_usd": 2879232434116.401,
+      "stablecoin_total_supply": 305255878065.41705
     }
   },
   "market_score": {
     "btc_trend": 4,
-    "funding": 4,
+    "funding": 3,
     "sentiment": 3,
     "macro": 3,
-    "total": 14,
-    "label": "偏多（15→14：BTC 趋势 -1、资金面 +1、情绪面 -1）",
-    "vs_previous": "15 → 14（-1）。**三栏变动、净减 1 分，但方向上这是本期质量最高的一次换挡：减的分来自价格与情绪的极值消退，加的分来自资金面第一次出现不含价格干扰的真实流入。**\n**BTC 趋势 5 → 4（极值消退，非趋势转坏）：** 上期给 5 的唯一理由是「价格站在 168 小时窗口上沿之外（106.1% 分位），为跟踪以来首次」。本期分位回到 **93.7%**，该条件按其自身定义已不成立，**机械回到 4**。趋势本身完好：$86,218，7d +12.46%、30d +12.05%，距 7 日高点不足 1%，跳空缺口连续第 2 期未回补，距 50 周均线仍有约 9% 缓冲。**不要把这 1 分读成转弱。**\n**资金面 3 → 4（本期唯一实质性上调，理由必须写清楚）：** 上期拒绝上调资金面的明确理由是「三条主力链的美元 TVL 涨幅全部低于其代币涨幅，美元 TVL 的上涨是价格重估而非流入」。**本期该反对意见被数据直接推翻：** 16 条追踪链 **12 涨 4 跌**（上期 8 涨 8 跌），而同期 BTC -0.38%、ETH -0.47%、SOL -0.23%、AVAX -0.85%、ARB -4.46% 全部下跌。逐链折算：Ethereum TVL +0.59% / ETH -0.47% → 以 ETH 计价 **+1.06%**；Arbitrum TVL +0.72% / ARB -4.46% → **+5.4%**；Avalanche TVL +1.75% / AVAX -0.85% → **+2.6%**；Solana TVL +0.26% / SOL -0.23% → **+0.5%**。**四条主力链全部为以代币计价的真实净流入，与上期完全相反。**\n**为什么只给 4 不给 5：** 稳定币总供应 $3,055.52 亿（USD 锚定口径），与上期 $3,068.76 亿相比约 -0.43%；若计入非美元锚定稳定币则为 $3,071.53 亿、约 +0.09%。⚠️**两种口径分别落在上期数值的两侧，说明该差异在本序列的口径噪声范围内（近 6 期区间 $3,039–3,069 亿），本期不把稳定币供应当作方向信号。** 结论：**是链内资金的再配置，不是加密市场外部的新增资金。** 这是 4 与 5 的分界。\n**情绪面 4 → 3：** FGI **78（Extreme Greed）**，上期 70（Greed），单期 +8 **首次进入极端贪婪区间**；同时上涨广度 87.6% → **60.4%**（-27.2pp）。**贪婪读数升温 + 参与面收缩，是典型的行情后段组合**，对「无持仓时是否该积极布局」这个问题明确是减分项。**只降 1 档而不是 2 档的理由：资金费率首次转负（-0.004390%），空头在付钱给多头，明确否定了「多头杠杆拥挤」这一最危险的读法。** 极端贪婪来自现货情绪，不来自杠杆。\n**宏观面维持 3：** 连续第 4 期无新增变量，见 macro.note。CME 期货扩容属市场基础设施，不计入宏观。\n---\n**无持仓视角的结论：从上期的「beta 回来了，但 beta 回来时机会发现的边际回报下降」，转为「beta 停了，区分度回来了——这是本系统一期里效率最高的时点」。** 三条理由：\n(1) **筛选信号恢复有效。** 上期 87.6% 都在涨，涨幅不含信息；本期广度 60.4%、大盘归零，**还能涨 25% 以上的标的必须自带理由，而本期只有一只有（BCH）**。这正是上期写下的「上期的逻辑本期必须反向应用」的反向应用时刻。\n(2) **本期的硬事件质量是近期最高的。** CME 新闻稿是交易所一手信源 + 明确日期（10/19）+ 明确合约规格，同时覆盖一个新标的（BCH）和一个已跟踪标的（UNI）。**对照本期其余 11 只异动币：0 只带一手催化剂。**\n(3) **两条旧论点在本期被数据结算，一正一负，都已执行。** 负：UNI 的收入论点被证伪（9/21 尖峰次日回落 33.5%，且 Raydium 同日同形态，证明是全市场成交事件而非 Uniswap 结构变化）——但该条目因 CME 反而升分，**升的是完全不同的理由，这一点在报告里必须说清楚，否则会被误读成「论点被验证」**。正：AVAX 自设的 TVL $6.31 亿判据被收复（$6.36 亿、以 AVAX 计价 +2.6%），条目转 triggered。\n**本期研究时间的建议去处，按优先级：** ① **UNI（15/20，26 天）**——本期唯一分数上调且理由可独立验证的标的，但**必须先理解它的论点已经换了内核**。② **BCH（14/20，26 天）**——确定性最高、信息差最小；真正的判据是 BCH 相对 BSV/XEC 的超额收益是否扩大，若三者同步则市场根本没在给 CME 事件定价。③ **FIL（15/20，22 天）**——「论点强而价格弱」连续第 3 期，7d +18.08% 本期首次跑赢 BTC，供给侧论点开始被定价的可能性上升。\n**明确不推荐花时间的：** PRL（+46.47%，成交/市值 1.35% 全榜最薄，无催化剂）、MARSCOIN（+33.99%，换手率 79%，纯博弈）、MINA（+25.89%，媒体明说无触发因素，本系统内仍为 stale）。**本期风险最集中的标的是 PRL**，特别标出以免被涨幅吸引——它同时满足「涨幅最大、流动性最薄、已在全局热搜、零一手催化剂」四项，是 LOBSTER 今日 -43.77% 那类结局的完整前置条件。"
+    "total": 13,
+    "label": "偏多（14→13：资金面 -1，其余三栏不变）",
+    "vs_previous": "14 → 13（-1）。**只减 1 分，而且减的这 1 分是上期刚加上去的那 1 分——上期升级资金面所依据的条件本期被完整推翻，机械退回。这不是新的坏消息，是上期那条好消息的撤回。**\n**资金面 4 → 3（本期唯一变动，理由必须与上期一一对照）：** 上期把资金面从 3 升到 4 的全部依据是「16 条追踪链 **12 涨 4 跌**，且 Ethereum/Arbitrum/Avalanche/Solana **四条主力链全部为以代币计价的真实净流入**」。本期逐条对照：链涨跌变为 **1 涨 15 跌**（唯一上涨的是 Arc +8.49%）；以代币计价折算为 Ethereum **+0.73%**、Solana **+1.33%**、Avalanche **+0.94%** 仍为正，但 **Arbitrum -3.36%**、Bitcoin **-0.73%** 转负——**「四条主力链全部净流入」这个条件已不成立，按其自身定义机械退回 3。** 稳定币两种口径本期同向小幅净减（均约 -0.10%），幅度仍在噪声内，**不构成额外减分，也不再构成加分依据**。\n⚠️**必须同时说清楚资金面没有崩：** 美元 TVL 全面下跌的主因是价格重估，以代币计价 3 条主力链仍净增。**「退回 3」和「资金外流」是两件不同的事，本期只发生了前者。**\n**BTC 趋势维持 4（不跟随大盘减分）：** $84,483，24h -2.02%、7d +11.41%、30d +7.11%，7d 区间分位从 93.7% 回到 **76.9%**。维持 4 的三条理由：(a) **BTC 跑赢全市场总市值跌幅 2.85pp**，本期是 BTC 抗跌而非 BTC 领跌；(b) 高低点结构未破——一周前序列起点约 $76,006，现价仍高出 11.2%；(c) 距 50 周均线仍有约 7.2% 缓冲，$75,622.80 支撑位未受威胁。**分位从 93.7% 掉到 76.9% 是本栏下次降级的预警，但 4 与 3 的分界应该是趋势结构破坏，不是单日回撤。**\n**情绪面维持 3（一加一减相抵，这是本期最需要解释的一栏）：** 减分项——**上涨广度 60.4% → 17.2%，跟踪以来最低，三期连续腰斩（87.6% → 60.4% → 17.2%）**；Meme 板块 -7.12% 为大盘跌幅的 1.46 倍，风险偏好从最投机端先撤。加分项——**FGI 78（Extreme Greed）→ 71（Greed），单期 -7，本期退出极端贪婪区间**，上期明确写下的「极端贪婪是行情后段」这个减分理由本期自行消失；同时 **OI 单期 -9.70%（跟踪以来最大降幅）+ 费率负值收窄 56%**，是**双向去杠杆**——杠杆风险在下降而不是上升。**净效果为 0，维持 3。**\n**宏观面维持 3：** 连续第 5 期无制度性新变量。新增 9/30 PCE 仅为日期标记（来源为日历聚合站、非一手，且数据方向未知），不计入评分。见 macro.note。\n---\n**无持仓视角的结论：从上期的「beta 停了、区分度回来了」推进到「区分度已经给出答案了——本期该做的是读名单，不是等信号」。** 三条理由：\n(1) **筛选强度达到本系统跟踪以来最高。** 上上期 87.6% 都在涨（涨幅不含信息），上期 60.4%，**本期只有 17.2% 上涨**——在 180 只里逆势上涨且涨幅两位数的只有 7 只（RAY +19.65%、LOBSTER +17.31%、BTW +15.09%、ZRO +14.85%、MET +14.06%、DRV +13.46%、LIT +12.08%）。**这 7 只里有 5 只被本期归因到了具体的一手或准一手催化剂，这个命中率是上期（11 只异动币里 0 只带一手催化剂）的完全反面。**\n(2) **上期写下的两条风险预判本期全部结算，都是正面结果。** ① **PRL 已完全跌出 250 币池**（上期 +46.47%、被特别标为「本期风险最集中的标的」、四项红旗齐备）——预判成立。② **BCH 的相对强度判据给出正面答案**：7d BCH +61.86% > BSV +46.10% > XEC +26.24%，BCH 超额 BSV 15.8pp、超额 XEC 35.6pp，市场确实在为 CME 单独定价而非泛 fork 行情。**上期写下的两条判据，一条避开了亏损，一条确认了论点——这是把「验证方式」写进报告的直接回报。**\n(3) **本期新发现的最高分机会（MET 15/20）第一次同时满足「低扩散 + 低估值倍数 + 明确时间窗」三条。** 之前几期的高分项都要在扩散度上打折（BCH/SOL/UNI 都已 🟢），MET 是 🟡且收入倍数 4.9x 为同业最低，时间窗由一手解锁日期（10/23）精确界定为 29 天。\n**本期研究时间的建议去处，按优先级：** ① **MET（15/20，29 天，🟡）**——本期唯一的新高分项，判据可精确执行：29 天内若日收入维持 $10 万以上且回购钱包持续买入则论点成立；⚠️必须先接受 58.7% 的日换手率意味着入场点比论点更重要。② **BCH（14/20，25 天，🟢）**——判据已给出正面答案，下一个判据是 **BSV 是否持续反超 BCH**（今日 BSV +5.28% > BCH +2.75% 是第一个警号）；若外溢扩大则事件特异性被稀释，论点价值下降。③ **ZRO（13/20，🟡）**——本期涨分幅度最大（11→13）且从 stale 复活，「治理代币 → 原生 gas 代币」是性质变化，⚠️但 DeFiLlama 口径协议 24h 收入 $0，定价完全押在 Q4 主网兑现上，**没有确切日期是这条论点最大的弱点**。\n**明确不推荐花时间的（本期全部附具体理由）：** **DRV** —— 7d +169%、30d +211%、距 ATH 仅 -6.38%，而 30 日收入 $51.2 万（年化约 $620 万）对应市值 $4.74 亿 ≈ **76x**，35% 回购率折算年回购仅市值的 **0.46%**，**是本期叙事与现金流背离最大的标的**；**BTW** —— 市值 $27.20 亿、FDV $100.44 亿而日成交仅 $2,370 万（**v/mc 0.9%**），且媒体已记录其「三个流通供应口径相差 6.10 亿枚」的数据争议，今日 +15.09% 创 ATH，**这是 PRL 那类结构的放大版**；**AKE** —— 市值 $10.41 亿而日成交 $2,983 万（v/mc 2.9%）、mc/fdv 0.23、30d +451.67%，催化剂（9/2 Bitget 永续上线）已过去 3 周；**LOBSTER** —— 今日 +17.31% 是前一日 -43.77% 之后的反弹，7d 仍 -23.47%，无催化剂；**MINA** —— 连续第 2 期双向异动（上期 +25.89%、本期 -10.06%）都查不到归因，本系统内维持 stale。"
   },
   "watchlist": {},
   "alerts": [
     {
+      "severity": "critical",
+      "rule": "new_high_grade_opportunity",
+      "message": "🔥 高分机会：MET — 季度解锁已于 9/23 落地、下一次远至 10/23（一手复核），29 天无解锁窗口 + 协议收入回购，收入倍数 4.9x 为同业最低（15/20，扩散度🟡）"
+    },
+    {
       "severity": "warning",
       "rule": "event_within_48h",
-      "message": "⏰**48 小时内 3 件事**：(1) **MET 解锁今日 9/23 落地**——tokenomist 一手复核确认日期与分配类别（Meteora Ecosystem Reserve），**数量与金额页面未披露，按规则写 null，不沿用上期媒体数字**；MET 本期 +7.78%、7d +50.76%，解锁前已有明显涨幅。(2) **BitMEX 关停今日 9/23**（沿用记录）。(3) **XPL 解锁 9/25（2 天后，本期新建条目）**——tokenomist 一手口径为 9/25、分配类别 Ecosystem and Growth；⚠️第三方日历口径为 9/28，**按一手信源优先采用 9/25，并在 9/25–9/28 全区间保持警戒**。XPL 本期 -7.69% 为全池跌幅前列、Plasma 链 TVL -1.89% 为 16 链最差，**解锁前价格与资金面同时走弱，属提前定价形态**。"
+      "message": "⏰ 事件临近：XPL unlock（2026-09-25，1 天）— tokenomist 第 2 次一手复核通过，分配类别 Ecosystem and Growth，数量/金额未披露；⚠️第三方日历口径为 9/28，9/25–9/28 全段警戒"
+    },
+    {
+      "severity": "warning",
+      "rule": "event_within_48h",
+      "message": "⏰ 事件临近：GT unlock（2026-09-26，2 天）— ⚠️连续第 3 期无法一手复核（tokenomist 404），正式转为不可验证条目；GT v/mc 仅 0.2%，薄流动性会放大任何真实抛压"
     },
     {
       "severity": "warning",
       "rule": "large_cap_mover",
-      "message": "本期触发 large_cap_mover 的币种 **10 只**（|24h| > 15% 且市值 > $3,000 万），连续第 2 期收缩：28 → 13 → 9 → 13 → **10**。上涨侧：BCH +25.75%、PRL +46.47%、MARSCOIN +33.99%、MINA +25.89%、BSV +18.61%、KITE +17.78%、USELESS +16.30%、GRASS +15.26%；下跌侧：**龙虾 LOBSTER -43.77%**（前列持币人控制约 40% 供应，拉升后巨鲸出货，4 月已重演过一次）、STONK -16.21%（9/21 创 ATH 次日回吐）。**10 只里只有 BCH 带一手催化剂（CME 9/22 公告），其余 9 只全部为原因未明或旧背景延续。**"
+      "message": "RAY 24h 变动 +19.65%（市值 $5.71 亿），进入异动关注 — 代币化 AMD 股票 9/16 上线，链上日收入抬升约 67%，为 250 池最大涨幅"
+    },
+    {
+      "severity": "warning",
+      "rule": "large_cap_mover",
+      "message": "SPX 24h 变动 -18.45%（市值 $4.04 亿），进入异动关注 — 无个体催化剂，Meme 板块 -7.12% 系统性撤离，同族 Murad Picks -14.78%"
+    },
+    {
+      "severity": "warning",
+      "rule": "large_cap_mover",
+      "message": "LOBSTER 24h 变动 +17.31%（市值 $1.61 亿），进入异动关注 — 前一日 -43.77% 后的反弹，7d 仍 -23.47%，无催化剂"
+    },
+    {
+      "severity": "warning",
+      "rule": "large_cap_mover",
+      "message": "BTW 24h 变动 +15.09%（市值 $27.20 亿），进入异动关注 — ⚠️创 ATH 但 v/mc 仅 0.9%，且存在「三个流通供应口径相差 6.10 亿枚」的公开数据争议"
     },
     {
       "severity": "info",
-      "rule": "btc_resistance_break",
-      "message": "BTC $86,218 仍在上期阻力 $85,982.66 之上（+0.27%），本期 7d 区间高点抬升至 $86,968.80，区间分位 **93.7%**（上期 106.1%）。**规则触发但性质与上期不同：上期是突破，本期是守住。** 上期那根约 $2,000 跳空缺口连续第 2 期未回补；媒体口径的下一阻力 $88,000 本期未触及。"
-    },
-    {
-      "severity": "info",
-      "rule": "ecosystem_followup_uni_revenue",
-      "message": "**上期写下的验证条件本期开出否定结果，按规则记录。** 上期把 UNI 催化剂维度 3→4 复位，依据是 dailyRevenue 单日 +115%，并写明验证条件「能否连续 3 日站上 $40 万」。实测 9/21 $646,331 → 9/22 **$430,090**，次日即从峰值回落 33.5%。**关键对照：Raydium dailyRevenue 同日 $468,089 → $258,113，形态完全一致**——两个无关协议同日同幅跳升再回落，证明 9/21 的收入尖峰是全市场成交量事件（BTC 突破日）的映射，不是 Uniswap 的结构性变化。**该升级依据已作废。** UNI 本期仍升至 15/20，但**升分理由完全来自 CME 期货公告这条独立催化剂，与收入无关**，不得读作「收入论点被验证」。"
-    },
-    {
-      "severity": "info",
-      "rule": "opportunity_scan_summary",
-      "message": "本期新建机会条目 1 条：**BCH — CME 受监管期货 10/19 上线（14/20，🟢）**，源自 CME 9/22 官方新闻稿，是本期 12 只异动币中唯一带一手催化剂的标的。状态变动 6 项：**AVAX ✅tracking→triggered**（Helicon 9/22 15:00 UTC 已激活，自设的链 TVL $6.31 亿判据被收复至 $6.36 亿）、**PIEVERSE 🔄new→tracking**、**COTI / ETHFI / ARGUS / LSK 四项 ⬇️tracking→stale**（ssp 达 5，按 4.7(a) 机械降级，上期均已预告，无例外）。评分变动 1 项：**UNI 🔺14→15**（时间窗 3→5、拥挤度 3→2，催化剂维持 4）。⚠️**特别记录一条「不变动」：MINA 本期 24h +25.89%、7d +83.48%，位列异动榜第 4，但按 4.1「单纯价格波动不算进展」维持 stale 不解除**——检索结论支持该处理（媒体明确写无清晰触发因素，Mesa 硬分叉为 9/3 旧事）。当前 48 条机会：tracking 14、new 1、triggered 1、stale 32。"
-    },
-    {
-      "severity": "info",
-      "rule": "altseason_gauge",
-      "message": "仍无法按规则评估（需 30 日 ETH/BTC 比率序列，免费 API 链路内未采集，不以估算值替代）。可引用的替代观察：**ETH/BTC 0.031883 与上期持平，ETH 7d +12.81% 略高于 BTC +12.46%，连续 3 期弱于 BTC 的记录中止**；BTC 主导率 58.82%、-0.21pp，终结连续 3 期上升。⚠️但**广度同时从 87.6% 掉到 60.4%**——主导率下降与广度下降并存，说明领涨权从 BTC 转给了少数个别山寨（BCH、PRL），**不是山寨普涨，仍不是山寨季**。"
-    },
-    {
-      "severity": "info",
-      "rule": "not_triggered_summary",
-      "message": "逐条评估后**未触发**的规则：btc_support_break（$86,218 远高于支撑 $75,383.71）、mvrv_overheated（1.6210 < 3.5）、mvrv_deep_value（1.6210 > 1.0）、extreme_fear_entry（FGI 78，为极端贪婪而非极端恐惧）、**funding_rate_extreme（费率 -0.004390%，虽为跟踪以来首次转负，但阈值需 < -0.05%，相差约一个数量级，明确不触发，不可当极端信号使用）**、fomc_imminent（35 天）、cpi_release（无 24h 内发布记录）、surprise_rate_change（无检出）、major_hack（无检出）、regulatory_action（无检出）、tvl_weekly_drop（16 链无周跌超 15%，本期最差为 Plasma -1.89%）、risk_off_signal（需主导率 7d +2% 且 FGI < 25，本期主导率下降且 FGI 78，双条件均不成立）、new_high_grade_opportunity（本期唯一新建条目 BCH 为 14/20，未达 15 分线）。\n⚠️**配置缺口记录（不自行新增规则，仅提示）：alerts.json 有 extreme_fear_entry（FGI < 15）但没有对称的极端贪婪规则。本期 FGI 78 首次进入 Extreme Greed 区间，在无持仓视角下这是进场时机的减分项，目前只能靠 market_score 情绪面（4→3）体现，无法触发告警。**"
+      "rule": "breadth_collapse_observation",
+      "message": "ℹ️ 观察项（非 alerts.json 规则）：上涨广度 17.2%（180 只中 31 只），为本系统跟踪以来最低，三期连续腰斩 87.6% → 60.4% → 17.2%"
     }
   ],
   "_sources": {
-    "btc.price_usd": "coingecko_api",
-    "btc.price_change_24h": "coingecko_api",
-    "btc.price_change_7d": "coingecko_api",
-    "btc.sparkline_7d": "coingecko_api",
-    "btc.fear_greed": "alternative_me_api",
-    "btc.mvrv_ratio": "coinmetrics_api",
-    "btc.funding_rate": "coingecko_derivatives_api",
-    "btc.open_interest": "coingecko_derivatives_api",
-    "btc.dominance": "coingecko_api",
-    "btc.support": "coingecko_api_sparkline",
-    "btc.resistance": "coingecko_api_sparkline",
-    "global.total_market_cap_usd": "coingecko_api",
-    "global.stablecoin_total_supply": "defillama_api",
-    "market_scan.movers": "coingecko_api",
-    "market_scan.sector_rotation": "coingecko_api",
-    "market_scan.trending": "coingecko_api",
-    "market_scan.chains_tvl_delta": "defillama_api",
-    "macro.fomc_date": "carried_forward",
-    "etf_qualitative": null,
-    "events.unlock_amounts": null,
-    "events.meteora_date": "tokenomist_page",
-    "events.plasma_date": "tokenomist_page",
-    "events.gatetoken_date": null,
-    "events.cme_futures": "cme_press_release",
-    "opportunities.revenue_series": "defillama_api",
-    "btc.technical_levels_50wma": null
+    "btc_price": "coingecko_api",
+    "btc_price_change": "coingecko_api",
+    "sparkline_7d": "coingecko_api",
+    "support": "derived_from_coingecko_sparkline",
+    "resistance": "derived_from_coingecko_sparkline",
+    "fear_greed": "alternative_me_api",
+    "mvrv_ratio": "coinmetrics_community_api",
+    "funding_rate": "coingecko_derivatives_api",
+    "open_interest": "coingecko_derivatives_api",
+    "dominance": "coingecko_global_api",
+    "total_market_cap_usd": "coingecko_global_api",
+    "stablecoin_total_supply": "defillama_stablecoins_api",
+    "movers": "coingecko_markets_api",
+    "movers_reason": "websearch_qualitative_only",
+    "sector_rotation": "coingecko_categories_api",
+    "trending": "coingecko_trending_api",
+    "chains_tvl_delta": "defillama_chains_api",
+    "protocol_revenue": "defillama_summary_fees_api",
+    "unlock_dates_xpl": "tokenomist_page_firsthand",
+    "unlock_dates_met": "tokenomist_page_firsthand",
+    "unlock_dates_gt": null,
+    "etf_flows": null,
+    "exchange_reserves": null,
+    "whale_accumulation": null,
+    "sopr": null
   },
   "_freshness": {}
 }
