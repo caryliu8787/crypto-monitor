@@ -1,6 +1,7 @@
 # Data snapshots (keep latest, ignore old history)
 data/history/*
 !data/history/.gitkeep
+data/latest.json.bak
 
 # Reports — HTML pushed for GitHub Pages, others ignored
 reports/*.md
