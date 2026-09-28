@@ -9,36 +9,21 @@
 ## Phase 0: 初始化
 
 读取 `config/scan-config.json`（币池过滤 + 板块追踪 + 评分参数 + 调用预算）、`config/alerts.json`（告警规则）、`config/watchlist.json`（用户钉住的关注币）、`config/output.json`（输出格式 + 可选 API key）。
-读取 `data/latest.json`（上期数据，用于对比、机会/事件跨期携带和新鲜度校验）。不存在则跳过对比。
-**兼容性：** 若上期数据是旧 schema（含 `holdings`/`alpha_signals`），只复用 `market_context` 内的可比字段，机会与事件从零开始建立。
 确定日期，时段固定为 daily（历史数据中的 morning/evening 为旧调度遗留，按正常上期数据对待）。
 
 ---
 
-## Phase 1: API 数据采集
+## Phase 1: 数据采集（已脚本化，模型不直接调 API）
 
-**全部用免费 API。** 若 `config/output.json` 的 `api_keys.coingecko_demo` 非空，CoinGecko 请求附加 header `x-cg-demo-api-key`；否则匿名调用（限速 5-15 次/分钟，**将 CoinGecko 调用与其他来源交错发起，避免连发触发 429**）。
+**运行 `python3 scripts/collect.py daily`。** 该脚本完成全部确定性工作：抓取 CoinGecko（250 币池/trending/categories/global/BTC sparkline/derivatives 资金费率与 OI）、CoinMetrics（MVRV）、DeFiLlama（链 TVL/稳定币供应）、Alternative.me（FGI），完成币池过滤、异动候选排序、上涨广度、板块轮动 `trend_sessions`、链 TVL 动量、新鲜度计数，并从 `data/latest.json` 提取上期机会/事件/评分基线，产出 **`data/collected.json`**。
 
-**大响应端点必须用 `curl -s` 存临时文件 + `jq`/`python3` 本地精确过滤**（250 币池、derivatives、chains 等）。**禁止用网页抓取工具的摘要模式处理大数组**——摘要会漏币（2026-07-07 实测：摘要模式扫 250 币池漏掉 ANSEM +36%、GROVE +30% 等 top movers，与 trending 交叉比对才发现）。网页抓取仅用于小 JSON 端点和网页。
+读取 `data/collected.json` 作为本期全部数值来源。脚本输出的 `_sources` 记录每个字段的来源，值为 `null` 的字段按「数据暂缺」处理（对应字段写 `null`）。**模型不需要、也不应该再逐条调用上述 API。**
 
-| 来源 | 端点 | 数据 |
-|------|------|------|
-| CoinGecko | `/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&price_change_percentage=24h,7d,30d` | 250 币扫描池（价格/24h/7d/30d 变化/市值/成交量） |
-| CoinGecko | `/api/v3/search/trending` | 热搜币（新币 bypass 的依据） |
-| CoinGecko | `/api/v3/coins/categories` | 板块市值 + 24h 变化（板块轮动） |
-| CoinGecko | `/api/v3/global` | 总市值、BTC dominance |
-| CoinGecko | `/api/v3/coins/bitcoin?sparkline=true` | BTC sparkline（在 `market_data.sparkline_7d.price`，168 点） |
-| CoinGecko | `/api/v3/derivatives?include_tickers=unexpired` | 资金费率 + 未平仓合约（筛选 Binance (Futures) 的 BTCUSDT，取 `funding_rate` 和 `open_interest`；响应约 8MB） |
-| CoinMetrics | `community-api.coinmetrics.io/v4/timeseries/asset-metrics?assets=btc&metrics=CapMVRVCur&frequency=1d&page_size=1` | MVRV 比率（`CapMVRVCur`） |
-| DeFiLlama | `api.llama.fi/v2/chains` | 全链 TVL（与上期对比得 TVL 动量） |
-| DeFiLlama | `stablecoins.llama.fi/stablecoinchains` | 各链稳定币供应 |
-| Alternative.me | `api.alternative.me/fng/` | Fear & Greed Index |
-
-**按需定向调用（仅对入围候选，不做全量）：**
+**仍需模型按需定向调用（仅对入围候选，不做全量）：**
 
 | 数据 | 端点 | 说明 |
 |------|------|------|
-| 协议收入 | `api.llama.fi/summary/fees/{protocol}?dataType=dailyRevenue` | 候选币需要基本面佐证时用 |
+| 协议收入 | `api.llama.fi/summary/fees/{protocol}?dataType=dailyRevenue`（用 `curl -s` 存临时文件 + `jq`/`python3` 精确提取） | 候选币需要基本面佐证时用 |
 | 代币解锁 | 网页抓取 `tokenomist.ai`（原 token.unlocks.app，已改名） | 部分可靠：解锁日期/分配比例通常可提取，精确数量常缺失→缺失写 `null` |
 
 > **已废弃数据源（不再尝试）：**
@@ -51,23 +36,20 @@
 
 **无免费 API 的字段（直接写 `null`）：** ETF 日度流向、交易所储备、鲸鱼月度累积、SOPR。报告中可用 WebSearch 做定性描述，JSON 不填数字。
 
-**降级链路：** 免费 API JSON → 页面抓取提取原文数字 → 都失败写 `null`、报告写「数据暂缺」。**禁止**从 WebSearch 结果提取数值填入 JSON。
+**降级链路：** `collect.py` 输出 → 页面抓取提取原文数字 → 都失败写 `null`、报告写「数据暂缺」。**禁止**从 WebSearch 结果提取数值填入 JSON。
 
 ---
 
 ## Phase 2: 全市场机会扫描（核心阶段）
 
-**2.1 异动币筛选（纯数据，不耗调用）**
-从 250 币池按 `scan-config.json` 过滤：市值 ≥ `min_market_cap_usd`、24h 成交 ≥ `min_volume_24h_usd`、排除 `exclude_categories`。
-按 |24h 变化| 和 |7d 变化| 综合排序，取前 `top_movers_reported` 个。
-**新币 bypass：** 出现在 trending 或有 TGE/新上所背景的币不受市值/成交量门槛限制。
+**2.1 异动候选（已由 collect.py 预计算）**
+`collected.json` 的 `movers[]` 已按 `scan-config.json` 过滤（市值/成交量门槛 + trending 新币 bypass）并按 |24h|+|7d| 综合排序取前 `top_movers_reported` 个，数值字段齐全，`reason`/`narrative_tag`/`source_url` 待填。`breadth` 为达标池上涨广度。
 
-**2.2 板块轮动（纯数据）**
-对 `categories_tracked` 中每个板块，市值与上期快照（`market_scan.sector_rotation`）对比。
-连续 ≥2 期同向变化 = 轮动信号（记录 `trend_sessions`）。上期无数据则本期只记录基线。
+**2.2 板块轮动（已由 collect.py 预计算）**
+`sector_rotation[]` 已含与上期对比的 `trend_sessions`（连续 ≥2 期同向 = 轮动信号），`note` 待填。
 
 **2.3 Trending × TVL 动量交叉（纯数据）**
-`/search/trending` 结果与 DeFiLlama 链 TVL 变化交叉：热搜币所在链 TVL 同步上升 = 更强信号。
+`collected.json` 的 `trending` 与 `chains_tvl_delta` 交叉：热搜币所在链 TVL 同步上升 = 更强信号。
 
 **2.4 定性归因（WebSearch，预算受控）**
 仅对 2.1-2.3 入围的候选（≤ `websearch_candidates_max` 个）逐个 WebSearch「{币名} + 今日日期」查涨跌原因：
@@ -82,7 +64,7 @@
 
 前瞻事件日历，持久化在 `data/latest.json` 的 `events[]`，跨期携带：
 
-1. **携带**：读上期 `events[]`，重算每条 `days_away`；`date < today` 的标记 `status: "passed"`（保留一期供报告回顾，下期删除）
+1. **携带**：`collected.json` 的 `previous.events[]` 已重算每条 `days_away` 并标记 `passed`（上期已 passed 的已自动删除）；以此为基础维护
 2. **解锁**：对高市值候选/watchlist 币网页抓取 `tokenomist.ai` 查解锁 cliff（日期可提取则记录，数量缺失写 `null`）
 3. **升级/ETF/上所**：WebSearch（≤ `websearch_events_max` 次）已知的近期主网升级、ETF 审批窗口、大所上币计划——**只记录有明确日期或明确时间窗的事件**
 4. 每个事件附 `opportunity_angle`（定性）：如「解锁前避险 vs 解锁后企稳吸筹」「升级前抢跑 vs sell-the-news」
@@ -106,9 +88,8 @@
 - `sessions_tracked` 计数递增
 - `sessions_since_progress` 计数：本期有**实质进展**则归 0，否则 +1。实质进展 = 催化剂状态变化 / 评分任一维度变化 / 新增可引用信源。**单纯价格波动不算进展。**
 
-### 4.2 新鲜度校验
-对 `market_context` 数值字段逐字段与上期比对：`mvrv_ratio`, `funding_rate`, `open_interest`, `fear_greed`, `dominance`。
-连续 ≥3 期值不变 → 写入 `_freshness`，报告标注「⚠️ 数据已 N 期未更新」。**绝不**静默复读上期数据当新数据。`null` 字段不参与校验。
+### 4.2 新鲜度校验（已由 collect.py 预计算）
+`collected.json` 的 `freshness` 已对 `mvrv_ratio`, `funding_rate`, `open_interest`, `fear_greed`, `dominance` 逐字段与上期比对并计数。原样写入 `latest.json` 的 `_freshness`；`sessions_unchanged` ≥3 的字段在报告标注「⚠️ 数据已 N 期未更新」。**绝不**静默复读上期数据当新数据。
 
 ### 4.3 事件状态更新
 按 Phase 3 结果更新 `events[]`；触发 `event_within_48h` 告警的事件在报告中前置。
@@ -147,7 +128,7 @@
 5. 关注名单（仅当 `config/watchlist.json` 非空时渲染，内联小表）
 
 **Markdown：** 读取 `templates/` 下模板，填充数据，组装完整报告。机会看板置顶。
-**HTML：** 读取 `templates/dashboard.html`，替换所有 `{{placeholder}}`。机会卡片按扩散度颜色编码（red/yellow/green/gray）。图表数据嵌入为 JS 数组。
+**HTML：** 模型**不手写 HTML**。写完 `data/latest.json` 后运行 `python3 scripts/render-html.py`，脚本读取 `templates/dashboard.html` 并替换全部 `{{placeholder}}` 生成 HTML。渲染所需的定性文字必须写进 JSON 对应字段（见 Phase 6 schema 中标注「渲染用」的字段）；JSON 里没有的内容不会出现在 HTML 里。
 
 ---
 
@@ -155,36 +136,46 @@
 
 | 输出 | 路径 | 说明 |
 |------|------|------|
-| Markdown | `reports/YYYY-MM-DD_{session}.md` | 文本报告 |
-| HTML | `reports/YYYY-MM-DD_{session}.html` | 可视化报告 |
-| JSON 快照 | `data/latest.json` | 结构化数据（历史归档由 `run-report.sh` 在运行前自动完成，无需处理） |
+| Markdown | `reports/YYYY-MM-DD_{session}.md` | 文本报告（模型写） |
+| HTML | `reports/YYYY-MM-DD_{session}.html` | `python3 scripts/render-html.py` 从 latest.json 生成 |
+| JSON 快照 | `data/latest.json` | 结构化数据（历史归档由 `scripts/pre-run.sh` 在运行前自动完成，无需处理） |
 | 告警摘要 | `reports/latest-alert.txt` | 单行摘要 |
 
-**执行顺序（由定时任务提示词驱动）：** 先运行 `scripts/pre-run.sh`（日志轮转 + 上期快照归档与备份）→ 执行 Phase 0-6 生成文件 → 验证 HTML + MD 存在且非空 → 成功后运行 `scripts/telegram-push.sh <日期> daily` 完成 git push 和 Telegram 推送。Phase 6 本身只负责生成文件；若任一 Phase 失败导致报告未产出，用 `data/latest.json.bak` 恢复 `data/latest.json`，避免半成品快照污染下一期对比。
+**执行顺序（由定时任务提示词驱动）：** 先运行 `scripts/pre-run.sh`（日志轮转 + 上期快照归档与备份）→ `python3 scripts/collect.py daily` → 执行 Phase 2-4 定性分析与评分 → 写 `data/latest.json` + Markdown 报告 + `reports/latest-alert.txt` → `python3 scripts/render-html.py` 生成 HTML → 验证 HTML + MD 存在且非空 → 成功后运行 `scripts/telegram-push.sh <日期> daily` 完成 git push 和 Telegram 推送。若中途失败导致报告未产出，用 `data/latest.json.bak` 恢复 `data/latest.json`，避免半成品快照污染下一期对比。
 
-**`data/latest.json` 结构：**
+**`data/latest.json` 结构（标注「渲染用」的字段是 render-html.py 的输入，缺失则 HTML 对应区块为空）：**
 ```json
 {
   "timestamp": "ISO 8601",
   "session": "daily",
   "market_scan": {
     "movers": [{"coin_id","symbol","price_usd","price_change_24h","price_change_7d","price_change_30d","market_cap","volume_24h","reason","narrative_tag","source_url"}],
-    "movers_narrative": "本期异动的定性综述",
-    "sector_rotation": [{"category","market_cap","market_cap_change_24h","trend_sessions","note"}],
+    "movers_narrative": "本期异动的定性综述（渲染用）",
+    "breadth": {"up","total","pct"},
+    "sector_rotation": [{"category","name","market_cap","market_cap_change_24h","trend_sessions","note"}],
+    "sector_note": "板块轮动补充评论（渲染用，可选）",
     "trending": [{"coin_id","symbol","name"}],
+    "trending_note": "热搜补充评论（渲染用，可选）",
     "chains_tvl_delta": [{"chain","tvl","tvl_change_pct_vs_prev"}]
   },
   "opportunities": [{"id","coin","title","thesis","diffusion":"red|yellow|green",
     "score":{"catalyst_strength","time_window","crowding","risk","total"},
     "status":"new|tracking|triggered|expired|stale",
     "first_seen","last_updated","sessions_tracked","sessions_since_progress","source_url"}],
+  "priority": [{"action":"high|medium|watch|skip","coin","headline","body"}],
+  "board_note": "看板补充（状态流转记录等，渲染用，可选）",
   "events": [{"id","coin","event_type":"unlock|upgrade|etf_decision|listing|macro",
     "date","days_away","description","opportunity_angle","source_url","status":"upcoming|passed"}],
+  "events_note": "事件日历补充（已过事件回顾等，渲染用，可选）",
   "market_context": {
-    "btc": {"price_usd","price_change_24h","price_change_7d","fear_greed","fear_greed_label","mvrv_ratio","funding_rate","open_interest","dominance","sparkline_7d","support","resistance","trend"},
+    "btc": {"price_usd","price_change_24h","price_change_7d","fear_greed","fear_greed_label","mvrv_ratio","mvrv_data_time","funding_rate","open_interest","dominance","dominance_change_pp","sparkline_7d","support","resistance","trend",
+      "signals": {"price","fgi","dominance","support","resistance"}},
     "macro": {"fomc_date","fomc_days_away","note"},
     "etf_qualitative": {"btc_etf_flow_text","eth_etf_flow_text"},
-    "global": {"total_market_cap_usd","stablecoin_total_supply"}
+    "eth": {"price_usd","price_change_24h","price_change_7d","eth_btc_ratio"},
+    "cycle_notes": {"mvrv","funding","oi","stablecoin","eth"},
+    "analysis_note": "市场环境补充分析（渲染用，可选）",
+    "global": {"total_market_cap_usd","stablecoin_total_supply","stablecoin_supply_change_pct","usde_circulating"}
   },
   "market_score": {"btc_trend","funding","sentiment","macro","total","label","vs_previous"},
   "watchlist": {"<coin_id>": {"price_usd","price_change_24h","price_change_7d","market_cap","note"}},
@@ -226,9 +217,11 @@
 
 由 Kimi Work 定时任务驱动（cron `0 4 * * *`，Asia/Shanghai，模型 k3-agent，local_conversation 模式，工作区为本项目目录）。每次运行按顺序执行：
 1. `scripts/pre-run.sh`：日志轮转（7 天清理）+ 上期快照归档到 `data/history/`（30 天清理）+ 备份 `data/latest.json` 为 `.bak`
-2. 执行本手册 Phase 0-6
-3. 验证产出文件（HTML + MD 存在且非空）；失败则用 `.bak` 恢复 `data/latest.json`
-4. 成功 → `scripts/telegram-push.sh` 推送 GitHub Pages + Telegram
+2. `python3 scripts/collect.py daily`：全部 API 采集 + 过滤 + 跨期对比 → `data/collected.json`
+3. 执行本手册 Phase 2-4（定性归因、事件、评分）→ 写 `data/latest.json` + Markdown + `latest-alert.txt`
+4. `python3 scripts/render-html.py`：从 latest.json 生成 HTML
+5. 验证产出文件（HTML + MD 存在且非空）；失败则用 `.bak` 恢复 `data/latest.json`
+6. 成功 → `scripts/telegram-push.sh` 推送 GitHub Pages + Telegram
 
 运行记录与失败状态在 Kimi Work 定时任务面板可查，并配有桌面通知。
 
