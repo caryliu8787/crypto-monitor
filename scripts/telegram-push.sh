@@ -36,7 +36,7 @@ if [ -f "$HTML_FILE" ]; then
   if ! git diff --cached --quiet 2>/dev/null; then
     git commit -m "Report: ${DATE} ${SESSION}"
   else
-    echo "No new changes to commit (already committed by Claude)."
+    echo "No new changes to commit (already committed)."
   fi
   # Only push if local is ahead of remote
   if [ "$(git rev-list --count origin/main..HEAD 2>/dev/null)" -gt 0 ]; then

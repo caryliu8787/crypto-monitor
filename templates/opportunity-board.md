@@ -10,7 +10,7 @@
 {{/if}}
 
 {{#if has_tracking_opportunities}}
-### 📌 持续跟踪
+### 📌 持续跟踪（最多 10 项，按评分降序；溢出并入末尾折叠行）
 {{tracking_opportunities}}
 {{/if}}
 
@@ -20,7 +20,7 @@
 {{/if}}
 
 {{#if has_stale_summary}}
-> {{stale_count}} 项机会持续静默跟踪，无进展（详见 JSON，不逐条展示）
+> {{stale_count}} 项机会持续静默跟踪，无进展（含评分溢出未展开项；详见 JSON，不逐条展示）
 {{/if}}
 
 > 每条格式：**[扩散度] [币种] 标题（{{score}}/20）** — 论点 | 时间窗 | 验证方式（来源: URL）

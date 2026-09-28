@@ -19,7 +19,7 @@
 
 **全部用免费 API。** 若 `config/output.json` 的 `api_keys.coingecko_demo` 非空，CoinGecko 请求附加 header `x-cg-demo-api-key`；否则匿名调用（限速 5-15 次/分钟，**将 CoinGecko 调用与其他来源交错发起，避免连发触发 429**）。
 
-**大响应端点必须用 `curl -s` 存临时文件 + `jq`/`python3` 本地精确过滤**（250 币池、derivatives、chains 等）。**禁止用 WebFetch 摘要模式处理大数组**——摘要会漏币（2026-07-07 实测：WebFetch 扫 250 币池漏掉 ANSEM +36%、GROVE +30% 等 top movers，与 trending 交叉比对才发现）。WebFetch 仅用于小 JSON 端点和网页。
+**大响应端点必须用 `curl -s` 存临时文件 + `jq`/`python3` 本地精确过滤**（250 币池、derivatives、chains 等）。**禁止用网页抓取工具的摘要模式处理大数组**——摘要会漏币（2026-07-07 实测：摘要模式扫 250 币池漏掉 ANSEM +36%、GROVE +30% 等 top movers，与 trending 交叉比对才发现）。网页抓取仅用于小 JSON 端点和网页。
 
 | 来源 | 端点 | 数据 |
 |------|------|------|
@@ -39,7 +39,7 @@
 | 数据 | 端点 | 说明 |
 |------|------|------|
 | 协议收入 | `api.llama.fi/summary/fees/{protocol}?dataType=dailyRevenue` | 候选币需要基本面佐证时用 |
-| 代币解锁 | WebFetch `tokenomist.ai`（原 token.unlocks.app，已改名） | 部分可靠：解锁日期/分配比例通常可提取，精确数量常缺失→缺失写 `null` |
+| 代币解锁 | 网页抓取 `tokenomist.ai`（原 token.unlocks.app，已改名） | 部分可靠：解锁日期/分配比例通常可提取，精确数量常缺失→缺失写 `null` |
 
 > **已废弃数据源（不再尝试）：**
 > - ~~farside.co.uk / sosovalue.com~~ — 403
@@ -83,7 +83,7 @@
 前瞻事件日历，持久化在 `data/latest.json` 的 `events[]`，跨期携带：
 
 1. **携带**：读上期 `events[]`，重算每条 `days_away`；`date < today` 的标记 `status: "passed"`（保留一期供报告回顾，下期删除）
-2. **解锁**：对高市值候选/watchlist 币 WebFetch `tokenomist.ai` 查解锁 cliff（日期可提取则记录，数量缺失写 `null`）
+2. **解锁**：对高市值候选/watchlist 币网页抓取 `tokenomist.ai` 查解锁 cliff（日期可提取则记录，数量缺失写 `null`）
 3. **升级/ETF/上所**：WebSearch（≤ `websearch_events_max` 次）已知的近期主网升级、ETF 审批窗口、大所上币计划——**只记录有明确日期或明确时间窗的事件**
 4. 每个事件附 `opportunity_angle`（定性）：如「解锁前避险 vs 解锁后企稳吸筹」「升级前抢跑 vs sell-the-news」
 
@@ -104,6 +104,7 @@
 `new`（本期新发现）→ `tracking`（持续跟踪）→ `triggered`（催化剂兑现）/ `expired`(时间窗过期/逻辑失效)
 - 上期已有的机会：有新进展则更新 detail 和评分；无新信息保持原状（**不编造进展**）
 - `sessions_tracked` 计数递增
+- `sessions_since_progress` 计数：本期有**实质进展**则归 0，否则 +1。实质进展 = 催化剂状态变化 / 评分任一维度变化 / 新增可引用信源。**单纯价格波动不算进展。**
 
 ### 4.2 新鲜度校验
 对 `market_context` 数值字段逐字段与上期比对：`mvrv_ratio`, `funding_rate`, `open_interest`, `fear_greed`, `dominance`。
@@ -124,7 +125,15 @@
 综合评分 + 扩散度 + 市场环境，输出「值得深挖」清单：每项给出论点、时间窗、验证方式（看什么信号确认/证伪）。不给买卖建议（无持仓），框架是「值得花时间研究的优先级」。
 
 ### 4.7 防膨胀规则（硬规则）
-机会或事件连续 ≥ `stale_after_sessions`（5）期无进展且未触发 → 状态改 `stale`，报告中**不再单独列出**，只在末尾折叠为一行：「N 项机会持续静默跟踪（见 JSON）」。JSON 中保留完整条目以维持连续性。**禁止把静默旧条目逐条重复打印**。
+报告长度必须收敛在 ~200 行。以下三条按顺序机械执行，**不是判断题**：
+
+**(a) 老化降级：** `sessions_since_progress` ≥ `stale_after_sessions`（5）且未触发 → 状态改 `stale`。适用于 `tracking` 和 `new`，无例外——`sessions_tracked` 再大也不是留在 `tracking` 的理由。
+
+**(b) 看板限额：** `### 📌 持续跟踪` 一节最多列 `tracking_board_max`（10）条，按 `score.total` 降序取前 N。超出的**不逐条展示**，并入 (c) 的折叠行。
+
+**(c) 折叠汇总：** `stale` 条目 + (b) 溢出条目在末尾折叠为一行：「N 项机会持续静默跟踪（见 JSON）」，只列 symbol + 评分。JSON 中保留完整条目以维持连续性。**禁止把静默或溢出条目逐条重复打印。**
+
+**长度兜底：** md 写完若仍 > 250 行，优先砍「持续跟踪」节的条目数（降低有效 `tracking_board_max`）重写该节，**不要**逐行手工裁剪已写好的报告——那会耗尽看门狗预算导致 HTML 生成不及（2026-07-27~29 实测连续 3 期因此失败）。
 
 ---
 
@@ -151,7 +160,7 @@
 | JSON 快照 | `data/latest.json` | 结构化数据（历史归档由 `run-report.sh` 在运行前自动完成，无需处理） |
 | 告警摘要 | `reports/latest-alert.txt` | 单行摘要 |
 
-**注意：不要在 Phase 6 中调用 `telegram-push.sh`。** Telegram 推送和 git push 由外部 `scripts/run-report.sh` 统一负责，Claude 进程只负责生成文件。
+**执行顺序（由定时任务提示词驱动）：** 先运行 `scripts/pre-run.sh`（日志轮转 + 上期快照归档与备份）→ 执行 Phase 0-6 生成文件 → 验证 HTML + MD 存在且非空 → 成功后运行 `scripts/telegram-push.sh <日期> daily` 完成 git push 和 Telegram 推送。Phase 6 本身只负责生成文件；若任一 Phase 失败导致报告未产出，用 `data/latest.json.bak` 恢复 `data/latest.json`，避免半成品快照污染下一期对比。
 
 **`data/latest.json` 结构：**
 ```json
@@ -168,7 +177,7 @@
   "opportunities": [{"id","coin","title","thesis","diffusion":"red|yellow|green",
     "score":{"catalyst_strength","time_window","crowding","risk","total"},
     "status":"new|tracking|triggered|expired|stale",
-    "first_seen","last_updated","sessions_tracked","source_url"}],
+    "first_seen","last_updated","sessions_tracked","sessions_since_progress","source_url"}],
   "events": [{"id","coin","event_type":"unlock|upgrade|etf_decision|listing|macro",
     "date","days_away","description","opportunity_angle","source_url","status":"upcoming|passed"}],
   "market_context": {
@@ -196,7 +205,7 @@
 5. **上期/本期有 `null` 的字段跳过 delta 计算。**
 6. **`_sources` 为必填字段**，记录每个关键指标的数据来源。禁止 `websearch` 作为数值字段来源。
 7. **机会看板没发现新机会 = 写「本期无新机会」。** 绝不编造或拔高旧信息。事件没有明确日期 = 不进事件日历。
-8. **防膨胀（见 4.7）：** 静默 ≥5 期的条目折叠为一行汇总，禁止逐条重复打印。
+8. **防膨胀（见 4.7）：** 无进展 ≥5 期的条目降 `stale`；持续跟踪节最多 10 条；stale + 溢出条目折叠为一行汇总，禁止逐条重复打印。
 
 ---
 
@@ -204,7 +213,7 @@
 
 | 场景 | 处理 |
 |------|------|
-| WebFetch 失败 | WebSearch 补充定性信息；数值字段标 `null` / 「数据暂缺」 |
+| 网页抓取失败 | WebSearch 补充定性信息；数值字段标 `null` / 「数据暂缺」 |
 | CoinGecko 429 限速 | 等待 60s 重试一次；仍失败则该数据源本期标 `null` |
 | WebSearch 无结果 | 标记「数据暂缺」/「原因未明」 |
 | config 损坏 | 停止，写 `reports/YYYY-MM-DD_error.md` |
@@ -215,14 +224,13 @@
 
 ## 调度
 
-由 macOS launchd 驱动，plist 位于 `~/Library/LaunchAgents/com.crypto-monitor.daily.plist`。
-plist 调用 `scripts/run-report.sh daily`，该脚本负责：
-1. 日志轮转（`logs/YYYY-MM-DD_{session}.log`，7 天自动清理）+ 上期快照归档到 `data/history/`（30 天清理）
-2. 杀残留进程 + 等待网络
-3. 调用 `claude -p` 生成报告（25 分钟硬超时）
-4. 验证产出文件（HTML + MD 存在且非空）
-5. 成功 → 调用 `telegram-push.sh` 推送
-6. 失败 → 发送 Telegram 告警（包含失败原因和日志路径）
+由 Kimi Work 定时任务驱动（cron `0 4 * * *`，Asia/Shanghai，模型 k3-agent，local_conversation 模式，工作区为本项目目录）。每次运行按顺序执行：
+1. `scripts/pre-run.sh`：日志轮转（7 天清理）+ 上期快照归档到 `data/history/`（30 天清理）+ 备份 `data/latest.json` 为 `.bak`
+2. 执行本手册 Phase 0-6
+3. 验证产出文件（HTML + MD 存在且非空）；失败则用 `.bak` 恢复 `data/latest.json`
+4. 成功 → `scripts/telegram-push.sh` 推送 GitHub Pages + Telegram
 
-系统时区为 Asia/Shanghai (UTC+8)，plist 中 Hour 直接使用本地时间。
+运行记录与失败状态在 Kimi Work 定时任务面板可查，并配有桌面通知。
+
 - 日报：04:00 UTC+8（每天一次，一天 = 一期）
+- 历史：2026-09-28 前由 macOS launchd + `claude -p` 驱动；Claude 账号停用后迁移至 Kimi 定时任务

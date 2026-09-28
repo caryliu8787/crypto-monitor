@@ -28,11 +28,12 @@
     "_comment": "4 维评分，每维 1-5 分，总分 /20。crowding 和 risk 为反向计分（越不拥挤/风险越低分越高）。",
     "dimensions": ["catalyst_strength", "time_window", "crowding_inverse", "risk_inverse"],
     "high_grade_threshold": 15,
-    "stale_after_sessions": 5
+    "stale_after_sessions": 5,
+    "tracking_board_max": 10
   },
 
   "call_budget": {
-    "_comment": "外部调用预算纪律（25 分钟看门狗约束）。",
+    "_comment": "外部调用预算纪律（40 分钟看门狗约束）。",
     "websearch_candidates_max": 12,
     "websearch_events_max": 5,
     "total_calls_target": "30-40"
