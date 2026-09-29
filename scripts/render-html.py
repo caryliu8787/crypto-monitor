@@ -185,10 +185,12 @@ def opportunity_priority_html(priority):
     out = []
     for i, p in enumerate(priority or [], 1):
         cls, label = ACTION_MAP.get(p.get("action"), ("watch", "观察"))
+        coin = str(p.get("coin", "")).upper()
+        coin_tag = f'<span class="coin-tag">{coin}</span> ' if coin else ""
+        num = "①②③④⑤⑥⑦⑧⑨⑩"[i - 1] if i <= 10 else f"{i}."
         out.append(
             f'<div class="rec-card {cls}"><div class="rec-header">'
-            f'<span class="rec-coin">{"①②③④⑤⑥"[i - 1] if i <= 6 else str(i)} '
-            f'{md(p.get("headline", p.get("coin", "")))}</span>'
+            f'<span class="rec-coin">{num} {coin_tag}{md(p.get("headline", coin))}</span>'
             f'<span class="rec-action {cls}">{label}</span></div>'
             f'<div class="rec-body">{md(p.get("body", ""))}</div></div>')
     return "\n".join(out)
@@ -332,7 +334,8 @@ def note_box(text, cls="key-changes"):
 
 def watchlist_section_html(watchlist):
     if not watchlist:
-        return ('<div class="key-changes"><strong>关注名单</strong> — '
+        return ('<h2 id="sec-watchlist">五、关注名单</h2>'
+                '<div class="key-changes"><strong>关注名单</strong> — '
                 '<code>config/watchlist.json</code> 为空，本节按规则不渲染内容。'
                 '发现值得长期钉住的标的时，把 CoinGecko coin id 加进该文件。</div>')
     items = []
@@ -343,7 +346,7 @@ def watchlist_section_html(watchlist):
             f'7d {fmt_pct(w.get("price_change_7d"))}<br>'
             f'<span style="color:var(--text-secondary);">{fmt_cap(w.get("market_cap"))}'
             f'{" · " + md(w.get("note")) if w.get("note") else ""}</span></div>')
-    return ('<h2>五、关注名单</h2><div class="watchlist-row">'
+    return ('<h2 id="sec-watchlist">五、关注名单</h2><div class="watchlist-row">'
             + "".join(items) + "</div>")
 
 

@@ -344,6 +344,40 @@ p, li {
   line-height: 1.6;
 }
 
+/* 币种徽章（与 alpha-card 同风格，按 action 着色） */
+.rec-card .coin-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: 2px;
+  letter-spacing: 0.3px;
+}
+.rec-card.buy .coin-tag   { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+.rec-card.hold .coin-tag  { background: rgba(227, 179, 65, 0.15); color: var(--yellow); }
+.rec-card.watch .coin-tag { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+.rec-card.sell .coin-tag  { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+
+/* ===== 顶部章节目录 ===== */
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 4px;
+  font-size: 12px;
+}
+.toc a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 3px 12px;
+  background: var(--bg-card);
+}
+.toc a:hover { color: var(--accent); border-color: var(--accent); }
+
 /* ===== Checklist ===== */
 .checklist-item {
   display: flex;
@@ -577,11 +611,20 @@ p, li {
     <div class="meta">{{report_date}} | {{report_session}} | {{report_timestamp}}</div>
   </div>
 
+  <!-- 顶部章节目录 -->
+  <nav class="toc">
+    <a href="#sec-board">一、机会看板</a>
+    <a href="#sec-scan">二、全市场扫描</a>
+    <a href="#sec-events">三、事件日历</a>
+    <a href="#sec-context">四、市场环境</a>
+    <a href="#sec-watchlist">五、关注名单</a>
+  </nav>
+
   <!-- ALERTS (顶部告警，无告警时为空字符串) -->
   {{alerts_html}}
 
   <!-- SECTION 1: OPPORTUNITY BOARD -->
-  <h2>一、机会看板</h2>
+  <h2 id="sec-board">一、机会看板</h2>
   <!-- 机会卡片复用 .alpha-card CSS：red/yellow/green 对应扩散度，gray 对应无新机会占位 -->
   {{opportunity_board_html}}
 
@@ -592,7 +635,7 @@ p, li {
   <hr class="section-divider">
 
   <!-- SECTION 2: MARKET SCAN -->
-  <h2>二、全市场扫描</h2>
+  <h2 id="sec-scan">二、全市场扫描</h2>
 
   <h3>异动榜</h3>
   <div class="card">
@@ -625,7 +668,7 @@ p, li {
   <hr class="section-divider">
 
   <!-- SECTION 3: EVENT CALENDAR -->
-  <h2>三、事件日历</h2>
+  <h2 id="sec-events">三、事件日历</h2>
   <div class="card">
     <div class="table-wrap">
       {{event_calendar_html}}
@@ -635,7 +678,7 @@ p, li {
   <hr class="section-divider">
 
   <!-- SECTION 4: MARKET CONTEXT (进场时机参考) -->
-  <h2>四、市场环境（进场时机参考）</h2>
+  <h2 id="sec-context">四、市场环境（进场时机参考）</h2>
 
   <h3>市场阶段评估</h3>
   <div class="card">

@@ -344,6 +344,40 @@ p, li {
   line-height: 1.6;
 }
 
+/* 币种徽章（与 alpha-card 同风格，按 action 着色） */
+.rec-card .coin-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 3px;
+  margin-right: 6px;
+  vertical-align: 2px;
+  letter-spacing: 0.3px;
+}
+.rec-card.buy .coin-tag   { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+.rec-card.hold .coin-tag  { background: rgba(227, 179, 65, 0.15); color: var(--yellow); }
+.rec-card.watch .coin-tag { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+.rec-card.sell .coin-tag  { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+
+/* ===== 顶部章节目录 ===== */
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 4px;
+  font-size: 12px;
+}
+.toc a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 3px 12px;
+  background: var(--bg-card);
+}
+.toc a:hover { color: var(--accent); border-color: var(--accent); }
+
 /* ===== Checklist ===== */
 .checklist-item {
   display: flex;
@@ -577,11 +611,20 @@ p, li {
     <div class="meta">2026-09-29 | daily | 2026-09-29 04:05 UTC+8</div>
   </div>
 
+  <!-- 顶部章节目录 -->
+  <nav class="toc">
+    <a href="#sec-board">一、机会看板</a>
+    <a href="#sec-scan">二、全市场扫描</a>
+    <a href="#sec-events">三、事件日历</a>
+    <a href="#sec-context">四、市场环境</a>
+    <a href="#sec-watchlist">五、关注名单</a>
+  </nav>
+
   <!-- ALERTS (顶部告警，无告警时为空字符串) -->
   <div class="alert-box warning"><strong>🟡 警告（8 条）</strong><ul style="margin:8px 0 0;padding-left:18px;"><li><code>large_cap_mover</code> — QNT 24h 变动 +29.70%（市值 $35.05 亿），进入异动关注</li><li><code>large_cap_mover</code> — HBAR 24h 变动 +28.25%（市值 $53.32 亿），进入异动关注</li><li><code>large_cap_mover</code> — MARSCOIN 24h 变动 +24.34%（市值 $1.58 亿），进入异动关注</li><li><code>large_cap_mover</code> — USELESS 24h 变动 -19.20%（市值 $2.39 亿），进入异动关注</li><li><code>event_within_48h</code> — ⏰ 事件临近：FF unlock（2026-09-29）— 今天，tokenomist 一手确认日期，数量 null</li><li><code>event_within_48h</code> — ⏰ 事件临近：CARDS unlock（2026-09-29）— 今天，tokenomist 一手确认日期（Advisors 批次），数量 null</li><li><code>event_within_48h</code> — ⏰ 事件临近：COTI upgrade（2026-09-30）— 明天，V1 → V2 迁移截止</li><li><code>event_within_48h</code> — ⏰ 事件临近：MACRO macro（2026-09-30）— 明天，美国 PCE 平减指数（日期标记）</li></ul></div>
 
   <!-- SECTION 1: OPPORTUNITY BOARD -->
-  <h2>一、机会看板</h2>
+  <h2 id="sec-board">一、机会看板</h2>
   <!-- 机会卡片复用 .alpha-card CSS：red/yellow/green 对应扩散度，gray 对应无新机会占位 -->
   <div class="alpha-card gray"><strong>本期无新机会</strong></div>
 <h3>📌 持续跟踪（17 项，按评分降序取前 10；其余并入末尾折叠行）</h3>
@@ -603,17 +646,17 @@ p, li {
 
   <h3>值得深挖（优先级排序）</h3>
   <!-- 复用 .rec-card CSS：buy=高优先级 hold=中 watch=观察 sell=证伪/放弃 -->
-  <div class="rec-card buy"><div class="rec-header"><span class="rec-coin">① 等 9/28 整日收入数据出炉——判决日</span><span class="rec-action buy">高优先级</span></div><div class="rec-body">9/27 已跌至 $52.9 万（两日 -44%），9/28 整日数据本期尚未产生。若 &lt;$50 万则「连续 3 日」倒计时第 1 天开始；价格已抢先下行（7d -36%）。</div></div>
-<div class="rec-card buy"><div class="rec-header"><span class="rec-coin">② 9/28 不完整日收入仅 $36,246，按速率全天约 $4.3 万</span><span class="rec-action buy">高优先级</span></div><div class="rec-body">若明日确认 9/28 整日 &lt;$10 万，降级倒计时开始。10/23 解锁前 24 天，收入判据比价格更接近触发。</div></div>
-<div class="rec-card buy"><div class="rec-header"><span class="rec-coin">③ 10/15 归属结束剩 16 天</span><span class="rec-action buy">高优先级</span></div><div class="rec-body">供给侧削减可提前验算（vesting 年释放约 6,670 万 FIL 终止）。条目虽 stale，事件是未来 4 周最硬的供给侧催化剂。</div></div>
-<div class="rec-card hold"><div class="rec-header"><span class="rec-coin">④ Sibos 第二日，7d +261% 后只看 10/1 闭幕后的量能</span><span class="rec-action hold">中优先级</span></div><div class="rec-body">今日还有一场 panel。不追价格；闭幕后一周内缩量回落 = sell-the-news 确认。</div></div>
-<div class="rec-card watch"><div class="rec-header"><span class="rec-coin">⑤ 连续 2 日累计约 +60%、量能 $12.86 亿，主因仍未明</span><span class="rec-action watch">观察</span></div><div class="rec-body">可查背景（Docs MCP 服务器）与涨幅量级不匹配。若出现一手催化剂再评估是否建条目。</div></div>
-<div class="rec-card watch"><div class="rec-header"><span class="rec-coin">⑥ 两笔解锁今天到期</span><span class="rec-action watch">观察</span></div><div class="rec-body">用 XPL 样本检验「薄盘币解锁提前定价」：今日不跌 = 抛压已消化；大跌 = XPL 是特例。</div></div><div class="key-changes">状态流转：UNI tracking→stale（ssp=5 机械降级，CME 10/19 事件仍在日历中）；本期无新发现机会。本期距上期仅约 4.5 小时，绝大多数条目无新信息属预期。</div>
+  <div class="rec-card buy"><div class="rec-header"><span class="rec-coin">① <span class="coin-tag">STONK</span> 等 9/28 整日收入数据出炉——判决日</span><span class="rec-action buy">高优先级</span></div><div class="rec-body">9/27 已跌至 $52.9 万（两日 -44%），9/28 整日数据本期尚未产生。若 &lt;$50 万则「连续 3 日」倒计时第 1 天开始；价格已抢先下行（7d -36%）。</div></div>
+<div class="rec-card buy"><div class="rec-header"><span class="rec-coin">② <span class="coin-tag">MET</span> 9/28 不完整日收入仅 $36,246，按速率全天约 $4.3 万</span><span class="rec-action buy">高优先级</span></div><div class="rec-body">若明日确认 9/28 整日 &lt;$10 万，降级倒计时开始。10/23 解锁前 24 天，收入判据比价格更接近触发。</div></div>
+<div class="rec-card buy"><div class="rec-header"><span class="rec-coin">③ <span class="coin-tag">FIL</span> 10/15 归属结束剩 16 天</span><span class="rec-action buy">高优先级</span></div><div class="rec-body">供给侧削减可提前验算（vesting 年释放约 6,670 万 FIL 终止）。条目虽 stale，事件是未来 4 周最硬的供给侧催化剂。</div></div>
+<div class="rec-card hold"><div class="rec-header"><span class="rec-coin">④ <span class="coin-tag">QNT</span> Sibos 第二日，7d +261% 后只看 10/1 闭幕后的量能</span><span class="rec-action hold">中优先级</span></div><div class="rec-body">今日还有一场 panel。不追价格；闭幕后一周内缩量回落 = sell-the-news 确认。</div></div>
+<div class="rec-card watch"><div class="rec-header"><span class="rec-coin">⑤ <span class="coin-tag">HBAR</span> 连续 2 日累计约 +60%、量能 $12.86 亿，主因仍未明</span><span class="rec-action watch">观察</span></div><div class="rec-body">可查背景（Docs MCP 服务器）与涨幅量级不匹配。若出现一手催化剂再评估是否建条目。</div></div>
+<div class="rec-card watch"><div class="rec-header"><span class="rec-coin">⑥ <span class="coin-tag">FF/CARDS</span> 两笔解锁今天到期</span><span class="rec-action watch">观察</span></div><div class="rec-body">用 XPL 样本检验「薄盘币解锁提前定价」：今日不跌 = 抛压已消化；大跌 = XPL 是特例。</div></div><div class="key-changes">状态流转：UNI tracking→stale（ssp=5 机械降级，CME 10/19 事件仍在日历中）；本期无新发现机会。本期距上期仅约 4.5 小时，绝大多数条目无新信息属预期。</div>
 
   <hr class="section-divider">
 
   <!-- SECTION 2: MARKET SCAN -->
-  <h2>二、全市场扫描</h2>
+  <h2 id="sec-scan">二、全市场扫描</h2>
 
   <h3>异动榜</h3>
   <div class="card">
@@ -646,7 +689,7 @@ p, li {
   <hr class="section-divider">
 
   <!-- SECTION 3: EVENT CALENDAR -->
-  <h2>三、事件日历</h2>
+  <h2 id="sec-events">三、事件日历</h2>
   <div class="card">
     <div class="table-wrap">
       <table class="data-table"><thead><tr><th>日期</th><th>倒计时</th><th>币种</th><th>类型</th><th>事件</th><th>机会角度</th></tr></thead><tbody><tr><td>2026-09-29</td><td><span class="warn"><strong>⏰ 今天</strong></span></td><td><strong>FF</strong></td><td><code>unlock</code></td><td class="meaning">⏰<strong>今天。</strong> tokenomist FF 页面显示下一次解锁为 2026-09-29，分配类别 Ecosystems (Remaining)；数量与金额该页未显示，写 null。媒体口径 7,714 万枚 FF / 约 $955 万 / 占总量 0.77%（未经一手复核）。截至本期采集时（04:00 UTC+8）尚无执行后价格反应可读。</td><td class="meaning">解锁前避险 vs 解锁后企稳吸筹。观察角度：若今日不再下跌，则抛压已被提前消化。</td></tr><tr><td>2026-09-29</td><td><span class="warn"><strong>⏰ 今天</strong></span></td><td><strong>CARDS</strong></td><td><code>unlock</code></td><td class="meaning">⏰<strong>今天。</strong> tokenomist 一手："The next unlock for Collector Crypt is scheduled for September 29, 2026. Released to Advisors."，数量未给出，写 null。媒体口径约 5,926 万枚 / 占总量 3.0%（未一手复核）。</td><td class="meaning">用 XPL 样本检验「薄盘币解锁提前定价」是否可复制：今日之后价格企稳 = 可复制的形态；大跌 = XPL 是特例。</td></tr><tr><td>2026-09-30</td><td><span class="warn"><strong>⏰ 1 天</strong></span></td><td><strong>COTI</strong></td><td><code>upgrade</code></td><td class="meaning">⏰<strong>明天。</strong> COTI V1 → V2 迁移截止日，V1 与 gCOTI V1 于 Q3 末日落。交易所持有者与 ERC-20 持有者无需操作；VIPER/Ledger 原生持有者须手动迁移。</td><td class="meaning">迁移完成后的销毁执行是论点核心。⚠️COTI 连续多期不在前 250 币池，即使兑现也缺乏观测链路。</td></tr><tr><td>2026-09-30</td><td><span class="warn"><strong>⏰ 1 天</strong></span></td><td><strong>MACRO</strong></td><td><code>macro</code></td><td class="meaning">⏰<strong>明天。</strong> 美国个人收入与 PCE 平减指数（美东 08:30）。⚠️来源为经济日历聚合站、非 BEA 一手页面，只作日期标记，不引用预期数值，不计入宏观面评分。</td><td class="meaning">方向未知 → 不构成可操作角度，只作为波动日标记。</td></tr><tr><td>2026-10-01</td><td><span class="warn"><strong>⏰ 2 天</strong></span></td><td><strong>VVV</strong></td><td><code>upgrade</code></td><td class="meaning">VVV 年排放 250 万→200 万第二阶段削减——第一刀已确认执行，第二刀为通缩路径验证点。</td><td class="meaning">供给侧确定性事件。10/1 是 VVV 条目能否从 stale 回到 tracking 的唯一判据。</td></tr><tr><td>2026-10-02</td><td>3 天</td><td><strong>ENA</strong></td><td><code>unlock</code></td><td class="meaning">tokenomist 一手："The next unlock for Ethena is scheduled for October 2, 2026. Released to Core Contributors."，数量未提供，写 null。背景：早期投资人已被买断并删除投资人解锁日历，本次为 Core Contributors 批次。</td><td class="meaning">解锁后吸筹比解锁前抢跑更有意义。真正的观测指标是 USDe 流通供应（当前 $49.03 亿 / 门槛 $75 亿）。</td></tr><tr><td>2026-10-15</td><td>16 天</td><td><strong>FIL</strong></td><td><code>unlock</code></td><td class="meaning">Filecoin vesting 终止日（官方 X 一手）：Protocol Labs 与 Filecoin Foundation 归属结束。可验算口径：vesting 年释放约 6,670 万 FIL，区块奖励约 2,170 万 FIL，与「gross issuance 削减约 75%」自洽。</td><td class="meaning">本期研究优先级第一。供给侧削减有硬日期、可提前验算。验证：归属结束的链上确认 + FIP-0118（Solstice）排入哪次网络升级。</td></tr><tr><td>2026-10-16</td><td>17 天</td><td><strong>ARB</strong></td><td><code>unlock</code></td><td class="meaning">tokenomist ARB 页面仍只展示 2026-07-15 的历史批次详情，下一笔 10-16 的枚数、金额与占比未列出，数值字段留空。</td><td class="meaning">解锁前避险。金额未知本身是风险——无法提前量化压力。</td></tr><tr><td>2026-10-19</td><td>20 天</td><td><strong>BCH/UNI</strong></td><td><code>listing</code></td><td class="meaning">CME Group 9/22 官方新闻稿：计划 10/19 上线 BCH 与 UNI 期货（pending regulatory review）。合约规格：BCH 250 BCH/张、微型 25 BCH/张；UNI 10,000 UNI/张、微型 1,000 UNI/张。</td><td class="meaning">准入型催化剂，不是需求型催化剂——同样首次为机构提供受监管的做空工具。⚠️唯一不确定项是 pending regulatory review。</td></tr><tr><td>2026-10-21</td><td>22 天</td><td><strong>LSK</strong></td><td><code>unlock</code></td><td class="meaning">LSK 跨链迁移截止日：持币人须经 Superbridge 或 Lisk Bridge 将 LSK 迁至以太坊。</td><td class="meaning">未迁移部分构成永久性供给缩减，但 9 月那波 +538% 的主体已验证为清算而非重定价。LSK 已跌出前 250 币池。</td></tr><tr><td>2026-10-23</td><td>24 天</td><td><strong>MET</strong></td><td><code>unlock</code></td><td class="meaning">tokenomist 一手：下一次解锁 2026-10-23，分配类别 Meteora Ecosystem Reserve；数量、金额、占比未显示 → 全部写 null。</td><td class="meaning">定义 MET 时间窗上限。⚠️9/28 不完整日收入仅 $36,246，若确认整日 &lt;$10 万则降级倒计时开始。</td></tr><tr><td>2026-10-28</td><td>29 天</td><td><strong>MACRO</strong></td><td><code>macro</code></td><td class="meaning">下次 FOMC 决议（10/27-28 会议，美东 10/28 14:00 公布）。9/16 已以 12-0 一致票加息 25bp 至 3.75%-4.00%；点阵图显示多数委员预期年内仍需再加一次。</td><td class="meaning">宏观面唯一的高确定性事件。距离 29 天，对 1-4 周时间窗的机会不构成直接约束。</td></tr><tr><td>2026-10-31</td><td>32 天</td><td><strong>LSK</strong></td><td><code>upgrade</code></td><td class="meaning">Lisk Chain 正式关停（运行 10 年后），项目转型为以太坊/Base 上的企业财资管理平台。</td><td class="meaning">供给侧终局事件，但流动性已不支持研究投入。</td></tr><tr><td>2026-11-01</td><td>33 天</td><td><strong>CEX</strong></td><td><code>listing</code></td><td class="meaning">Bitget 停止接受新日本用户，存量账户 11/1 起转只可平仓（沿用记录）。</td><td class="meaning">与 BitMEX/CoinEx 同属交易所地域性收缩序列。</td></tr></tbody></table><div class="etf-text-summary">FF 与 CARDS 两笔解锁今日到期（截至 04:00 UTC+8 尚无执行后价格反应）；明天 COTI V1 日落 + PCE。上期两个 d=0 事件已结算（QNT 演示兑现 / SOL Alpenglow 日期证伪），详见上期报告。</div>
@@ -656,7 +699,7 @@ p, li {
   <hr class="section-divider">
 
   <!-- SECTION 4: MARKET CONTEXT (进场时机参考) -->
-  <h2>四、市场环境（进场时机参考）</h2>
+  <h2 id="sec-context">四、市场环境（进场时机参考）</h2>
 
   <h3>市场阶段评估</h3>
   <div class="card">
@@ -774,7 +817,7 @@ p, li {
   <hr class="section-divider">
 
   <!-- SECTION 5: WATCHLIST (config/watchlist.json 为空时输出空字符串并省略标题) -->
-  <div class="key-changes"><strong>关注名单</strong> — <code>config/watchlist.json</code> 为空，本节按规则不渲染内容。发现值得长期钉住的标的时，把 CoinGecko coin id 加进该文件。</div>
+  <h2 id="sec-watchlist">五、关注名单</h2><div class="key-changes"><strong>关注名单</strong> — <code>config/watchlist.json</code> 为空，本节按规则不渲染内容。发现值得长期钉住的标的时，把 CoinGecko coin id 加进该文件。</div>
 
   <!-- FOOTER -->
   <div class="report-footer">
