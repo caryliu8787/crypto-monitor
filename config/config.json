@@ -16,20 +16,22 @@
     ]
   },
   "setups": {
-    "max_selected": 5,
+    "max_actionable": 4,
+    "max_watch": 3,
     "breakout_vol_ratio_min": 1.25,
     "pullback_ema20_band_pct": [-2.8, 3.2],
     "bounce_ema20_band_pct": [-3.2, 2.8],
     "max_long_funding_ann_pct": 50.0,
     "min_short_funding_ann_pct": -30.0,
     "squeeze_bb_pctile_max": 15.0,
+    "squeeze_20d_range_max_pct": 18.0,
     "unit_risk_equity_pct": 1.0,
     "max_leverage_cap": 3.0
   },
   "pulse": {
     "cooldown_hours": 6,
     "min_perp_vol_24h_usd": 30000000,
-    "min_open_interest_usd": 15000000,
+    "min_open_interest_usd": 10000000,
     "breakout_buffer_pct": 0.3,
     "short_squeeze_funding_ann_pct": -38.0,
     "short_squeeze_24h_chg_min": 3.0,

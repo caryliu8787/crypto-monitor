@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""crypto-monitor 2.0 一体化组装、渲染与发布脚本（替代原 assemble + render-html + telegram-push）。
+"""crypto-monitor 2.1 一体化组装、渲染与发布脚本（含熔断校验、日期防串、增量日历与自动兜底）。
 
 用法:
-  python3 scripts/publish.py            # 生成 latest.json + MD + HTML + index.html，并推送 GitHub & Telegram
-  python3 scripts/publish.py --no-push  # 仅在本地生成报告文件，不执行 git push 与 Telegram 推送
+  python3 scripts/publish.py                 # 组装 + 渲染 + 推送 GitHub Pages & Telegram
+  python3 scripts/publish.py --no-push       # 仅在本地生成报告文件，不执行 git push 与 Telegram 推送
+  python3 scripts/publish.py --auto-fallback # launchd 兜底模式：若今日早报未发，自动跑 collect + 纯量化发布
+  python3 scripts/publish.py --restore-bak   # 从 data/latest.json.bak 恢复上一份完好快照
 """
 
 import json
@@ -17,6 +19,8 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 from html import escape as html_escape
 from pathlib import Path
+
+from collect import MIN_VALID_PERPS, TrendCollector, classify_regime, load_json
 
 ROOT = Path(__file__).resolve().parent.parent
 TZ = timezone(timedelta(hours=8))
@@ -35,14 +39,6 @@ EVENT_META = {
     "upgrade": ("upgrade", "🚀 主网升级", "升级"),
     "macro": ("macro", "🏛️ 宏观节点", "宏观"),
 }
-
-
-def load_json(path, default=None):
-    try:
-        with open(path) as f:
-            return json.load(f)
-    except Exception:
-        return default
 
 
 def fmt_px(v):
@@ -97,28 +93,106 @@ def size_text_cn(notional_pct):
     return f"每 $1万本金开 ${usd_per_10k:,}（占 {pct}%）"
 
 
-# ---------- 1. 数据合并与告警 ----------
+def restore_latest_from_bak():
+    bak_path = ROOT / "data/latest.json.bak"
+    latest_path = ROOT / "data/latest.json"
+    bak = load_json(bak_path, {}) or {}
+    if ((bak.get("market_context") or {}).get("btc") or {}).get("price_usd"):
+        shutil.copy2(bak_path, latest_path)
+        print("[publish] restored data/latest.json from data/latest.json.bak", file=sys.stderr)
+        return True
+    return False
 
-def normalize_events(raw_events, today_date):
-    out, seen = [], set()
-    for e in raw_events or []:
+
+# ---------- 1. 数据校验、增量日历合并与告警 ----------
+
+def validate_collected(collected):
+    if not isinstance(collected, dict):
+        return "data/collected.json missing or invalid JSON"
+    btc = collected.get("btc") or {}
+    if not (btc.get("price_usd") and btc["price_usd"] > 0 and btc.get("ema20")):
+        return "collected BTC price_usd / ema20 missing (upstream API failure)"
+    uni_cnt = (((collected.get("regime") or {}).get("breadth") or {}).get("universe_count")) or 0
+    if uni_cnt < MIN_VALID_PERPS:
+        return f"collected universe_count ({uni_cnt}) < {MIN_VALID_PERPS}"
+    return None
+
+
+def merge_and_normalize_events(prev_events, overlay_events, today_date):
+    """以 previous.events 为底表增量合并 overlay.events（status=cancelled 可显式删除），杜绝整表误清空。"""
+    merged = {}
+
+    def _canon_key(e):
+        coin = str(e.get("coin") or "MKT").strip().upper()
+        etype = str(e.get("event_type") or "ev").strip().lower()
+        dt = str(e.get("date") or "").strip()
+        return (coin, etype, dt)
+
+    id_to_ckey = {}
+    for e in prev_events or []:
         if not isinstance(e, dict) or not e.get("date"):
             continue
-        eid = e.get("id") or f"{str(e.get('coin','mkt')).lower()}-{e.get('event_type','ev')}-{e['date'].replace('-','')}"
-        if eid in seen:
+        if e.get("status") in ("cancelled", "deleted", "passed"):
             continue
-        seen.add(eid)
+        ck = _canon_key(e)
+        eid = e.get("id") or f"{ck[0].lower()}-{ck[1]}-{ck[2].replace('-', '')}"
         item = dict(e, id=eid)
+        merged[ck] = item
+        id_to_ckey[eid] = ck
+
+    for e in overlay_events or []:
+        if not isinstance(e, dict):
+            continue
+        eid = e.get("id")
+        ck = _canon_key(e) if e.get("date") else id_to_ckey.get(eid)
+        if not ck or not ck[2]:
+            continue
+        if e.get("status") in ("cancelled", "deleted", "passed"):
+            merged.pop(ck, None)
+            if eid and eid in id_to_ckey:
+                merged.pop(id_to_ckey[eid], None)
+            continue
+        if eid and eid in id_to_ckey and id_to_ckey[eid] != ck:
+            merged.pop(id_to_ckey[eid], None)
+        final_id = eid or (merged.get(ck) or {}).get("id") or f"{ck[0].lower()}-{ck[1]}-{ck[2].replace('-', '')}"
+        base = dict(merged.get(ck) or {})
+        base.update(e)
+        base["id"] = final_id
+        merged[ck] = base
+        id_to_ckey[final_id] = ck
+
+    out = []
+    for item in merged.values():
         try:
             d = datetime.strptime(item["date"], "%Y-%m-%d").date()
-            item["days_away"] = (d - today_date).days
-            if item["days_away"] >= 0:
+            days_away = (d - today_date).days
+            if days_away >= 0:
+                item["days_away"] = days_away
                 item["status"] = "upcoming"
                 out.append(item)
         except Exception:
             continue
-    out.sort(key=lambda x: (x.get("days_away", 9999), x.get("date", "9999")))
+    out.sort(key=lambda x: (x.get("days_away", 9999), x.get("date", "9999"), str(x.get("coin", ""))))
     return out
+
+
+def resolve_risk_landmine_text(setup, events):
+    """如实展示排雷状态：未人工核查时绝不谎称『无解锁』，自动关联日历已知项并提示人工未核查。"""
+    if setup.get("risk_landmine"):
+        return setup["risk_landmine"]
+    sym = str(setup.get("symbol") or "").upper()
+    hits = [e for e in (events or []) if str(e.get("coin") or "").upper() == sym and 0 <= e.get("days_away", 99) <= 14]
+    if hits:
+        e0 = hits[0]
+        return f"日历预警：{e0.get('date')}（{e0.get('days_away')}天后）{e0.get('description', '')}"
+    return "单币解锁未专项核查（请对照下方排雷日历）"
+
+
+def partition_setups(setups):
+    action_list = [s for s in (setups or []) if s.get("direction") in ("LONG", "SHORT") and s.get("action_override") != "AVOID"]
+    avoid_list = [s for s in (setups or []) if s.get("action_override") == "AVOID"]
+    watch_list = [s for s in (setups or []) if s.get("direction") == "WATCH" and s.get("action_override") != "AVOID"]
+    return action_list, avoid_list, watch_list
 
 
 def build_key_warnings(btc, watch_rows, events):
@@ -145,20 +219,18 @@ def build_key_warnings(btc, watch_rows, events):
 # ---------- 2. Markdown 渲染 ----------
 
 def render_markdown(latest):
-    date = latest["timestamp"][:10]
+    date = latest["report_date"]
     reg = latest["regime"]
     sc = reg["scores"]
     br = reg["breadth"]
     btc = latest["market_context"]["btc"]
     eth = latest["market_context"]["eth"]
     glob = latest["market_context"]["global"]
-    setups = latest["setups"]
     watch = latest["watchlist_rows"]
     scan = latest["market_scan"]
     events = latest["events"]
 
-    action_list = [s for s in setups if s.get("direction") in ("LONG", "SHORT")]
-    watch_list = [s for s in setups if s.get("direction") == "WATCH"]
+    action_list, avoid_list, watch_list = partition_setups(latest.get("setups"))
     fgi_cn = FGI_CN.get(btc.get("fear_greed_label", ""), btc.get("fear_greed_label", ""))
 
     lines = [
@@ -190,33 +262,47 @@ def render_markdown(latest):
     ]
 
     if not action_list:
-        lines += ["> 今日无满足过滤条件的直接做多/做空单，建议观望或关注下方变盘观察池。", ""]
+        lines += ["> 今日无满足过滤条件的直接可执行单，建议观望或关注下方变盘观察池。", ""]
     else:
         for idx, s in enumerate(action_list, 1):
             d_cn = "🟢 做多 LONG" if s["direction"] == "LONG" else "🔴 做空 SHORT"
-            avoid = " ⚠️【排雷规避】" if s.get("action_override") == "AVOID" else ""
+            stop_sign = "-" if s["direction"] == "LONG" else "+"
+            risk_txt = resolve_risk_landmine_text(s, events)
             lines += [
-                f"### {idx}. {d_cn} · **{s['symbol']}**（{s['setup_label']} · {s['score']['total']}/20 分）{avoid}",
+                f"### {idx}. {d_cn} · **{s['symbol']}**（{s['setup_label']} · {s['score']['total']}/20 分）",
                 f"- **① 怎么进场**：{s['trigger_rule']}（现价 `{fmt_px(s['price_usd'])}`，24h `{fmt_pct(s.get('chg_24h'))}`）",
-                f"- **② 错了在哪砍**：{s['stop_rule']}",
-                f"- **③ 建议开多大**：**{size_text_cn(s.get('notional_1r_pct'))}**（若打止损，总账户仅亏 1%）",
-                f"- **💡 为什么做它**：{s.get('catalyst_note') or s.get('quant_summary')}",
-                f"- **🛡️ 持仓排雷**：{s.get('risk_landmine')}（年化费率 `{fmt_pct(s.get('funding_ann_pct'))}` · 14天相对大饼 `{fmt_pct(s.get('rs_14d'))}` · 持仓 {fmt_usd(s.get('oi_usd'))}）",
+                f"- **② 错了在哪砍**：`{fmt_px(s.get('stop_price'))}`（`{stop_sign}{s.get('stop_dist_pct')}%`）— {s['stop_rule']}",
+                f"- **③ 建议开多大**：**{size_text_cn(s.get('notional_1r_pct'))}**（按进场位 `{fmt_px(s.get('trigger_price'))}` 计，若打止损总账户亏 ≤1%）",
+                f"- **📊 量化信号**：{s.get('quant_summary') or '—'}",
+            ]
+            if s.get("catalyst_note"):
+                lines.append(f"- **💡 催化核查**：{s['catalyst_note']}")
+            lines += [
+                f"- **🛡️ 持仓排雷**：{risk_txt}（年化费率 `{fmt_pct(s.get('funding_ann_pct'))}` · 14天相对大饼 `{fmt_pct(s.get('rs_14d'))}` · 持仓 {fmt_usd(s.get('oi_usd'))}）",
                 "",
             ]
+
+    if avoid_list:
+        lines += ["### ⛔ 排雷剔除（存在重大事件/解锁风险，不纳入可执行单）", ""]
+        for s in avoid_list:
+            risk_txt = resolve_risk_landmine_text(s, events)
+            lines.append(f"- **{s['symbol']}**（原技术信号：{s.get('setup_label','')}）：因「{risk_txt}」规避开仓。")
+        lines.append("")
 
     if watch_list:
         lines += [
             "### 👀 待变盘观察池（窄幅收敛，突破前勿提前猜方向）",
             "",
-            "| 币种 | 现价 (24h) | 向上突破做多位 | 向下跌破做空位 | 关注逻辑 |",
-            "|------|------------|----------------|----------------|----------|",
+            "| 币种 | 现价 (24h) | 向上突破做多位 | 向下跌破做空位 | 量化结构与催化 |",
+            "|------|------------|----------------|----------------|----------------|",
         ]
         for s in watch_list:
+            logic = s.get("quant_summary") or ""
+            if s.get("catalyst_note"):
+                logic = f"{logic} ｜ 催化：{s['catalyst_note']}" if logic else s["catalyst_note"]
             lines.append(
                 f"| **{s['symbol']}** | {fmt_px(s.get('price_usd'))} ({fmt_pct(s.get('chg_24h'))}) | "
-                f"**{fmt_px(s.get('donchian_20d_high'))}** | **{fmt_px(s.get('donchian_20d_low'))}** | "
-                f"{s.get('catalyst_note') or s.get('quant_summary')} |"
+                f"**{fmt_px(s.get('donchian_20d_high'))}** | **{fmt_px(s.get('donchian_20d_low'))}** | {logic} |"
             )
         lines.append("")
 
@@ -241,7 +327,7 @@ def render_markdown(latest):
         lines.append("> 未来 14 天暂无已确认日期的重大排雷事件。")
     else:
         lines += ["| 日期 | 倒计时 | 标的 | 类型 | 事件说明与应对 |", "|------|--------|------|------|----------------|"]
-        for e in events[:10]:
+        for e in events[:12]:
             da = e.get("days_away", 99)
             cnt = f"**⏰ {da}天**" if da <= 3 else f"{da}天"
             t_cn = EVENT_META.get(e.get("event_type"), ("", "", "事件"))[2]
@@ -278,6 +364,7 @@ def render_html(latest, date_str):
     eth = latest["market_context"]["eth"]
     glob = latest["market_context"]["global"]
     scan = latest["market_scan"]
+    events = latest.get("events") or []
 
     code = reg.get("regime_code", "")
     cls = "bull" if "BULL" in code else ("bear" if "BEAR" in code else "chop")
@@ -291,12 +378,13 @@ def render_html(latest, date_str):
     ]
     kw_html = f'<div class="key-warnings">{"".join(kw_items)}</div>' if kw_items else ""
 
+    breadth_sc = sc.get("breadth") if sc.get("breadth") is not None else sc.get("funding", "—")
     hero_html = (
         f'<div class="hero-card {cls}">'
         f'<div class="hero-top">'
         f'<div class="regime-pill {cls}">{icon} 当前市场：{esc(reg.get("regime_label","—"))}（{sc.get("total","—")}/20 分）</div>'
         f'<div class="score-chips">'
-        f'<span>大饼趋势 {sc.get("btc_trend","—")}/5</span><span>全场广度 {sc.get("funding","—")}/5</span>'
+        f'<span>大饼趋势 {sc.get("btc_trend","—")}/5</span><span>全场广度 {breadth_sc}/5</span>'
         f'<span>情绪费率 {sc.get("sentiment","—")}/5</span><span>宏观环境 {sc.get("macro","—")}/5</span>'
         f'</div></div>'
         f'<div class="hero-posture">👉 今日操作原则：{esc(reg.get("posture",""))}</div>'
@@ -319,22 +407,26 @@ def render_html(latest, date_str):
         for k in kpis
     )
 
-    # Setups
-    setups = latest.get("setups") or []
-    action_list = [s for s in setups if s.get("direction") in ("LONG", "SHORT")]
-    watch_list = [s for s in setups if s.get("direction") == "WATCH"]
+    action_list, avoid_list, watch_list = partition_setups(latest.get("setups"))
     s_parts = []
     if not action_list:
-        s_parts.append('<div class="card"><div class="muted">今日无直接入场的多空信号，建议观望或留意下方待变盘观察池。</div></div>')
+        s_parts.append('<div class="card"><div class="muted">今日无满足过滤条件的直接入场单，建议观望或留意下方待变盘观察池。</div></div>')
     else:
         for idx, s in enumerate(action_list, 1):
             d = s["direction"]
-            dir_cn = ("🟢 做多 LONG" if d == "LONG" else "🔴 做空 SHORT") + (" · ⚠️排雷规避" if s.get("action_override") == "AVOID" else "")
+            dir_cn = "🟢 做多 LONG" if d == "LONG" else "🔴 做空 SHORT"
+            stop_sign = "-" if d == "LONG" else "+"
             pct_sz = int(s.get("notional_1r_pct") or 0)
             usd_10k = pct_sz * 100
             src_html = f' <a href="{esc(s["source_url"])}" target="_blank" style="font-size:13px;color:var(--accent);">[信源 ↗]</a>' if s.get("source_url") else ""
             fr = s.get("funding_ann_pct")
             fr_hint = "（空头补贴多单）" if (d == "LONG" and fr is not None and fr < -5) else ""
+            cat_row = (
+                f'<div class="reason-row"><strong>💡 催化核查：</strong><span>{esc(s["catalyst_note"])}{src_html}</span></div>'
+                if s.get("catalyst_note")
+                else ""
+            )
+            risk_txt = resolve_risk_landmine_text(s, events)
             s_parts.append(
                 f'<div class="ticket-card {d}">'
                 f'<div class="ticket-head"><div class="ticket-title">'
@@ -343,13 +435,14 @@ def render_html(latest, date_str):
                 f'<span class="setup-tag">{esc(s.get("setup_label",""))} · 现价 {fmt_px(s.get("price_usd"))} ({pct_span(s.get("chg_24h"))})</span>'
                 f'</div><div class="score-pill">评分 {s["score"]["total"]}/20</div></div>'
                 f'<div class="order-steps">'
-                f'<div class="step-box"><div class="s-label">① 怎么进场（参考位）</div><div class="s-main">{fmt_px(s.get("trigger_price"))} 附近</div><div class="s-desc">{esc(s.get("trigger_rule",""))}</div></div>'
-                f'<div class="step-box"><div class="s-label">② 错了在哪砍（日线止损）</div><div class="s-main" style="color:var(--red);">{fmt_px(s.get("stop_price"))} <span style="font-size:13.5px;">(-{s.get("stop_dist_pct")}%)</span></div><div class="s-desc">{esc(s.get("stop_rule",""))}</div></div>'
-                f'<div class="step-box"><div class="s-label">③ 建议开多大（按最多亏1%计）</div><div class="s-main" style="color:var(--accent);">${usd_10k:,} <span style="font-size:13.5px;">/ 每$1万本金 ({pct_sz}%)</span></div><div class="s-desc">若打止损（-{s.get("stop_dist_pct")}%），每$1万账户仅亏 $100</div></div>'
+                f'<div class="step-box"><div class="s-label">① 怎么进场（计划触发位）</div><div class="s-main">{fmt_px(s.get("trigger_price"))}</div><div class="s-desc">{esc(s.get("trigger_rule",""))}</div></div>'
+                f'<div class="step-box"><div class="s-label">② 错了在哪砍（日线止损）</div><div class="s-main" style="color:var(--red);">{fmt_px(s.get("stop_price"))} <span style="font-size:13.5px;">({stop_sign}{s.get("stop_dist_pct")}%)</span></div><div class="s-desc">{esc(s.get("stop_rule",""))}</div></div>'
+                f'<div class="step-box"><div class="s-label">③ 建议开多大（按最多亏1%计）</div><div class="s-main" style="color:var(--accent);">${usd_10k:,} <span style="font-size:13.5px;">/ 每$1万本金 ({pct_sz}%)</span></div><div class="s-desc">按 {fmt_px(s.get("trigger_price"))} 进场打止损（宽 {s.get("stop_dist_pct")}%），每$1万本金亏 ≤$100</div></div>'
                 f'</div>'
                 f'<div class="reason-list">'
-                f'<div class="reason-row"><strong>💡 为什么做它：</strong><span>{esc(s.get("catalyst_note") or s.get("quant_summary",""))}{src_html}</span></div>'
-                f'<div class="reason-row"><strong>🛡️ 持仓排雷：</strong><span>{esc(s.get("risk_landmine",""))}</span></div>'
+                f'<div class="reason-row"><strong>📊 量化信号：</strong><span>{esc(s.get("quant_summary",""))}</span></div>'
+                f'{cat_row}'
+                f'<div class="reason-row"><strong>🛡️ 持仓排雷：</strong><span>{esc(risk_txt)}</span></div>'
                 f'</div>'
                 f'<div class="meta-pills">'
                 f'<span class="meta-pill">14天相对大饼：{fmt_pct(s.get("rs_14d"))}</span>'
@@ -359,27 +452,39 @@ def render_html(latest, date_str):
                 f'</div></div>'
             )
 
+    if avoid_list:
+        av_rows = []
+        for s in avoid_list:
+            risk_txt = resolve_risk_landmine_text(s, events)
+            av_rows.append(
+                f'<div class="kw-item crit"><span>⛔</span><span><strong>排雷剔除 · {esc(s["symbol"])}</strong>'
+                f'（原量化候选：{esc(s.get("setup_label",""))}）：因「{esc(risk_txt)}」已剔除出可执行单，建议空仓规避。</span></div>'
+            )
+        s_parts.append(f'<div class="key-warnings" style="margin-bottom:16px;">{"".join(av_rows)}</div>')
+
     if watch_list:
         w_cards = []
         for s in watch_list:
             src_html = f' <a href="{esc(s["source_url"])}" target="_blank" style="font-size:12px;color:var(--accent);">[信源 ↗]</a>' if s.get("source_url") else ""
+            cat_div = f'<div style="margin-top:3px;"><strong>催化核查：</strong>{esc(s["catalyst_note"])}{src_html}</div>' if s.get("catalyst_note") else ""
+            risk_txt = resolve_risk_landmine_text(s, events)
             w_cards.append(
                 f'<div class="watch-card">'
                 f'<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">'
                 f'<div><strong style="font-size:18px;">{esc(s["symbol"])}</strong> <span class="muted" style="font-size:13px;">现价 {fmt_px(s.get("price_usd"))} ({pct_span(s.get("chg_24h"))})</span></div>'
                 f'<span class="trend-pill DOWN_BOUNCE">窄幅收敛待变盘</span></div>'
                 f'<div class="watch-triggers">'
-                f'<div class="wt-box"><div class="wt-lbl">🟢 放量突破做多位</div><div class="wt-val up">{fmt_px(s.get("donchian_20d_high"))}</div></div>'
-                f'<div class="wt-box"><div class="wt-lbl">🔴 放量跌破做空位</div><div class="wt-val down">{fmt_px(s.get("donchian_20d_low"))}</div></div>'
+                f'<div class="wt-box"><div class="wt-lbl">🟢 向上突破做多位</div><div class="wt-val up">{fmt_px(s.get("donchian_20d_high"))}</div></div>'
+                f'<div class="wt-box"><div class="wt-lbl">🔴 向下跌破做空位</div><div class="wt-val down">{fmt_px(s.get("donchian_20d_low"))}</div></div>'
                 f'</div>'
                 f'<div style="font-size:13px;color:var(--text-body);line-height:1.55;">'
-                f'<strong>关注逻辑：</strong>{esc(s.get("catalyst_note") or s.get("quant_summary",""))}{src_html}'
-                f'<div class="muted" style="font-size:12px;margin-top:3px;">排雷：{esc(s.get("risk_landmine",""))}</div>'
+                f'<strong>量化结构：</strong>{esc(s.get("quant_summary",""))}'
+                f'{cat_div}'
+                f'<div class="muted" style="font-size:12px;margin-top:3px;">排雷：{esc(risk_txt)}</div>'
                 f'</div></div>'
             )
         s_parts.append(f'<div class="watch-subhead">👀 待变盘观察池（突破前观望，勿提前猜方向）</div><div class="watch-grid">{"".join(w_cards)}</div>')
 
-    # Watchlist Table
     w_trs = []
     for w in latest.get("watchlist_rows") or []:
         ts = w.get("trend_state", "RANGE_CHOP")
@@ -407,7 +512,6 @@ def render_html(latest, date_str):
         '</tr></thead><tbody>' + "".join(w_trs) + '</tbody></table>'
     )
 
-    # Radar Table Helper (merges RS + Funding + Trend into 1 clean table!)
     def radar_table(rows):
         if not rows:
             return '<div class="muted">暂无数据</div>'
@@ -427,13 +531,11 @@ def render_html(latest, date_str):
             '</tr></thead><tbody>' + "".join(trs) + '</tbody></table>'
         )
 
-    # Events Table
-    events = latest.get("events") or []
     if not events:
         ev_html = '<div class="muted">未来 14 天暂无已确认日期的重大排雷事件</div>'
     else:
         ev_trs = []
-        for e in events[:10]:
+        for e in events[:12]:
             da = e.get("days_away", 99)
             r_cls = ' class="urgent-row"' if da <= 3 else ""
             cd = '<span class="warn">⏰ 今天</span>' if da <= 0 else (f'<span class="warn">⏰ {da} 天后</span>' if da <= 3 else f"{da} 天后")
@@ -477,6 +579,7 @@ def build_telegram_message(latest, date_str):
     br = reg["breadth"]
     btc = latest["market_context"]["btc"]
     eth = latest["market_context"]["eth"]
+    events = latest.get("events") or []
     code = reg.get("regime_code", "")
     r_icon = "🟢" if "BULL" in code else ("🔴" if "BEAR" in code else "🟡")
     fgi_cn = FGI_CN.get(btc.get("fear_greed_label", ""), "")
@@ -487,34 +590,42 @@ def build_telegram_message(latest, date_str):
         f"{r_icon} <b>{html_escape(reg.get('regime_label','—'))}</b>（{sc.get('total','—')}/20分 · 情绪 {btc.get('fear_greed','—')} {fgi_cn}）",
         f"👉 {html_escape(reg.get('posture',''))}",
         "",
-        f"• <b>BTC</b> {fmt_px(btc.get('price_usd'))}（{fmt_pct(btc.get('price_change_24h'))}）{html_escape(btc.get('trend_label',''))}｜20日线压力 {fmt_px(btc.get('ema20'))}",
-        f"• <b>ETH</b> {fmt_px(eth.get('price_usd'))}（{fmt_pct(eth.get('chg_24h'))}）｜全场仅 <b>{br.get('pct_above_ema20','—')}%</b> 站上20日线",
+        f"• <b>BTC</b> {fmt_px(btc.get('price_usd'))}（{fmt_pct(btc.get('price_change_24h'))}）{html_escape(btc.get('trend_label',''))}｜20日线 {fmt_px(btc.get('ema20'))}",
+        f"• <b>ETH</b> {fmt_px(eth.get('price_usd'))}（{fmt_pct(eth.get('chg_24h'))}）｜全场 <b>{br.get('pct_above_ema20','—')}%</b> 站上20日线",
         "",
         "━━━━━━━━━━━━━━━",
     ]
 
-    setups = latest.get("setups") or []
-    action_list = [s for s in setups if s.get("direction") in ("LONG", "SHORT")]
-    watch_list = [s for s in setups if s.get("direction") == "WATCH"]
+    action_list, avoid_list, watch_list = partition_setups(latest.get("setups"))
 
     if not action_list:
         lines.append("🎯 <b>今日可执行单：暂无</b>（建议观望等右侧突破）")
     else:
         lines.append(f"🎯 <b>今日可执行单（共 {len(action_list)} 个）</b>")
         for idx, s in enumerate(action_list[:4], 1):
-            tag = ("🟢 做多" if s["direction"] == "LONG" else "🔴 做空") + ("[排雷规避]" if s.get("action_override") == "AVOID" else "")
-            why = (s.get("catalyst_note") or s.get("quant_summary") or "").strip()
-            if len(why) > 56:
-                why = why[:55] + "…"
+            tag = "🟢 做多" if s["direction"] == "LONG" else "🔴 做空"
+            stop_sign = "-" if s["direction"] == "LONG" else "+"
+            q_txt = (s.get("quant_summary") or "").strip()
+            c_txt = (s.get("catalyst_note") or "").strip()
+            why = f"{q_txt}｜{c_txt}" if (q_txt and c_txt) else (q_txt or c_txt)
+            if len(why) > 64:
+                why = why[:63] + "…"
             lines += [
                 "",
                 f"<b>{idx}. {tag} {html_escape(s['symbol'])}</b>（{html_escape(s.get('setup_label',''))} · {s['score']['total']}分）",
                 f"• 现价：{fmt_px(s.get('price_usd'))}（{fmt_pct(s.get('chg_24h'))}）｜年化费率 {fmt_pct(s.get('funding_ann_pct'))}",
-                f"• 进场：{fmt_px(s.get('trigger_price'))} 附近",
-                f"• 止损：{fmt_px(s.get('stop_price'))}（止损宽 {s.get('stop_dist_pct')}%）",
+                f"• 进场：{fmt_px(s.get('trigger_price'))}",
+                f"• 止损：{fmt_px(s.get('stop_price'))}（{stop_sign}{s.get('stop_dist_pct')}%）",
                 f"• 仓位：<b>{size_text_cn(s.get('notional_1r_pct'))}</b>",
-                f"• 逻辑：{html_escape(why)}",
+                f"• 信号：{html_escape(why)}",
             ]
+
+    if avoid_list:
+        av_syms = "、".join(
+            f"{html_escape(s['symbol'])}（{html_escape(resolve_risk_landmine_text(s, events)[:22])}）"
+            for s in avoid_list[:3]
+        )
+        lines += ["", f"⛔ <b>排雷剔除</b>：{av_syms}"]
 
     if watch_list:
         lines += ["", "👀 <b>变盘观察池（等突破再动）</b>"]
@@ -524,7 +635,7 @@ def build_telegram_message(latest, date_str):
             )
 
     ev_lines = []
-    for e in latest.get("events") or []:
+    for e in events:
         da = e.get("days_away")
         if da is not None and 0 <= da <= 7:
             when = "今天" if da == 0 else ("明天" if da == 1 else f"{da}天后")
@@ -568,20 +679,72 @@ def push_git_and_telegram(html_rel_path, date_str, tg_message):
 
 # ---------- 主入口 ----------
 
+def already_published_today(today_str):
+    html_path = ROOT / "reports" / f"{today_str}_daily.html"
+    latest = load_json(ROOT / "data/latest.json", {}) or {}
+    btc_ok = (((latest.get("market_context") or {}).get("btc") or {}).get("price_usd") or 0) > 0
+    if not (html_path.is_file() and html_path.stat().st_size > 2000 and btc_ok and latest.get("report_date") == today_str):
+        return False
+    # 确认当日文件已提交且领先分支已推送
+    st = subprocess.run(
+        ["git", "status", "--porcelain", f"reports/{today_str}_daily.html", "index.html", "data/latest.json"],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    ahead = subprocess.run(
+        ["git", "rev-list", "--count", "origin/main..HEAD"],
+        cwd=ROOT, capture_output=True, text=True,
+    )
+    is_clean = (st.returncode == 0 and not st.stdout.strip())
+    is_pushed = (ahead.returncode == 0 and int((ahead.stdout or "0").strip() or 0) == 0)
+    return is_clean and is_pushed
+
+
 def main():
+    if "--restore-bak" in sys.argv:
+        return 0 if restore_latest_from_bak() else 1
+
     no_push = "--no-push" in sys.argv
-    collected = load_json(ROOT / "data/collected.json")
-    if not collected:
-        print("Error: data/collected.json missing. Run collect.py first.", file=sys.stderr)
-        return 1
-
-    cfg = load_json(ROOT / "config/config.json", {})
-    overlay = load_json(ROOT / "data/overlay.json", {}) or {}
+    auto_fallback = "--auto-fallback" in sys.argv
     now = datetime.now(TZ)
-    date_str = collected.get("date") or now.strftime("%Y-%m-%d")
-    today_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+    now_date_str = now.strftime("%Y-%m-%d")
 
-    max_sel = cfg.get("setups", {}).get("max_selected", 5)
+    if auto_fallback:
+        if already_published_today(now_date_str):
+            print(f"[publish] {now_date_str} report already live, auto-fallback skipped.", flush=True)
+            return 0
+        print(f"[publish] {now_date_str} report not yet published at {now.strftime('%H:%M')}; running pure-quant fallback...", flush=True)
+        rc = TrendCollector().run("daily")
+        if rc != 0:
+            print(f"[publish] FATAL: fallback collect failed with code {rc}; aborting.", file=sys.stderr)
+            return rc
+
+    collected = load_json(ROOT / "data/collected.json")
+    err = validate_collected(collected)
+    if err:
+        print(f"[publish] FATAL: {err}. Refusing to overwrite latest.json or push.", file=sys.stderr)
+        return 2
+
+    date_str = collected.get("date") or now_date_str
+    if not no_push and date_str != now_date_str and "--allow-stale-collected" not in sys.argv:
+        print(
+            f"[publish] FATAL: collected.json date ({date_str}) != today ({now_date_str}). Run collect.py first.",
+            file=sys.stderr,
+        )
+        return 2
+
+    today_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+    cfg = load_json(ROOT / "config/config.json", {}) or {}
+    raw_overlay = load_json(ROOT / "data/overlay.json", {}) or {}
+
+    overlay_fresh = bool(raw_overlay and raw_overlay.get("date") == date_str)
+    if raw_overlay and not overlay_fresh:
+        print(
+            f"[publish] WARNING: overlay.json date ({raw_overlay.get('date')}) != report date ({date_str}); "
+            "ignoring stale qualitative overlay fields.",
+            file=sys.stderr,
+        )
+    overlay = raw_overlay if overlay_fresh else {}
+
     cands = collected.get("setups_candidates", [])
     by_id = {c["id"]: c for c in cands}
     by_sym = {c["symbol"]: c for c in cands}
@@ -589,24 +752,32 @@ def main():
     chosen_ids = overlay.get("selected_setup_ids")
     if chosen_ids:
         chosen = []
+        seen_syms = set()
         for sid in chosen_ids:
-            if sid in by_id:
-                chosen.append(dict(by_id[sid]))
-            elif sid.upper() in by_sym:
-                chosen.append(dict(by_sym[sid.upper()]))
+            m = by_id.get(sid) or by_sym.get(str(sid).upper())
+            if m and m["symbol"] not in seen_syms:
+                chosen.append(dict(m))
+                seen_syms.add(m["symbol"])
     else:
-        chosen = [dict(c) for c in cands[:max_sel]]
-    # 若 overlay 旧 ID 与新一轮筛选不一致导致为空，回退取最新候选池前 max_sel
+        chosen = [dict(c) for c in cands]
     if not chosen and cands:
-        chosen = [dict(c) for c in cands[:max_sel]]
+        chosen = [dict(c) for c in cands]
+
+    events = merge_and_normalize_events(
+        (collected.get("previous") or {}).get("events", []),
+        overlay.get("events") if isinstance(overlay.get("events"), list) else [],
+        today_date,
+    )
 
     ov_map = overlay.get("setup_overlays") or {}
     for s in chosen:
         ov = ov_map.get(s["symbol"]) or ov_map.get(s["id"]) or {}
-        s["catalyst_note"] = ov.get("catalyst_note") or "纯日线量价结构驱动，无异常单日消息干扰"
-        s["risk_landmine"] = ov.get("risk_landmine") or "近 7 日无已知大额悬崖解锁排雷项"
+        s["catalyst_note"] = (ov.get("catalyst_note") or "").strip() or None
+        s["risk_landmine"] = (ov.get("risk_landmine") or "").strip() or None
         s["action_override"] = ov.get("action_override")
         s["source_url"] = ov.get("source_url")
+        if s["action_override"] == "AVOID":
+            s["notional_1r_pct"] = 0
 
     watch_notes = overlay.get("watchlist_notes") or {}
     watch_rows = [
@@ -614,21 +785,35 @@ def main():
         for w in collected.get("watchlist_rows", [])
     ]
 
-    raw_events = overlay.get("events") if isinstance(overlay.get("events"), list) and overlay.get("events") else collected.get("previous", {}).get("events", [])
-    events = normalize_events(raw_events, today_date)
-
     regime = dict(collected["regime"])
-    scores = dict(regime["scores"])
+    raw_scores = dict(regime["scores"])
+    s_br = raw_scores.get("breadth") if raw_scores.get("breadth") is not None else raw_scores.get("funding", 3)
+    s_macro = raw_scores.get("macro", 3)
     if isinstance(overlay.get("macro_score_override"), int) and 1 <= overlay["macro_score_override"] <= 5:
-        scores["macro"] = overlay["macro_score_override"]
-        scores["total"] = scores["btc_trend"] + scores["funding"] + scores["sentiment"] + scores["macro"]
-    regime["scores"] = scores
-    regime["regime_note"] = overlay.get("regime_note")
+        s_macro = overlay["macro_score_override"]
+    total_sc = raw_scores["btc_trend"] + s_br + raw_scores["sentiment"] + s_macro
+    r_code, r_label, r_posture = classify_regime(total_sc)
+
+    regime.update({
+        "regime_code": r_code,
+        "regime_label": r_label,
+        "posture": r_posture,
+        "scores": {
+            "btc_trend": raw_scores["btc_trend"],
+            "breadth": s_br,
+            "sentiment": raw_scores["sentiment"],
+            "macro": s_macro,
+            "total": total_sc,
+        },
+        "regime_note": (overlay.get("regime_note") or "").strip() or None,
+    })
 
     warnings = build_key_warnings(collected["btc"], watch_rows, events)
 
     latest = {
         "schema_version": "2.1-slim",
+        "report_date": date_str,
+        "overlay_applied": overlay_fresh,
         "timestamp": now.isoformat(timespec="seconds"),
         "session": "daily",
         "regime": regime,
@@ -641,7 +826,7 @@ def main():
             "neg_funding_leaders": collected.get("neg_funding_leaders", []),
         },
         "events": events,
-        "events_note": overlay.get("events_note"),
+        "events_note": (overlay.get("events_note") or "").strip() or None,
         "market_context": {
             "btc": collected["btc"],
             "eth": collected["eth"],
@@ -651,25 +836,37 @@ def main():
         "_sources": collected.get("_sources", {}),
     }
 
-    (ROOT / "reports").mkdir(exist_ok=True)
-    with open(ROOT / "data/latest.json", "w") as f:
-        json.dump(latest, f, ensure_ascii=False, indent=2)
+    try:
+        (ROOT / "reports").mkdir(exist_ok=True)
+        md_path = ROOT / "reports" / f"{date_str}_daily.md"
+        md_text = render_markdown(latest)
 
-    md_path = ROOT / "reports" / f"{date_str}_daily.md"
-    md_text = render_markdown(latest)
-    md_path.write_text(md_text)
+        html_rel = f"reports/{date_str}_daily.html"
+        html_path = ROOT / html_rel
+        html_text = render_html(latest, date_str)
 
-    html_rel = f"reports/{date_str}_daily.html"
-    html_path = ROOT / html_rel
-    html_text = render_html(latest, date_str)
-    html_path.write_text(html_text)
-    shutil.copy2(html_path, ROOT / "index.html")
+        leftover = re.findall(r"\{\{[a-zA-Z0-9_]+\}\}", html_text)
+        if leftover:
+            raise RuntimeError(f"Unfilled HTML template placeholders: {leftover}")
 
-    leftover = re.findall(r"\{\{[a-zA-Z0-9_]+\}\}", html_text)
-    if leftover:
-        print(f"[publish] WARNING leftover placeholders: {leftover}", file=sys.stderr)
+        tmp_latest = ROOT / "data/latest.json.tmp"
+        with open(tmp_latest, "w") as f:
+            json.dump(latest, f, ensure_ascii=False, indent=2)
+        os.replace(tmp_latest, ROOT / "data/latest.json")
 
-    print(f"[publish] built {md_path.name} ({len(md_text.splitlines())}L) + {html_path.name} + index.html ({len(html_text)}B)", flush=True)
+        md_path.write_text(md_text)
+        html_path.write_text(html_text)
+        shutil.copy2(html_path, ROOT / "index.html")
+    except Exception as exc:
+        print(f"[publish] FATAL build error: {exc}", file=sys.stderr)
+        restore_latest_from_bak()
+        return 2
+
+    print(
+        f"[publish] built {md_path.name} ({len(md_text.splitlines())}L) + {html_path.name} + index.html "
+        f"(overlay={'fresh' if overlay_fresh else 'none/stale'}, events={len(events)})",
+        flush=True,
+    )
 
     if not no_push:
         tg_msg = build_telegram_message(latest, date_str)

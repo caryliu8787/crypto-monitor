@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""crypto-monitor 2.0 精简版量化采集引擎（含运行前归档 + 纯永续合约日线结构扫描）。
+"""crypto-monitor 2.1 量化采集引擎（含运行前归档 + 失败熔断保护 + 日线结构扫描）。
 
 用法: python3 scripts/collect.py [daily]
+失败退出码: 2（当核心交易所接口不可用、有效合约数不足 15 或 BTC 日线缺失时熔断退出，绝不产出残缺 collected.json）
 """
 
 import json
@@ -23,6 +24,8 @@ OKX_BASE = "https://www.okx.com"
 HL_INFO = "https://api.hyperliquid.xyz/info"
 CG_BASE = "https://api.coingecko.com/api/v3"
 
+MIN_VALID_PERPS = 15
+
 
 def load_json(path, default=None):
     try:
@@ -33,7 +36,7 @@ def load_json(path, default=None):
 
 
 def fetch_json(url, headers=None, body=None, timeout=25):
-    hdrs = {"User-Agent": "crypto-trend-radar/2.0"}
+    hdrs = {"User-Agent": "crypto-trend-radar/2.1"}
     if body is not None:
         hdrs["Content-Type"] = "application/json"
     if headers:
@@ -55,8 +58,41 @@ def fetch_json(url, headers=None, body=None, timeout=25):
     return None
 
 
+def classify_regime(total_score):
+    """根据四维总分（4~20）确定性映射市场阶段与仓位纪律（供 collect 与 publish 共用）。"""
+    if total_score >= 15:
+        return (
+            "BULL_TREND",
+            "多头趋势期",
+            "顺势做多突破与20日线回踩标的，总名义仓位上限 2.0x–3.0x，不做逆势空单。",
+        )
+    if total_score >= 12:
+        return (
+            "BULL_LEAN",
+            "偏多结构期",
+            "逢回踩20日线布局相对大饼强势币，总仓位建议 1.0x–2.0x，不追高费率品种。",
+        )
+    if total_score >= 9:
+        return (
+            "CHOP_SELECTIVE",
+            "震荡分化期",
+            "控制出手频率（总仓位 ≤1.0x–1.5x），仅做独立逻辑强α或多空配对，防假突破磨损。",
+        )
+    if total_score >= 6:
+        return (
+            "BEAR_PRESSURE",
+            "空头承压期",
+            "防守为主（总仓位 ≤1.0x）：严禁大跌后低位追空大饼；只做极少数独立强势/负费率逼空多单，弱势币等反抽20日线再空。",
+        )
+    return (
+        "DEEP_BEAR",
+        "单边恐慌宣泄期",
+        "严控回撤（≤0.5x–1.0x）：警惕极端负费率暴力轧空，空单等反抽均线再进，抄底等日线收复20日线。",
+    )
+
+
 def housekeeping(now_ts):
-    """内置运行前归档与日志清理（替代原 pre-run.sh）。"""
+    """运行前日志清理与有效 latest.json 备份（仅当 latest.json 含有效 BTC 价格时才更新 .bak）。"""
     (ROOT / "logs").mkdir(exist_ok=True)
     hist_dir = ROOT / "data/history"
     hist_dir.mkdir(parents=True, exist_ok=True)
@@ -66,9 +102,10 @@ def housekeeping(now_ts):
             p.unlink(missing_ok=True)
 
     latest_path = ROOT / "data/latest.json"
-    if latest_path.exists() and latest_path.stat().st_size > 10:
+    prev = load_json(latest_path, {}) or {}
+    btc_px = ((prev.get("market_context") or {}).get("btc") or {}).get("price_usd")
+    if btc_px and btc_px > 0:
         shutil.copy2(latest_path, ROOT / "data/latest.json.bak")
-        prev = load_json(latest_path, {})
         ts = (prev.get("timestamp") or "")[:10]
         if ts:
             shutil.copy2(latest_path, hist_dir / f"{ts}_daily.json")
@@ -78,7 +115,21 @@ def housekeeping(now_ts):
             p.unlink(missing_ok=True)
 
 
-# ---------- 技术指标计算 ----------
+def compute_weighted_funding_ann(coin):
+    """计算 OKX + Hyperliquid 按持仓 OI 加权的年化资金费率（%），供 collect 与 pulse 共用。"""
+    okx_fr = coin.get("okx_funding_8h_pct")
+    hl_fr = coin.get("hl_funding_8h_pct")
+    oi_tot = coin.get("oi_usd") or 0.0
+    if okx_fr is not None and hl_fr is not None and oi_tot > 0:
+        fr_8h = (okx_fr * (coin.get("okx_oi_usd") or 0.0) + hl_fr * (coin.get("hl_oi_usd") or 0.0)) / oi_tot
+    elif okx_fr is not None:
+        fr_8h = okx_fr
+    else:
+        fr_8h = hl_fr
+    return (fr_8h * 3.0 * 365.0) if fr_8h is not None else None
+
+
+# ---------- 技术指标纯函数 ----------
 
 def calc_ema_series(values, span):
     n = len(values)
@@ -140,7 +191,19 @@ def round_sig(val, digits=4):
     return float(f"{val:.{digits}g}")
 
 
-# ---------- 主采集器 ----------
+def fmt_rule_px(v):
+    if v is None:
+        return "—"
+    if abs(v) >= 1000:
+        return f"${v:,.0f}"
+    if abs(v) >= 1:
+        return f"${v:,.2f}"
+    if abs(v) >= 0.01:
+        return f"${v:.4f}"
+    return f"${v:.6f}"
+
+
+# ---------- 主采集引擎 ----------
 
 class TrendCollector:
     def __init__(self):
@@ -152,22 +215,41 @@ class TrendCollector:
         self._cg_hdr = {"x-cg-demo-api-key": cg_key} if cg_key else {}
 
     def get_crypto_whitelist(self):
-        limit = min(250, self.cfg.get("universe", {}).get("coingecko_top_limit", 200))
+        limit = min(250, self.cfg.get("universe", {}).get("coingecko_top_limit", 150))
         rows = fetch_json(
             f"{CG_BASE}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page={limit}&page=1",
             headers=self._cg_hdr,
         )
         syms = {(r.get("symbol") or "").upper() for r in (rows or []) if r.get("symbol")}
-        self.sources["coingecko_top200"] = "coingecko" if syms else None
+        self.sources["coingecko_top150"] = "coingecko" if syms else None
         return syms
 
-    def fetch_perp_universe(self, crypto_whitelist=None):
+    def fetch_okx_funding_for_coins(self, coins_iter):
+        """并发补齐指定合约的 OKX 实时资金费率（供 collect 与 pulse 统一口径调用）。"""
+        targets = [c for c in coins_iter if c.get("okx_inst_id") and c.get("okx_funding_8h_pct") is None]
+        if not targets:
+            return
+
+        def _one(c):
+            iid = c["okx_inst_id"]
+            fr_data = (fetch_json(f"{OKX_BASE}/api/v5/public/funding-rate?instId={iid}", timeout=12) or {}).get("data") or []
+            if fr_data and fr_data[0].get("fundingRate") not in (None, ""):
+                try:
+                    c["okx_funding_8h_pct"] = float(fr_data[0]["fundingRate"]) * 100.0
+                except (TypeError, ValueError):
+                    pass
+
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            list(pool.map(_one, targets))
+
+    def fetch_perp_universe(self, crypto_whitelist=None, extra_symbols=None):
         uni = self.cfg.get("universe", {})
         exclude = {s.upper() for s in uni.get("exclude_bases", [])}
-        min_vol = uni.get("min_perp_vol_24h_usd", 20_000_000)
-        min_oi = uni.get("min_open_interest_usd", 15_000_000)
+        min_vol = uni.get("min_perp_vol_24h_usd", 15_000_000)
+        min_oi = uni.get("min_open_interest_usd", 10_000_000)
         top_n = uni.get("top_n_perps", 60)
         watch_syms = [str(s).upper() for s in self.cfg.get("watchlist", [])]
+        must_include = {s.upper() for s in (extra_symbols or [])} | set(watch_syms) | {"BTC", "ETH"}
 
         okx_t = (fetch_json(f"{OKX_BASE}/api/v5/market/tickers?instType=SWAP") or {}).get("data") or []
         okx_oi = (fetch_json(f"{OKX_BASE}/api/v5/public/open-interest?instType=SWAP") or {}).get("data") or []
@@ -210,19 +292,9 @@ class TrendCollector:
             if last <= 0:
                 continue
             coins[sym] = {
-                "symbol": sym,
-                "price_usd": last,
-                "chg_24h": pct_diff(last, open24) if open24 else None,
-                "okx_inst_id": iid,
-                "okx_scale": scale,
-                "okx_vol_usd": vol_usd,
-                "okx_oi_usd": oi_usd,
-                "okx_funding_8h_pct": None,
-                "hl_coin": None,
-                "hl_scale": 1.0,
-                "hl_vol_usd": 0.0,
-                "hl_oi_usd": 0.0,
-                "hl_funding_8h_pct": None,
+                "symbol": sym, "price_usd": last, "chg_24h": pct_diff(last, open24) if open24 else None,
+                "okx_inst_id": iid, "okx_scale": scale, "okx_vol_usd": vol_usd, "okx_oi_usd": oi_usd, "okx_funding_8h_pct": None,
+                "hl_coin": None, "hl_scale": 1.0, "hl_vol_usd": 0.0, "hl_oi_usd": 0.0, "hl_funding_8h_pct": None,
             }
 
         hl_resp = fetch_json(HL_INFO, body={"type": "metaAndAssetCtxs"})
@@ -250,8 +322,7 @@ class TrendCollector:
                 fr_8h = (fr_1h * 8.0 * 100.0) if fr_1h is not None else None
 
                 if sym in coins:
-                    c = coins[sym]
-                    c.update({"hl_coin": name, "hl_scale": scale, "hl_vol_usd": vol_usd, "hl_oi_usd": oi_usd, "hl_funding_8h_pct": fr_8h})
+                    coins[sym].update({"hl_coin": name, "hl_scale": scale, "hl_vol_usd": vol_usd, "hl_oi_usd": oi_usd, "hl_funding_8h_pct": fr_8h})
                 else:
                     coins[sym] = {
                         "symbol": sym, "price_usd": price, "chg_24h": pct_diff(price, prev_px) if prev_px else None,
@@ -264,19 +335,19 @@ class TrendCollector:
             c["perp_vol_24h_usd"] = c["okx_vol_usd"] + c["hl_vol_usd"]
             c["oi_usd"] = c["okx_oi_usd"] + c["hl_oi_usd"]
             c["in_watchlist"] = sym in watch_syms
-            if crypto_whitelist and sym not in crypto_whitelist and sym not in watch_syms:
+            if crypto_whitelist and sym not in crypto_whitelist and sym not in must_include:
                 continue
-            if sym in watch_syms or (c["perp_vol_24h_usd"] >= min_vol and c["oi_usd"] >= min_oi):
+            if sym in must_include or (c["perp_vol_24h_usd"] >= min_vol and c["oi_usd"] >= min_oi):
                 eligible.append(c)
 
         eligible.sort(key=lambda x: 0.6 * x["perp_vol_24h_usd"] + 0.4 * x["oi_usd"], reverse=True)
         selected = {c["symbol"]: c for c in eligible[:top_n]}
-        for sym in (*watch_syms, "BTC", "ETH"):
+        for sym in must_include:
             if sym in coins:
                 selected.setdefault(sym, coins[sym])
         return list(selected.values()), coins
 
-    def update_and_calc_oi_deltas(self, all_coins_map, now_ts):
+    def update_and_calc_oi_deltas(self, all_coins_map, now_ts, persist=True):
         oi_path = ROOT / "data/oi_history.json"
         cutoff = now_ts - 72 * 3600
         hist = [
@@ -296,7 +367,7 @@ class TrendCollector:
 
         snap_24h = find_snap(24 * 3600, 14 * 3600, 36 * 3600)
         snap_4h = find_snap(4 * 3600, 1.5 * 3600, 8 * 3600)
-        if cur_oi and (not hist or (now_ts - hist[-1].get("ts", 0)) >= 1200):
+        if persist and cur_oi and (not hist or (now_ts - hist[-1].get("ts", 0)) >= 1200):
             hist.append({"ts": int(now_ts), "oi": cur_oi})
             with open(oi_path, "w") as f:
                 json.dump(hist, f, separators=(",", ":"))
@@ -366,12 +437,14 @@ class TrendCollector:
                 sym, bars, src = fut.result()
                 candle_map[sym] = (bars, src)
 
-        self.sources["daily_candles"] = "okx_1Dutc+hyperliquid_1d" if candle_map else None
+        self.sources["daily_candles"] = "okx_1Dutc+hyperliquid_1d" if any(b for b, _ in candle_map.values()) else None
         btc_bars = candle_map.get("BTC", ([], None))[0]
         btc_p = next((c["price_usd"] for c in selected if c["symbol"] == "BTC"), None)
 
+        # closed[-1] 为最近一根 00:00 UTC 收盘，closed[-(d+1)] 的收盘恰为 d*24h 前（消除 1 天偏差）
         def ret_nd(cur_p, bars, d):
-            return pct_diff(cur_p, bars[-d]["c"]) if (cur_p is not None and len(bars) >= d) else None
+            idx = d + 1
+            return pct_diff(cur_p, bars[-idx]["c"]) if (cur_p is not None and len(bars) >= idx) else None
 
         btc_r7 = ret_nd(btc_p, btc_bars, 7)
         btc_r14 = ret_nd(btc_p, btc_bars, 14)
@@ -401,6 +474,7 @@ class TrendCollector:
             d10h, d10l = max(highs[-10:]), min(lows[-10:])
             d55h = max(highs[-55:]) if len(highs) >= 55 else max(highs)
             d55l = min(lows[-55:]) if len(lows) >= 55 else min(lows)
+            range_20d_pct = ((d20h - d20l) / d20l * 100.0) if d20l > 0 else None
 
             avg_qv20 = sum(qvols[-21:-1]) / 20.0
             vol_ratio = (qvols[-1] / avg_qv20) if avg_qv20 > 0 else None
@@ -411,13 +485,7 @@ class TrendCollector:
             rs_7d = (chg_7d - btc_r7) if (chg_7d is not None and btc_r7 is not None) else None
             rs_14d = (chg_14d - btc_r14) if (chg_14d is not None and btc_r14 is not None) else None
 
-            okx_fr, hl_fr = c.get("okx_funding_8h_pct"), c.get("hl_funding_8h_pct")
-            if okx_fr is not None and hl_fr is not None and c["oi_usd"] > 0:
-                fr_8h = (okx_fr * c["okx_oi_usd"] + hl_fr * c["hl_oi_usd"]) / c["oi_usd"]
-            else:
-                fr_8h = okx_fr if okx_fr is not None else hl_fr
-            fr_ann = (fr_8h * 3.0 * 365.0) if fr_8h is not None else None
-
+            fr_ann = compute_weighted_funding_ann(c)
             oi_now = c["oi_usd"]
             oi_chg_24h = pct_diff(oi_now, (snap_24h or {}).get(sym))
             oi_chg_4h = pct_diff(oi_now, (snap_4h or {}).get(sym))
@@ -470,6 +538,7 @@ class TrendCollector:
                 "donchian_10d_low": round_sig(d10l, 5),
                 "donchian_55d_high": round_sig(d55h, 5),
                 "donchian_55d_low": round_sig(d55l, 5),
+                "range_20d_pct": round(range_20d_pct, 2) if range_20d_pct is not None else None,
                 "pos_in_20d_pct": pos_20d,
                 "vol_ratio_1d": round(vol_ratio, 2) if vol_ratio is not None else None,
                 "bb_width_pctile": bb_pctile,
@@ -492,19 +561,26 @@ class TrendCollector:
             enriched.append(item)
         return enriched
 
-    def scan_setups(self, enriched, today_str):
+    def scan_setups(self, enriched, today_str, regime_code):
         scfg = self.cfg.get("setups", {})
         max_atr = self.cfg.get("universe", {}).get("max_atr_pct_filter", 20.0)
+        max_act = scfg.get("max_actionable", 4)
+        max_wat = scfg.get("max_watch", 3)
         vol_min = scfg.get("breakout_vol_ratio_min", 1.25)
         pb_lo, pb_hi = scfg.get("pullback_ema20_band_pct", [-2.8, 3.2])
         bn_lo, bn_hi = scfg.get("bounce_ema20_band_pct", [-3.2, 2.8])
         max_long_fr = scfg.get("max_long_funding_ann_pct", 50.0)
         min_short_fr = scfg.get("min_short_funding_ann_pct", -30.0)
         sq_max = scfg.get("squeeze_bb_pctile_max", 15.0)
+        sq_rng_max = scfg.get("squeeze_20d_range_max_pct", 18.0)
         unit_risk = scfg.get("unit_risk_equity_pct", 1.0)
         max_lev = scfg.get("max_leverage_cap", 3.0)
 
-        candidates = []
+        is_bull_regime = regime_code in ("BULL_TREND", "BULL_LEAN")
+        is_bear_regime = regime_code in ("BEAR_PRESSURE", "DEEP_BEAR")
+
+        action_pool, watch_pool = [], []
+
         for m in enriched:
             sym, p, c1d, ema20, ema50, atr = m["symbol"], m["price_usd"], m["close_1d"], m["ema20"], m["ema50"], m["atr14"]
             if not (p and c1d and ema20 and atr and atr > 0) or (m.get("atr_pct") or 0) > max_atr:
@@ -517,54 +593,70 @@ class TrendCollector:
             p20h, p20l = m["prev_20d_high"], m["prev_20d_low"]
             d20h, d20l = m["donchian_20d_high"], m["donchian_20d_low"]
             d10h, d10l = m["donchian_10d_high"], m["donchian_10d_low"]
-            coin_setups = []
+            rng20 = m.get("range_20d_pct") or 999.0
 
-            def build_risk(entry_ref, stop_ref, is_long):
-                raw_dist = ((entry_ref - stop_ref) if is_long else (stop_ref - entry_ref)) / entry_ref * 100.0
+            coin_actions, coin_watch = [], []
+
+            def build_risk_from_entry(entry_raw, stop_ref, is_long):
+                """严格以实际计划进场价 entry_px 为基准计算止损宽度与 1% 风险定仓，确保展示价格与百分比 100% 自洽。"""
+                entry_px = round_sig(entry_raw, 5)
+                raw_dist = ((entry_px - stop_ref) if is_long else (stop_ref - entry_px)) / entry_px * 100.0
                 if raw_dist < 2.0:
-                    stop_ref = entry_ref - 1.8 * atr if is_long else entry_ref + 1.8 * atr
-                    raw_dist = abs(entry_ref - stop_ref) / entry_ref * 100.0
-                size_1r = int(min(max_lev * 100.0, round(unit_risk / raw_dist * 100.0, 0)))
-                rr_sc = 5 if 3.0 <= raw_dist <= 8.5 else (4 if raw_dist <= 12.0 else (3 if raw_dist <= 16.0 else 2))
-                return round_sig(stop_ref, 5), round(raw_dist, 2), size_1r, rr_sc
+                    stop_ref = entry_px - 1.8 * atr if is_long else entry_px + 1.8 * atr
+                stop_px = round_sig(stop_ref, 5)
+                exact_dist = abs(entry_px - stop_px) / entry_px * 100.0
+                size_1r = int(min(max_lev * 100.0, math.floor(unit_risk / exact_dist * 100.0 + 0.5)))
+                if size_1r * exact_dist / 100.0 > unit_risk * 1.02 and size_1r > 1:
+                    size_1r -= 1
+                rr_sc = 5 if 3.0 <= exact_dist <= 8.5 else (4 if exact_dist <= 12.0 else (3 if exact_dist <= 16.0 else 2))
+                return entry_px, stop_px, round(exact_dist, 2), max(1, size_1r), rr_sc
 
-            # A1: LONG 20D 通道突破
-            if ((c1d >= p20h and p >= p20h * 0.99) or p > d20h * 1.001) and fr_ann <= max_long_fr and dist_atr <= 2.8 and (vr >= vol_min or (m["chg_24h"] or 0) >= 4.0):
+            # A1: LONG 20D 通道突破（空头期仅允许 14D 相对大饼 >= +10% 的独立强 α）
+            if (not is_bear_regime or rs14 >= 10.0) and ((c1d >= p20h and p >= p20h * 0.99) or p > d20h * 1.001) and fr_ann <= max_long_fr and dist_atr <= 2.8 and (vr >= vol_min or (m["chg_24h"] or 0) >= 4.0):
+                brk_lvl = round_sig(p20h if c1d >= p20h else d20h, 5)
                 sc_px = max(d10l, ema20 - 0.5 * atr)
-                if sc_px >= p * 0.975:
-                    sc_px = p - 1.8 * atr
-                stop_px, stop_pct, size_1r, rr_sc = build_risk(p, sc_px, True)
-                trig = round_sig(p20h if c1d >= p20h else d20h, 5)
+                if sc_px >= max(p, brk_lvl) * 0.975:
+                    sc_px = max(p, brk_lvl) - 1.8 * atr
+                entry_px, stop_px, stop_pct, size_1r, rr_sc = build_risk_from_entry(max(p, brk_lvl), sc_px, True)
+                vol_word = f"放量突破20日高点（量能比 {vr:.2f}x）" if vr >= vol_min else f"日线突破20日高点（昨日量比 {vr:.2f}x，盘中走强）"
                 s_st = 5 if (ema50 and ema20 > ema50 and c1d > p20h) else 4
                 s_mo = 5 if (vr >= 1.6 and rs14 >= 8) else (4 if (vr >= 1.25 or rs14 >= 4) else 3)
                 s_cr = 5 if fr_ann <= 5 else (4 if fr_ann <= 20 else 3)
-                coin_setups.append({
+                coin_actions.append({
                     "direction": "LONG", "setup_type": "breakout_20d", "setup_label": "日线20日高点突破",
-                    "trigger_price": trig, "trigger_rule": f"站稳 20 日前高 ${trig} 上方顺势跟进",
-                    "stop_price": stop_px, "stop_rule": f"日线收盘跌破 ${stop_px} 止损（宽 {stop_pct}%）",
+                    "trigger_price": entry_px, "trigger_rule": f"站稳突破位 {fmt_rule_px(brk_lvl)} 跟进（按 {fmt_rule_px(entry_px)} 计仓）",
+                    "stop_price": stop_px, "stop_rule": f"日线收盘跌破 {fmt_rule_px(stop_px)} 止损（-{stop_pct}%）",
                     "stop_dist_pct": stop_pct, "notional_1r_pct": size_1r,
                     "score": {"structure": s_st, "momentum": s_mo, "crowding": s_cr, "risk_reward": rr_sc, "total": s_st + s_mo + s_cr + rr_sc},
-                    "quant_summary": f"放量突破20日高点（量能比 {vr:.2f}x），14天跑赢大饼 {rs14:+.1f}%，年化费率 {fr_ann:+.1f}%。",
+                    "quant_summary": f"{vol_word}，14天相对大饼 {rs14:+.1f}%，年化费率 {fr_ann:+.1f}%。",
                 })
 
-            # A2: LONG 多头排列回踩 EMA20
-            if ema50 and ema20 > ema50 and (m["ema20_rising"] or p >= ema20) and pb_lo <= dist20 <= pb_hi and p > ema50 * 1.005 and rs14 >= 2.0 and fr_ann <= 35.0:
-                stop_px, stop_pct, size_1r, rr_sc = build_risk(p, min(ema50 * 0.99, ema20 - 1.5 * atr), True)
+            # A2: LONG 多头排列回踩 EMA20（空头期要求 rs14 >= 8% 强抗跌）
+            if (not is_bear_regime or rs14 >= 8.0) and ema50 and ema20 > ema50 and (m["ema20_rising"] or p >= ema20) and pb_lo <= dist20 <= pb_hi and p > ema50 * 1.005 and rs14 >= 2.0 and fr_ann <= 35.0:
+                entry_px, stop_px, stop_pct, size_1r, rr_sc = build_risk_from_entry(
+                    ema20 if p >= ema20 else p, min(ema50 * 0.99, ema20 - 1.5 * atr), True
+                )
+                rule_txt = (
+                    f"挂单/等待回踩 20 日均线 {fmt_rule_px(entry_px)} 企稳低吸"
+                    if p >= ema20
+                    else f"现价已回踩至 20 日均线（{fmt_rule_px(ema20)}）下方，于 {fmt_rule_px(entry_px)} 企稳收阳低吸"
+                )
                 s_st = 5 if (m.get("ema200") and ema50 > m["ema200"]) else 4
                 s_mo = 5 if rs14 >= 10 else 4
                 s_cr = 5 if fr_ann <= 5 else 4
-                coin_setups.append({
+                coin_actions.append({
                     "direction": "LONG", "setup_type": "pullback_ema20", "setup_label": "多头排列回踩20日线",
-                    "trigger_price": ema20, "trigger_rule": f"回踩 20 日均线 ${ema20} 附近企稳收阳低吸",
-                    "stop_price": stop_px, "stop_rule": f"日线收盘跌破防守位 ${stop_px} 离场（宽 {stop_pct}%）",
+                    "trigger_price": entry_px, "trigger_rule": rule_txt,
+                    "stop_price": stop_px, "stop_rule": f"日线收盘跌破防守位 {fmt_rule_px(stop_px)} 离场（-{stop_pct}%）",
                     "stop_dist_pct": stop_pct, "notional_1r_pct": size_1r,
                     "score": {"structure": s_st, "momentum": s_mo, "crowding": s_cr, "risk_reward": rr_sc, "total": s_st + s_mo + s_cr + rr_sc},
-                    "quant_summary": f"日线维持多头排列，现价贴近20日均线（{dist20:+.1f}%），14天跑赢大饼 {rs14:+.1f}%。",
+                    "quant_summary": f"日线维持多头排列，现价距20日均线 {dist20:+.1f}%，14天跑赢大饼 {rs14:+.1f}%。",
                 })
 
-            # A3: LONG 逆势逼空龙头（收紧规则：必须日线多头排列，或存在年化 <= -15% 的真实空头拥挤逼空）
+            # A3: LONG 逆势多头领涨 / 负费率逼空
             if p >= ema20 * 0.985 and rs7 >= 6.0 and ((ema50 and ema20 > ema50) or fr_ann <= -15.0) and dist_atr <= 2.4:
-                stop_px, stop_pct, size_1r, rr_sc = build_risk(p, min(ema20 * 0.96, p - 1.8 * atr), True)
+                raw_entry = ema20 if p >= ema20 else p
+                entry_px, stop_px, stop_pct, size_1r, rr_sc = build_risk_from_entry(raw_entry, min(ema20 * 0.95, raw_entry - 1.5 * atr), True)
                 if stop_pct <= 18.0:
                     s_st = 4 if (ema50 and p > ema50) else 3
                     s_mo = 5 if rs7 >= 12 else 4
@@ -575,82 +667,101 @@ class TrendCollector:
                         if fr_ann <= -15.0
                         else f"大盘承压下日线维持多头排列，7天逆势跑赢大饼 {rs7:+.1f}%。"
                     )
-                    coin_setups.append({
+                    rule_txt = (
+                        f"等待回踩 20 日均线 {fmt_rule_px(entry_px)} 附近低吸（突破 {fmt_rule_px(d20h)} 右侧加仓）"
+                        if p > ema20 * 1.01
+                        else f"守稳 20 日均线 {fmt_rule_px(entry_px)} 附近低吸（突破 {fmt_rule_px(d20h)} 加仓）"
+                    )
+                    coin_actions.append({
                         "direction": "LONG", "setup_type": "rs_leader_squeeze", "setup_label": s_lbl,
-                        "trigger_price": ema20, "trigger_rule": f"守稳 20 日均线 ${ema20} 低吸，突破 ${d20h} 加仓",
-                        "stop_price": stop_px, "stop_rule": f"日线收盘跌破 ${stop_px} 离场（宽 {stop_pct}%）",
+                        "trigger_price": entry_px, "trigger_rule": rule_txt,
+                        "stop_price": stop_px, "stop_rule": f"日线收盘跌破 {fmt_rule_px(stop_px)} 离场（-{stop_pct}%）",
                         "stop_dist_pct": stop_pct, "notional_1r_pct": size_1r,
                         "score": {"structure": s_st, "momentum": s_mo, "crowding": s_cr, "risk_reward": rr_sc, "total": s_st + s_mo + s_cr + rr_sc},
                         "quant_summary": q_sum,
                     })
 
-            # B1: SHORT 20D 通道破位
-            if ((c1d <= p20l and p <= p20l * 1.01) or p < d20l * 0.999) and fr_ann >= min_short_fr and dist_atr >= -2.2 and (vr >= 1.15 or (m["chg_24h"] or 0) <= -4.0):
+            # B1: SHORT 20D 支撑破位（多头趋势期不做逆势空；偏离均线已超 -1.8x ATR 时禁追地板空单）
+            if not is_bull_regime and ((c1d <= p20l and p <= p20l * 1.01) or p < d20l * 0.999) and fr_ann >= min_short_fr and dist_atr >= -1.8 and (vr >= 1.15 or (m["chg_24h"] or 0) <= -4.0):
+                brk_lvl = round_sig(p20l if c1d <= p20l else d20l, 5)
+                raw_entry = brk_lvl if p < brk_lvl else p
                 sc_px = min(d10h, ema20 + 0.5 * atr)
-                if sc_px <= p * 1.025:
-                    sc_px = p + 1.8 * atr
-                stop_px, stop_pct, size_1r, rr_sc = build_risk(p, sc_px, False)
+                if sc_px <= raw_entry * 1.025:
+                    sc_px = raw_entry + 1.8 * atr
+                entry_px, stop_px, stop_pct, size_1r, rr_sc = build_risk_from_entry(raw_entry, sc_px, False)
                 if stop_pct <= 18.0:
-                    trig = round_sig(p20l if c1d <= p20l else d20l, 5)
+                    vol_word = f"放量跌破20日低点（量能比 {vr:.2f}x）" if vr >= 1.25 else f"日线跌破20日低点（昨日量比 {vr:.2f}x，盘中转弱）"
                     s_st = 5 if (ema50 and ema20 < ema50 and c1d < p20l) else 4
                     s_mo = 5 if (vr >= 1.5 and rs14 <= -6) else 4
                     s_cr = 5 if fr_ann >= 5 else 4
-                    coin_setups.append({
+                    coin_actions.append({
                         "direction": "SHORT", "setup_type": "breakdown_20d", "setup_label": "日线20日支撑破位",
-                        "trigger_price": trig, "trigger_rule": f"反抽破位口 ${trig} 受阻做空（勿低位追空）",
-                        "stop_price": stop_px, "stop_rule": f"日线收盘站回 ${stop_px} 止损（宽 {stop_pct}%）",
+                        "trigger_price": entry_px, "trigger_rule": f"等待反抽破位口 {fmt_rule_px(entry_px)} 受阻做空（勿低位追空）",
+                        "stop_price": stop_px, "stop_rule": f"日线收盘站回 {fmt_rule_px(stop_px)} 止损（+{stop_pct}%）",
                         "stop_dist_pct": stop_pct, "notional_1r_pct": size_1r,
                         "score": {"structure": s_st, "momentum": s_mo, "crowding": s_cr, "risk_reward": rr_sc, "total": s_st + s_mo + s_cr + rr_sc},
-                        "quant_summary": f"放量跌破20日低点（量能比 {vr:.2f}x），14天跑输大饼 {rs14:+.1f}%。",
+                        "quant_summary": f"{vol_word}，14天跑输大饼 {rs14:+.1f}%。",
                     })
 
-            # B2: SHORT 空头排列反抽 EMA20
-            if ema50 and ema20 < ema50 and not m["ema20_rising"] and bn_lo <= dist20 <= bn_hi and p < ema50 * 0.995 and rs14 <= -3.0 and fr_ann >= -15.0:
-                stop_px, stop_pct, size_1r, rr_sc = build_risk(p, max(ema50 * 1.01, ema20 + 1.5 * atr), False)
+            # B2: SHORT 空头排列反抽 EMA20（多头趋势期仅在 rs14 <= -12% 极弱标的上保留）
+            if (not is_bull_regime or rs14 <= -12.0) and ema50 and ema20 < ema50 and not m["ema20_rising"] and bn_lo <= dist20 <= bn_hi and p < ema50 * 0.995 and rs14 <= -3.0 and fr_ann >= -15.0:
+                entry_px, stop_px, stop_pct, size_1r, rr_sc = build_risk_from_entry(
+                    ema20 if p <= ema20 else p, max(ema50 * 1.01, ema20 + 1.5 * atr), False
+                )
+                rule_txt = (
+                    f"等待反抽 20 日均线 {fmt_rule_px(entry_px)} 滞涨布空"
+                    if p <= ema20
+                    else f"现价已反抽至 20 日均线（{fmt_rule_px(ema20)}）上方，于 {fmt_rule_px(entry_px)} 滞涨收上影线布空"
+                )
                 s_st = 5 if (m.get("ema200") and ema50 < m["ema200"]) else 4
                 s_mo = 5 if rs14 <= -10 else 4
                 s_cr = 5 if fr_ann >= 5 else 4
-                coin_setups.append({
+                coin_actions.append({
                     "direction": "SHORT", "setup_type": "bounce_ema20_short", "setup_label": "空头反抽20日线受阻",
-                    "trigger_price": ema20, "trigger_rule": f"反抽 20 日均线 ${ema20} 滞涨收上影线布空",
-                    "stop_price": stop_px, "stop_rule": f"日线收盘站回 ${stop_px} 止损（宽 {stop_pct}%）",
+                    "trigger_price": entry_px, "trigger_rule": rule_txt,
+                    "stop_price": stop_px, "stop_rule": f"日线收盘站回 {fmt_rule_px(stop_px)} 止损（+{stop_pct}%）",
                     "stop_dist_pct": stop_pct, "notional_1r_pct": size_1r,
                     "score": {"structure": s_st, "momentum": s_mo, "crowding": s_cr, "risk_reward": rr_sc, "total": s_st + s_mo + s_cr + rr_sc},
                     "quant_summary": f"标准空头趋势反抽至20日均线附近（{dist20:+.1f}%），14天跑输大饼 {rs14:+.1f}%。",
                 })
 
-            # C: WATCH 波动率极度压缩
-            if m["bb_width_pctile"] is not None and m["bb_width_pctile"] <= sq_max and m["perp_vol_24h_usd"] >= 35_000_000:
-                stop_px, stop_pct, size_1r, rr_sc = build_risk(d20h, ema20, True)
-                coin_setups.append({
+            # C: WATCH 真正窄幅收敛（同时要求 BB 带宽低分位 + 20 日高低振幅 <= sq_rng_max，且独立池不挤占可执行单名额）
+            if not coin_actions and m["bb_width_pctile"] is not None and m["bb_width_pctile"] <= sq_max and rng20 <= sq_rng_max and m["perp_vol_24h_usd"] >= 30_000_000:
+                entry_px, stop_px, stop_pct, size_1r, rr_sc = build_risk_from_entry(d20h, ema20, True)
+                coin_watch.append({
                     "direction": "WATCH", "setup_type": "volatility_squeeze", "setup_label": "日线窄幅收敛待变盘",
-                    "trigger_price": d20h, "trigger_rule": f"上破 ${d20h} 做多 / 下破 ${d20l} 做空",
-                    "stop_price": ema20, "stop_rule": f"突破后以20日均线 ${ema20} 为防守",
+                    "trigger_price": entry_px, "trigger_rule": f"上破 {fmt_rule_px(d20h)} 做多 / 下破 {fmt_rule_px(d20l)} 做空",
+                    "stop_price": stop_px, "stop_rule": f"突破后以20日均线 {fmt_rule_px(ema20)} 为防守",
                     "stop_dist_pct": stop_pct, "notional_1r_pct": size_1r,
                     "score": {"structure": 4, "momentum": 3, "crowding": 4, "risk_reward": rr_sc, "total": 11 + rr_sc},
-                    "quant_summary": f"20日布林带宽处于近60天 {m['bb_width_pctile']}% 极低分位，变盘在即。",
+                    "quant_summary": f"近20日高低振幅仅 {rng20:.1f}%（布林带宽处60日 {m['bb_width_pctile']}% 分位），蓄势待突破。",
                 })
 
-            if coin_setups:
-                coin_setups.sort(key=lambda s: (s["direction"] != "WATCH", s["score"]["total"]), reverse=True)
-                best = coin_setups[0]
+            def _attach(best):
                 best.update({
                     "id": f"{sym.lower()}-{best['setup_type']}-{today_str.replace('-', '')}",
                     "symbol": sym, "in_watchlist": m["in_watchlist"],
                     "price_usd": p, "close_1d": c1d, "chg_24h": m["chg_24h"], "rs_14d": m["rs_14d"],
-                    "ema20": ema20, "ema50": ema50, "donchian_20d_high": d20h, "donchian_20d_low": d20l,
-                    "bb_width_pctile": m["bb_width_pctile"], "trend_label": m["trend_label"],
+                    "ema20": ema20, "ema50": ema50,
+                    "prev_20d_high": p20h, "prev_20d_low": p20l,
+                    "donchian_20d_high": d20h, "donchian_20d_low": d20l,
+                    "range_20d_pct": m["range_20d_pct"], "bb_width_pctile": m["bb_width_pctile"], "trend_label": m["trend_label"],
                     "atr14": atr, "atr_pct": m["atr_pct"], "vol_ratio_1d": m["vol_ratio_1d"],
                     "perp_vol_24h_usd": m["perp_vol_24h_usd"], "oi_usd": m["oi_usd"],
                     "oi_change_24h_pct": m["oi_change_24h_pct"], "funding_ann_pct": m["funding_ann_pct"],
                 })
-                candidates.append(best)
+                return best
 
-        candidates.sort(
-            key=lambda x: (x["score"]["total"], 1 if x["in_watchlist"] else 0, math.log10(max(1.0, x["perp_vol_24h_usd"]))),
-            reverse=True,
-        )
-        return candidates[:10]
+            if coin_actions:
+                coin_actions.sort(key=lambda s: s["score"]["total"], reverse=True)
+                action_pool.append(_attach(coin_actions[0]))
+            elif coin_watch:
+                watch_pool.append(_attach(coin_watch[0]))
+
+        sort_key = lambda x: (x["score"]["total"], 1 if x["in_watchlist"] else 0, math.log10(max(1.0, x["perp_vol_24h_usd"])))
+        action_pool.sort(key=sort_key, reverse=True)
+        watch_pool.sort(key=lambda x: (-(x.get("range_20d_pct") or 99), math.log10(max(1.0, x["perp_vol_24h_usd"]))), reverse=True)
+        return action_pool[:max_act] + watch_pool[:max_wat]
 
     def evaluate_regime(self, enriched, fgi, stable_delta):
         by_sym = {m["symbol"]: m for m in enriched}
@@ -679,23 +790,13 @@ class TrendCollector:
         s_sent = 4 if (med_fr is not None and -10 <= med_fr <= 25 and (fgi or 50) >= 45) else (2 if (fgi or 50) < 25 else 3)
         s_macro = 3
         tot = s_btc + s_br + s_sent + s_macro
-
-        if tot >= 15:
-            code, label, posture = "BULL_TREND", "多头趋势期", "顺势做多突破与20日线回踩标的，总名义仓位上限 2.0x–3.0x，不做逆势空单。"
-        elif tot >= 12:
-            code, label, posture = "BULL_LEAN", "偏多结构期", "逢回踩20日线布局相对大饼强势币，总仓位建议 1.0x–2.0x，不追高费率品种。"
-        elif tot >= 9:
-            code, label, posture = "CHOP_SELECTIVE", "震荡分化期", "控制出手频率（总仓位 ≤1.0x–1.5x），仅做独立逻辑强α或多空配对，防假突破磨损。"
-        elif tot >= 6:
-            code, label, posture = "BEAR_PRESSURE", "空头承压期", "防守为主（总仓位 ≤1.0x）：严禁大跌后低位追空大饼；只做极少数独立强势/负费率逼空多单，弱势币等反抽20日线再空。"
-        else:
-            code, label, posture = "DEEP_BEAR", "单边恐慌宣泄期", "严控回撤（≤0.5x–1.0x）：警惕极端负费率暴力轧空，空单等反抽均线再进，抄底等日线收复20日线。"
+        code, label, posture = classify_regime(tot)
 
         return {
             "regime_code": code,
             "regime_label": label,
             "posture": posture,
-            "scores": {"btc_trend": s_btc, "funding": s_br, "sentiment": s_sent, "macro": s_macro, "total": tot},
+            "scores": {"btc_trend": s_btc, "breadth": s_br, "sentiment": s_sent, "macro": s_macro, "total": tot},
             "breadth": {"universe_count": total, "above_ema20": above20, "pct_above_ema20": pct20, "pct_above_ema50": pct50},
             "derivatives_overview": {"universe_total_oi_usd": total_oi, "median_funding_ann_pct": med_fr},
             "eth_summary": {
@@ -732,7 +833,7 @@ class TrendCollector:
         out = []
         for e in self.prev.get("events", []):
             e = dict(e)
-            if e.get("status") == "passed":
+            if e.get("status") in ("passed", "cancelled"):
                 continue
             try:
                 d = datetime.strptime(e["date"], "%Y-%m-%d").date()
@@ -750,12 +851,29 @@ class TrendCollector:
         today = now.date()
         today_str = today.strftime("%Y-%m-%d")
         housekeeping(now.timestamp())
-        print(f"[collect 2.0] {now.isoformat(timespec='seconds')} start", flush=True)
+        print(f"[collect 2.1] {now.isoformat(timespec='seconds')} start", flush=True)
 
         whitelist = self.get_crypto_whitelist()
         selected, all_coins = self.fetch_perp_universe(whitelist)
-        snap_24h, snap_4h = self.update_and_calc_oi_deltas(all_coins, now.timestamp())
+
+        # 失败熔断门禁 1: 两个核心合约交易所均失败时立即终止，绝不写出残缺数据
+        if not self.sources.get("okx_swap") and not self.sources.get("hyperliquid"):
+            print("[collect 2.1] FATAL: both OKX Swap and Hyperliquid APIs failed; aborting.", file=sys.stderr)
+            return 2
+
+        snap_24h, snap_4h = self.update_and_calc_oi_deltas(all_coins, now.timestamp(), persist=True)
         enriched = self.enrich_universe_metrics(selected, snap_24h, snap_4h)
+
+        by_sym = {m["symbol"]: m for m in enriched}
+        btc_m = by_sym.get("BTC", {})
+
+        # 失败熔断门禁 2: 有效日线合约池不足或 BTC 核心数据缺失时立即终止
+        if len(enriched) < MIN_VALID_PERPS or not btc_m.get("price_usd") or not btc_m.get("ema20"):
+            print(
+                f"[collect 2.1] FATAL: insufficient valid perps ({len(enriched)} < {MIN_VALID_PERPS}) or missing BTC daily candles; aborting.",
+                file=sys.stderr,
+            )
+            return 2
 
         stable_total = self.get_stablecoins()
         fgi, fgi_label = self.get_fgi()
@@ -763,13 +881,10 @@ class TrendCollector:
         stable_delta = round((stable_total - prev_stable) / prev_stable * 100.0, 2) if (stable_total and prev_stable) else None
 
         regime = self.evaluate_regime(enriched, fgi, stable_delta)
-        setups = self.scan_setups(enriched, today_str)
-
-        by_sym = {m["symbol"]: m for m in enriched}
-        btc_m = by_sym.get("BTC", {})
+        setups = self.scan_setups(enriched, today_str, regime["regime_code"])
 
         max_atr = self.cfg.get("universe", {}).get("max_atr_pct_filter", 20.0)
-        min_oi = self.cfg.get("universe", {}).get("min_open_interest_usd", 15_000_000)
+        min_oi = self.cfg.get("universe", {}).get("min_open_interest_usd", 10_000_000)
         liquid = [
             m for m in enriched
             if m["symbol"] != "BTC" and (m.get("oi_usd") or 0) >= min_oi and (m.get("atr_pct") or 0) <= max_atr and m.get("rs_14d") is not None
@@ -787,8 +902,9 @@ class TrendCollector:
         def slim(m):
             keys = (
                 "symbol", "price_usd", "close_1d", "chg_24h", "chg_7d", "rs_7d", "rs_14d",
-                "ema20", "ema50", "dist_ema20_pct", "dist_ema20_atr", "donchian_20d_high",
-                "donchian_20d_low", "pos_in_20d_pct", "atr14", "atr_pct", "vol_ratio_1d",
+                "ema20", "ema50", "dist_ema20_pct", "dist_ema20_atr",
+                "prev_20d_high", "prev_20d_low", "donchian_20d_high", "donchian_20d_low",
+                "range_20d_pct", "pos_in_20d_pct", "atr14", "atr_pct", "vol_ratio_1d",
                 "bb_width_pctile", "trend_state", "trend_label", "perp_vol_24h_usd", "oi_usd",
                 "oi_change_24h_pct", "funding_ann_pct",
             )
@@ -816,6 +932,8 @@ class TrendCollector:
                 "ema200": btc_m.get("ema200"),
                 "atr14": btc_m.get("atr14"),
                 "atr_pct": btc_m.get("atr_pct"),
+                "prev_20d_high": btc_m.get("prev_20d_high"),
+                "prev_20d_low": btc_m.get("prev_20d_low"),
                 "donchian_20d_high": btc_m.get("donchian_20d_high"),
                 "donchian_20d_low": btc_m.get("donchian_20d_low"),
                 "trend_state": btc_m.get("trend_state"),
@@ -844,7 +962,7 @@ class TrendCollector:
 
         missing = [k for k, v in self.sources.items() if v is None]
         print(
-            f"[collect 2.0] done in {time.time() - t0:.1f}s -> perps={len(enriched)} "
+            f"[collect 2.1] done in {time.time() - t0:.1f}s -> perps={len(enriched)} "
             f"setups={len(setups)} watchlist={len(watchlist_rows)} missing={missing or '无'}",
             flush=True,
         )
