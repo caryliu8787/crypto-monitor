@@ -732,11 +732,12 @@ def _pid_alive(pid):
 
 
 def primary_pipeline_in_progress(today_str, now_ts, grace_sec=PRIMARY_GRACE_SEC):
-    """检测 08:05 主流程是否正在采集中或正处于 Step 2 联网核查窗口内，防止兜底任务抢跑撞车。"""
+    """仅当主流程留下当日 .pipeline-run.json 标记时，才避让采集进程与 40 分钟 Step 2 窗口（兜底自身不写该标记，绝不挡住 08:50 重试）。"""
     pipe = load_json(ROOT / "data/.pipeline-run.json", {}) or {}
-    if pipe.get("date") == today_str:
-        if pipe.get("stage") == "collect" and (now_ts - (pipe.get("started_ts") or 0)) < 600 and _pid_alive(pipe.get("pid")):
-            return f"collect.py pid={pipe.get('pid')} actively running"
+    if pipe.get("date") != today_str:
+        return None
+    if pipe.get("stage") == "collect" and (now_ts - (pipe.get("started_ts") or 0)) < 600 and _pid_alive(pipe.get("pid")):
+        return f"collect.py pid={pipe.get('pid')} actively running"
 
     col_path = ROOT / "data/collected.json"
     col = load_json(col_path)
@@ -772,7 +773,17 @@ def already_published_today(today_str):
     )
     is_clean = (st.returncode == 0 and not st.stdout.strip())
     is_pushed = (ahead.returncode == 0 and int((ahead.stdout or "0").strip() or 0) == 0)
-    return is_clean and is_pushed
+    if not (is_clean and is_pushed):
+        return False
+    # 若配置了 Telegram，还需确认当日 Telegram 已成功送达（否则允许 08:50 自动补推）
+    out_cfg = load_json(ROOT / "config/output.json", {}) or {}
+    tg_cfg = (out_cfg.get("formats") or {}).get("telegram") or {}
+    tg_configured = bool((os.environ.get("TELEGRAM_BOT_TOKEN") or tg_cfg.get("bot_token")) and (os.environ.get("TELEGRAM_CHAT_ID") or tg_cfg.get("chat_id")))
+    if tg_configured:
+        pub_state = load_json(ROOT / "data/publish-state.json", {}) or {}
+        if pub_state.get("last_tg_date") != today_str:
+            return False
+    return True
 
 
 def main():
