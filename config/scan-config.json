@@ -1,17 +1,36 @@
 {
-  "_comment": "全市场扫描参数。控制机会发现的币池过滤、板块轮动追踪和机会评分机制。",
+  "_comment": "2.0 低倍合约日线趋势雷达配置。聚焦高流动性主流永续合约、日线收盘结构（EMA20/50/200、20D/55D 唐奇安通道、ATR14、相对BTC强弱）与资金费率/OI 持仓健康度。",
 
-  "universe": {
-    "min_market_cap_usd": 30000000,
-    "min_volume_24h_usd": 3000000,
-    "movers_pool_size": 250,
-    "exclude_categories": ["stablecoins", "wrapped-tokens", "liquid-staking-tokens", "bridged-tokens"],
-    "top_movers_reported": 12,
-    "new_listing_bypass": "出现在 /search/trending 或有明确 TGE/新上所背景的币可绕过市值/成交量门槛——薄流通盘新币正是值得早期发现的机会类型，不要让门槛静默排除它们"
+  "perp_universe": {
+    "top_n_perps": 75,
+    "coingecko_crypto_top_pages": 2,
+    "min_perp_vol_24h_usd": 12000000,
+    "min_open_interest_usd": 5000000,
+    "max_atr_pct_filter": 25.0,
+    "candle_days": 230,
+    "exclude_bases": [
+      "USDC", "USDT", "DAI", "USDE", "FDUSD", "PYUSD", "USD1", "RLUSD",
+      "WBTC", "WETH", "STETH", "WSTETH", "XAUT", "PAXG", "XAU", "XAG"
+    ]
+  },
+
+  "trend_setups": {
+    "max_actionable_setups": 5,
+    "high_conviction_score": 15,
+    "breakout_vol_ratio_min": 1.25,
+    "pullback_ema20_band_pct": [-2.8, 3.2],
+    "bounce_ema20_band_pct": [-3.2, 2.8],
+    "max_long_funding_ann_pct": 55.0,
+    "min_short_funding_ann_pct": -35.0,
+    "squeeze_bb_pctile_max": 15.0,
+    "risk_model": {
+      "unit_risk_equity_pct": 1.0,
+      "max_leverage_cap": 3.0
+    }
   },
 
   "sector_rotation": {
-    "_comment": "追踪的 CoinGecko category id。每期与上期快照对比市值变化，连续 ≥2 期同向视为轮动信号。",
+    "_comment": "追踪的 CoinGecko category id。读取 market_cap_change_24h（百分比），连续 ≥2 期同向视为轮动信号。",
     "categories_tracked": [
       "layer-1",
       "layer-2",
@@ -24,18 +43,21 @@
     "min_category_market_cap_usd": 500000000
   },
 
-  "opportunity_scoring": {
-    "_comment": "4 维评分，每维 1-5 分，总分 /20。crowding 和 risk 为反向计分（越不拥挤/风险越低分越高）。",
-    "dimensions": ["catalyst_strength", "time_window", "crowding_inverse", "risk_inverse"],
-    "high_grade_threshold": 15,
-    "stale_after_sessions": 5,
-    "tracking_board_max": 10
+  "pulse": {
+    "_comment": "盘中纯脚本异动脉冲阈值（scripts/pulse.py，零大模型消耗，每 2 小时巡检一次）。",
+    "cooldown_hours": 6,
+    "min_perp_vol_24h_usd": 25000000,
+    "min_open_interest_usd": 10000000,
+    "breakout_buffer_pct": 0.3,
+    "breakout_vol_ratio_min": 1.4,
+    "short_squeeze_funding_ann_pct": -38.0,
+    "short_squeeze_24h_chg_min": 3.0,
+    "crowded_long_funding_ann_pct": 65.0,
+    "atr_extension_warn": 3.0
   },
 
   "call_budget": {
-    "_comment": "外部调用预算纪律（40 分钟看门狗约束）。",
-    "websearch_candidates_max": 12,
-    "websearch_events_max": 5,
-    "total_calls_target": "30-40"
+    "websearch_setups_max": 6,
+    "websearch_events_max": 4
   }
 }

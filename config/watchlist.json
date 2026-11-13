@@ -1,4 +1,15 @@
 {
-  "_comment": "用户手动钉住的关注币种（CoinGecko coin id）。无论是否再次出现在异动扫描中，报告的关注名单区都会展示其当前指标。发现值得持续跟踪的机会时，手动把 coin id 加进来。默认空。",
-  "coins": []
+  "_comment": "核心自选合约池（支持直接填大写币种 Symbol 如 SOL/HYPE，会自动匹配 OKX Swap 与 Hyperliquid 永续合约）。每天固定计算并展示日线均线结构、20D 通道位置、ATR 波幅与资金费率。",
+  "coins": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "HYPE",
+    "SUI",
+    "BNB",
+    "DOGE",
+    "AAVE",
+    "LINK",
+    "PENDLE"
+  ]
 }

@@ -1,141 +1,61 @@
 {
-  "_comment": "告警规则配置（机会发现导向）。severity: critical/warning/info。动态阈值使用百分比或相对值，不硬编码绝对价格和币种名单。",
+  "_comment": "告警规则配置（2.0 低倍合约日线趋势交易导向）。severity: critical/warning/info。",
 
-  "price_alerts": [
+  "regime_alerts": [
     {
-      "id": "large_cap_mover",
-      "description": "扫描池（top 250）内币种 24h 异动，阈值见 scan-config.json",
-      "condition": "abs(24h_change) > 15% AND market_cap > min_market_cap_usd",
-      "severity": "warning",
-      "message_template": "{{ticker}} 24h 变动 {{change}}%（市值 ${{mcap}}），进入异动关注"
-    },
-    {
-      "id": "btc_support_break",
-      "description": "BTC 跌破当日技术分析搜索到的关键支撑位",
-      "condition": "price < searched_key_support",
+      "id": "btc_20d_channel_break",
+      "description": "BTC 突破或跌破日线 20D 唐奇安通道高低点",
+      "condition": "btc.close_1d > btc.prev_20d_high OR btc.live_price < btc.prev_20d_low",
       "severity": "critical",
-      "message_template": "BTC 跌破关键支撑 ${{support}}，趋势可能转弱"
+      "message_template": "BTC 日线触及/突破 20D {{direction}}（${{level}}），大盘趋势进入单边扩张窗口"
     },
     {
-      "id": "btc_resistance_break",
-      "description": "BTC 突破当日技术分析搜索到的关键阻力位",
-      "condition": "price > searched_key_resistance",
-      "severity": "info",
-      "message_template": "BTC 突破关键阻力 ${{resistance}}，趋势偏强"
+      "id": "btc_ema50_cross",
+      "description": "BTC 跌破或收复日线 EMA50 中期生命线",
+      "condition": "btc crosses ema50",
+      "severity": "warning",
+      "message_template": "BTC {{action}}日线 EMA50（${{ema50}}），中期仓位偏置需同步调整"
     }
   ],
 
-  "cycle_alerts": [
+  "setup_alerts": [
     {
-      "_comment": "周期位置信号，用作进场时机参考（当前无持仓，视角是「何时该积极找机会」）",
-      "id": "mvrv_overheated",
-      "description": "BTC MVRV 比率超过 3.5，市场可能过热",
-      "condition": "mvrv_ratio > 3.5",
-      "severity": "warning",
-      "message_template": "BTC MVRV 比率 {{mvrv}}，市场可能过热，谨慎追高"
-    },
-    {
-      "id": "mvrv_deep_value",
-      "description": "BTC MVRV 比率低于 1.0，历史性低估区间",
-      "condition": "mvrv_ratio < 1.0",
+      "id": "high_conviction_setup",
+      "description": "今日筛选出 ≥15/20 的高确定性日线趋势剧本",
+      "condition": "setup.score.total >= 15",
       "severity": "critical",
-      "message_template": "BTC MVRV 比率 {{mvrv}}，进入历史性低估区间——周期级进场信号"
+      "message_template": "🎯 高确定性剧本：{{symbol}} {{direction}}（{{setup_label}}，{{score}}/20）— 触发 ${{trigger}} / 止损 ${{stop}}"
     },
     {
-      "id": "extreme_fear_entry",
-      "description": "恐惧贪婪指数低于 15，极端恐惧",
-      "condition": "fear_greed < 15",
+      "id": "perp_short_squeeze",
+      "description": "主流合约出现显著负费率且价格抗跌/走强（潜在逼空行情）",
+      "condition": "funding_ann_pct <= -30% AND chg_24h >= 2%",
       "severity": "warning",
-      "message_template": "恐惧贪婪指数 {{fgi}}（极端恐惧），逆向布局窗口，关注机会看板高分项"
+      "message_template": "🔥 负费率逼空信号：{{symbol}} 年化费率 {{funding_ann}}% + 24h {{chg_24h}}%（OI ${{oi}}）"
     },
     {
-      "id": "funding_rate_extreme",
-      "description": "资金费率极端，多空拥挤",
-      "condition": "funding_rate > 0.1% OR funding_rate < -0.05%",
+      "id": "perp_crowded_extension",
+      "description": "自选或持仓候选出现极端正费率或偏离 EMA20 超过 3x ATR",
+      "condition": "funding_ann_pct >= 65% OR abs(dist_ema20_atr) >= 3.0",
       "severity": "warning",
-      "message_template": "BTC 资金费率 {{rate}}%，{{direction}}拥挤"
+      "message_template": "⚠️ 趋势拥挤/超涨超跌：{{symbol}} 偏离 EMA20 达 {{dist_atr}}x ATR，年化费率 {{funding_ann}}%，不宜追单"
     }
   ],
 
-  "macro_alerts": [
-    {
-      "id": "fomc_imminent",
-      "description": "FOMC 会议在 24h 内",
-      "condition": "fomc_date within 24h",
-      "severity": "critical",
-      "message_template": "FOMC 会议即将召开（{{date}}），预期波动加剧"
-    },
-    {
-      "id": "cpi_release",
-      "description": "CPI 数据在 24h 内发布",
-      "condition": "cpi_date within 24h",
-      "severity": "warning",
-      "message_template": "CPI 数据即将发布（{{date}}），关注通胀预期"
-    },
-    {
-      "id": "surprise_rate_change",
-      "description": "意外的利率变动",
-      "condition": "detected_in_search",
-      "severity": "critical",
-      "message_template": "检测到意外利率变动：{{detail}}"
-    }
-  ],
-
-  "ecosystem_alerts": [
-    {
-      "id": "major_hack",
-      "description": "扫描池或机会名单内币种的重大安全事件",
-      "condition": "detected_in_search",
-      "severity": "critical",
-      "message_template": "{{ticker}} 相关安全事件：{{detail}}"
-    },
-    {
-      "id": "regulatory_action",
-      "description": "监管打击或执法行动",
-      "condition": "detected_in_search",
-      "severity": "critical",
-      "message_template": "监管行动：{{detail}}"
-    },
-    {
-      "id": "tvl_weekly_drop",
-      "description": "机会名单相关链 TVL 周跌幅超过 15%（数据驱动，不限定币种）",
-      "condition": "tvl_7d_change < -15%",
-      "severity": "warning",
-      "message_template": "{{chain}} TVL 周跌 {{change}}%，生态资金外流"
-    }
-  ],
-
-  "cross_coin_alerts": [
-    {
-      "id": "risk_off_signal",
-      "description": "避险信号：BTC 主导率上升 + 恐惧情绪",
-      "condition": "btc_dominance_7d_change > +2% AND fear_greed < 25",
-      "severity": "warning",
-      "message_template": "避险信号：BTC 主导率升至 {{dominance}}%，恐惧贪婪 {{fgi}}，山寨机会环境恶化"
-    },
-    {
-      "id": "altseason_gauge",
-      "description": "ETH/BTC 比率创 30 日新高/新低（山寨季风向标）",
-      "condition": "eth_btc_ratio > 30d_high OR eth_btc_ratio < 30d_low",
-      "severity": "info",
-      "message_template": "ETH/BTC 比率 {{ratio}} 创 30 日{{direction}}，山寨市场相对{{strength}}"
-    }
-  ],
-
-  "opportunity_alerts": [
-    {
-      "id": "new_high_grade_opportunity",
-      "description": "本期新发现的机会评分达到高分线",
-      "condition": "opportunity.status == 'new' AND opportunity.score.total >= 15",
-      "severity": "critical",
-      "message_template": "🔥 高分机会：{{coin}} — {{title}}（{{score}}/20，扩散度{{diffusion}}）"
-    },
+  "risk_landmine_alerts": [
     {
       "id": "event_within_48h",
-      "description": "事件日历中有事件进入 48h 窗口",
+      "description": "未来 48h 内存在重大代币解锁、升级或宏观 CPI/FOMC 事件",
       "condition": "event.days_away <= 2 AND event.status == 'upcoming'",
       "severity": "warning",
-      "message_template": "⏰ 事件临近：{{coin}} {{event_type}}（{{date}}）— {{description}}"
+      "message_template": "⏰ 48h 持仓排雷：{{coin}} {{event_type}}（{{date}}）— {{description}}"
+    },
+    {
+      "id": "major_unlock_headwind",
+      "description": "未来 7 天内存在大额代币解锁，提示多单规避或顺空头结构关注",
+      "condition": "event.event_type == 'unlock' AND event.days_away <= 7",
+      "severity": "info",
+      "message_template": "🔓 7d 解锁排雷：{{coin}}（{{date}}，剩 {{days}} 天）— {{description}}"
     }
   ]
 }

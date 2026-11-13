@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cary.crypto-pulse</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <string>/Users/cary/projects/crypto-monitor/scripts/pulse.py</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/Users/cary/projects/crypto-monitor</string>
+  <key>StartInterval</key>
+  <integer>7200</integer>
+  <key>RunAtLoad</key>
+  <false/>
+  <key>StandardOutPath</key>
+  <string>/Users/cary/projects/crypto-monitor/logs/pulse.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/cary/projects/crypto-monitor/logs/pulse.err</string>
+</dict>
+</plist>

@@ -27,5 +27,10 @@ config/output.json
 *.swo
 *~
 
-# Intermediate collector output (runtime artifact)
+# Intermediate collector & runtime state artifacts
 data/collected.json
+data/overlay.json
+data/oi_history.json
+data/pulse_state.json
+data/tmp/
+.tmp/
