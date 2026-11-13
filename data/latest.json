@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0-daily-perp-trend",
-  "timestamp": "2026-11-13T21:02:09+08:00",
+  "timestamp": "2026-11-13T21:15:58+08:00",
   "session": "daily",
   "regime": {
     "regime_code": "BEAR_PRESSURE",
@@ -79,6 +79,9 @@
       "catalyst_note": "双重强催化共振：① 纳斯达克批准 Canary 质押型 INJ ETF（代码 INJC）；② 11/12 开启年度重磅 RWA 主网升级『Veyra (v1.21.0)』治理投票（目标 11/24 激活）。",
       "risk_landmine": "近 14 日无大额代币悬崖解锁；需留意 11/24 主网升级前后的兑现波动与 BTC 极端下杀拖累。",
       "source_url": "https://www.thedefiant.io",
+      "donchian_20d_high": 8.591,
+      "donchian_20d_low": 6.818,
+      "bb_width_pctile": 19.7,
       "action_override": null
     },
     {
@@ -122,6 +125,9 @@
       "catalyst_note": "11/9 纽交所（NYSE）确认选用 Avalanche 架构构建 24/7 代币化股票交易与清算底层；11/12 财库公司 AVAX One 披露全仓质押策略并清零可转债。",
       "risk_landmine": "11/8 基金会解锁已平稳消化，布林带宽压缩至近 60 日极值，静待日线收盘突破区间上下沿再右侧跟进。",
       "source_url": "https://cryptobriefing.com",
+      "donchian_20d_high": 9.166,
+      "donchian_20d_low": 7.745,
+      "bb_width_pctile": 1.6,
       "action_override": null
     },
     {
@@ -165,6 +171,9 @@
       "catalyst_note": "去中心化主权云与 Chain Fusion 叙事支撑买盘，在大盘普跌中放量守稳 EMA20，上方紧邻 EMA50 与 20D 高点共振压力区。",
       "risk_landmine": "无近期大额悬崖解锁；上方 EMA50 阻力密集，建议确认突破前高或回踩 EMA20 不破分批试仓。",
       "source_url": null,
+      "donchian_20d_high": 2.749,
+      "donchian_20d_low": 2.257,
+      "bb_width_pctile": 1.6,
       "action_override": null
     },
     {
@@ -208,6 +217,9 @@
       "catalyst_note": "瑞士数字资产银行 Sygnum 上线 LIT 机构交易、托管与借贷服务，Perp DEX 赛道交易量维持头部，合约持仓深度充沛。",
       "risk_landmine": "11 月处于解锁平静期；真正的大额 50% 总量三年线性解锁始于 2026-12-27（剩 44 天），波段周期内无迫近抛压。",
       "source_url": null,
+      "donchian_20d_high": 3.5728,
+      "donchian_20d_low": 2.59,
+      "bb_width_pctile": 4.9,
       "action_override": null
     }
   ],
@@ -1848,47 +1860,47 @@
     {
       "severity": "critical",
       "rule": "btc_20d_channel_break",
-      "message": "BTC 触及/跌破日线 20D 低点 $71,073（现价 $69,100），大盘处于下行寻底阶段，多单严控仓位"
+      "message": "BTC 跌破近 20 日低点 $71,073（现价 $69,100），下行寻底阶段严控多单仓位"
     },
     {
       "severity": "critical",
       "rule": "high_conviction_setup",
-      "message": "高分日线剧本：INJ LONG · 多头排列回踩 EMA20（18/20） — 触发 $7.81 / 止损 $6.84（13.23%）"
+      "message": "高分剧本：INJ LONG · 多头排列回踩 EMA20（18/20） — 进场参考 $7.81 / 止损 $6.84"
     },
     {
       "severity": "critical",
       "rule": "high_conviction_setup",
-      "message": "高分日线剧本：ICP LONG · 逆势抗跌龙头 · 空头回补（16/20） — 触发 $2.56 / 止损 $2.30（11.68%）"
+      "message": "高分剧本：ICP LONG · 逆势抗跌龙头 · 空头回补（16/20） — 进场参考 $2.56 / 止损 $2.30"
     },
     {
       "severity": "warning",
       "rule": "perp_short_squeeze",
-      "message": "负费率逼空观察：JUP 年化费率 -57.8% 且 24h +2.02%（合约 OI $1148万），空头拥挤慎摸顶"
+      "message": "负费率逼空：JUP 年化费率 -57.8% 且 24h +2.02%，空头拥挤勿盲目摸顶"
     },
     {
       "severity": "warning",
       "rule": "perp_crowded_extension",
-      "message": "偏离/拥挤预警：BTC 偏离日线 EMA20 达 -3.32x ATR，年化费率 +2.9%，忌追涨杀跌"
+      "message": "BTC 短线偏离 20 日均线达 -3.3 倍波幅（ATR），切忌顺向追单"
     },
     {
       "severity": "warning",
       "rule": "event_within_48h",
-      "message": "⏰ 48h 持仓排雷：PIEVERSE unlock（2026-11-14）— 多源追踪页列示 11/14 代币解锁窗口。"
+      "message": "48h 内排雷：PIEVERSE 代币解锁（2026-11-14）— 多源追踪页列示 11/14 代币解锁窗口。"
     },
     {
       "severity": "warning",
       "rule": "event_within_48h",
-      "message": "⏰ 48h 持仓排雷：STRK unlock（2026-11-15）— 早期贡献者与投资者月度解锁约 1.27 亿枚 STRK（约占总供应 1.25%）。"
+      "message": "48h 内排雷：STRK 代币解锁（2026-11-15）— 早期贡献者与投资者月度解锁约 1.27 亿枚 STRK（约占总供应 1.25%）。"
     },
     {
       "severity": "info",
       "rule": "major_unlock_headwind",
-      "message": "🔓 7d 解锁排雷：ARB（2026-11-16，剩 3 天）— 团队与投资者月度悬崖解锁约 92.6M ARB。"
+      "message": "7天内解锁：ARB（2026-11-16，剩 3 天）— 团队与投资者月度悬崖解锁约 92.6M ARB。"
     },
     {
       "severity": "info",
       "rule": "major_unlock_headwind",
-      "message": "🔓 7d 解锁排雷：ZRO（2026-11-20，剩 7 天）— 战略伙伴、团队与投资者月度解锁约 23.3M–23.6M ZRO。"
+      "message": "7天内解锁：ZRO（2026-11-20，剩 7 天）— 战略伙伴、团队与投资者月度解锁约 23.3M–23.6M ZRO。"
     }
   ],
   "_sources": {
