@@ -7,7 +7,7 @@
 3. 自动评估日线趋势告警规则（BTC 通道/均线破位、高分剧本、负费率逼空、拥挤偏离、48h/7d 事件排雷）
 4. 生成：
    - data/latest.json
-   - reports/YYYY-MM-DD_daily.md（精炼实战日线交易早报，控制在 120~170 行）
+   - reports/YYYY-MM-DD_daily.md（高可读性实战日线交易早报）
    - reports/latest-alert.txt
 5. 自动调用 scripts/render-html.py 产出交互式 HTML 仪表盘
 
@@ -15,6 +15,7 @@
 """
 
 import json
+import re
 import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
@@ -22,6 +23,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 TZ = timezone(timedelta(hours=8))
+
+EVENT_TYPE_CN = {
+    "unlock": "代币解锁",
+    "upgrade": "主网升级",
+    "macro": "宏观节点",
+}
 
 
 def load_json(path, default=None):
@@ -91,7 +98,6 @@ def normalize_events(raw_events, today_date):
 def build_alerts(btc, setups, enriched_watch, neg_leaders, events, prev_btc):
     alerts = []
 
-    # 1. BTC 20D 通道突破 / 破位
     bp = btc.get("price_usd")
     d20h = btc.get("donchian_20d_high")
     d20l = btc.get("donchian_20d_low")
@@ -99,16 +105,15 @@ def build_alerts(btc, setups, enriched_watch, neg_leaders, events, prev_btc):
         alerts.append({
             "severity": "critical",
             "rule": "btc_20d_channel_break",
-            "message": f"BTC 触及/突破日线 20D 高点阻力 {fmt_px(d20h)}（现价 {fmt_px(bp)}），关注右侧多头趋势共振",
+            "message": f"BTC 突破日线 20 日高点 {fmt_px(d20h)}（现价 {fmt_px(bp)}），多头趋势共振",
         })
     elif bp and d20l and bp <= d20l * 1.003:
         alerts.append({
             "severity": "critical",
             "rule": "btc_20d_channel_break",
-            "message": f"BTC 触及/跌破日线 20D 低点 {fmt_px(d20l)}（现价 {fmt_px(bp)}），大盘处于下行寻底阶段，多单严控仓位",
+            "message": f"BTC 跌破近 20 日低点 {fmt_px(d20l)}（现价 {fmt_px(bp)}），下行寻底阶段严控多单仓位",
         })
 
-    # 2. BTC EMA50 穿越
     ema50 = btc.get("ema50")
     prev_p = (prev_btc or {}).get("price_usd")
     if bp and ema50 and prev_p:
@@ -116,70 +121,60 @@ def build_alerts(btc, setups, enriched_watch, neg_leaders, events, prev_btc):
             alerts.append({
                 "severity": "warning",
                 "rule": "btc_ema50_cross",
-                "message": f"BTC 失守日线 EMA50 中期均线（{fmt_px(ema50)}），中期趋势转弱",
+                "message": f"BTC 失守日线 50 日均线（{fmt_px(ema50)}），中期趋势转弱",
             })
         elif prev_p <= ema50 < bp:
             alerts.append({
                 "severity": "warning",
                 "rule": "btc_ema50_cross",
-                "message": f"BTC 重新站上日线 EMA50 中期均线（{fmt_px(ema50)}），中期结构转强",
+                "message": f"BTC 收复日线 50 日均线（{fmt_px(ema50)}），中期结构修复",
             })
 
-    # 3. 高分交易剧本 (>=15/20)
     for s in setups:
-        tot = (s.get("score") or {}).get("total") or 0
-        if tot >= 15 and s.get("direction") in ("LONG", "SHORT"):
+        if s.get("direction") in ("LONG", "SHORT") and s.get("action_override") != "AVOID" and s["score"]["total"] >= 16:
             alerts.append({
                 "severity": "critical",
                 "rule": "high_conviction_setup",
                 "message": (
-                    f"高分日线剧本：{s['symbol']} {s['direction']} · {s['setup_label']}（{tot}/20）"
-                    f" — 触发 {fmt_px(s.get('trigger_price'))} / 止损 {fmt_px(s.get('stop_price'))}（{s.get('stop_dist_pct')}%）"
+                    f"高分剧本：{s['symbol']} {s['direction']} · {s['setup_label']}（{s['score']['total']}/20）"
+                    f" — 进场参考 {fmt_px(s['trigger_price'])} / 止损 {fmt_px(s['stop_price'])}"
                 ),
             })
 
-    # 4. 负费率逼空异动
-    for m in neg_leaders[:4]:
+    for m in neg_leaders[:3]:
         fr = m.get("funding_ann_pct")
-        c24 = m.get("chg_24h")
-        if fr is not None and c24 is not None and fr <= -30.0 and c24 >= 2.0:
+        chg = m.get("chg_24h") or 0
+        if fr is not None and fr <= -25.0 and chg >= 1.5:
             alerts.append({
                 "severity": "warning",
                 "rule": "perp_short_squeeze",
-                "message": (
-                    f"负费率逼空观察：{m['symbol']} 年化费率 {fr:+.1f}% 且 24h {c24:+.2f}%"
-                    f"（合约 OI {fmt_usd(m.get('oi_usd'))}），空头拥挤慎摸顶"
-                ),
+                "message": f"负费率逼空：{m['symbol']} 年化费率 {fr:+.1f}% 且 24h {chg:+.2f}%，空头拥挤勿盲目摸顶",
             })
 
-    # 5. 自选池过度偏离 / 正费率拥挤
     for w in enriched_watch:
         datr = w.get("dist_ema20_atr")
         fr = w.get("funding_ann_pct") or 0
-        if (datr is not None and abs(datr) >= 3.0) or fr >= 65.0:
+        if datr is not None and (abs(datr) >= 3.0 or abs(fr) >= 60.0):
             alerts.append({
                 "severity": "warning",
                 "rule": "perp_crowded_extension",
-                "message": (
-                    f"偏离/拥挤预警：{w['symbol']} 偏离日线 EMA20 达 {datr:+.2f}x ATR，"
-                    f"年化费率 {fr:+.1f}%，忌追涨杀跌"
-                ),
+                "message": f"{w['symbol']} 短线偏离 20 日均线达 {datr:+.1f} 倍波幅（ATR），切忌顺向追单",
             })
 
-    # 6. 48h & 7d 事件排雷
     for e in events:
-        da = e.get("days_away")
-        if da is not None and 0 <= da <= 2:
+        da = e.get("days_away", 99)
+        t_cn = EVENT_TYPE_CN.get(e.get("event_type"), e.get("event_type", "事件"))
+        if 0 <= da <= 2:
             alerts.append({
                 "severity": "warning",
                 "rule": "event_within_48h",
-                "message": f"⏰ 48h 持仓排雷：{str(e.get('coin','')).upper()} {e.get('event_type')}（{e.get('date')}）— {e.get('description','')}",
+                "message": f"48h 内排雷：{str(e.get('coin','')).upper()} {t_cn}（{e.get('date')}）— {e.get('description','')}",
             })
-        elif da is not None and 2 < da <= 7 and e.get("event_type") == "unlock":
+        elif 3 <= da <= 7 and e.get("event_type") == "unlock":
             alerts.append({
                 "severity": "info",
                 "rule": "major_unlock_headwind",
-                "message": f"🔓 7d 解锁排雷：{str(e.get('coin','')).upper()}（{e.get('date')}，剩 {da} 天）— {e.get('description','')}",
+                "message": f"7天内解锁：{str(e.get('coin','')).upper()}（{e.get('date')}，剩 {da} 天）— {e.get('description','')}",
             })
 
     sev_rank = {"critical": 0, "warning": 1, "info": 2}
@@ -189,7 +184,6 @@ def build_alerts(btc, setups, enriched_watch, neg_leaders, events, prev_btc):
 
 def generate_markdown(latest):
     date = latest["timestamp"][:10]
-    sess = latest["session"]
     reg = latest["regime"]
     sc = reg["scores"]
     br = reg["breadth"]
@@ -200,139 +194,162 @@ def generate_markdown(latest):
     watch = latest["watchlist_rows"]
     scan = latest["market_scan"]
     events = latest["events"]
-    alerts = latest["alerts"]
 
-    lines = [
-        f"# 加密货币日线合约趋势早报 — {date}（{sess}）",
-        "",
-        f"> 采集时间：{latest['timestamp'][:16].replace('T', ' ')} (UTC+8) ｜ 已收盘日线基准：{btc.get('last_closed_date', '—')} (00:00 UTC)",
-        f"> 数据源：OKX Swap + Hyperliquid + CoinGecko + DeFiLlama + CoinMetrics + Alternative.me（零推算，详见 `_sources`）",
-        "",
-        "## 一、大盘择时滤网（Regime & 仓位偏置）",
-        "",
-        f"- **当前阶段：{reg['regime_label']}（{sc['total']}/20）**",
-        f"- **仓位与执行准则**：{reg['posture']}",
-    ]
-    if reg.get("regime_note"):
-        lines.append(f"- **定性补充**：{reg['regime_note']}")
     mvrv_val = btc.get("mvrv_ratio")
     mvrv_str = f"{mvrv_val:.2f}" if isinstance(mvrv_val, (int, float)) else (mvrv_val or "—")
+
+    action_setups = [s for s in setups if s.get("direction") in ("LONG", "SHORT")]
+    watch_setups = [s for s in setups if s.get("direction") == "WATCH"]
+
+    lines = [
+        f"# 加密货币日线合约趋势早报（{date}）",
+        "",
+        f"> 生成时间：{latest['timestamp'][:16].replace('T', ' ')} (UTC+8) ｜ 日线收盘基准：{btc.get('last_closed_date', '—')} 00:00 UTC",
+        "",
+        "## 一、今日大盘总纲：能不能做？仓位开多大？",
+        "",
+        f"- **市场环境**：**{reg['regime_label']}（{sc['total']}/20 分）** ｜ 恐慌贪婪指数 **{btc.get('fear_greed','—')}**（{btc.get('fear_greed_label','')}）",
+        f"- **今日行动准则**：{reg['posture']}",
+    ]
+    if reg.get("regime_note"):
+        lines.append(f"- **盘面解读**：{reg['regime_note']}")
+
     lines += [
-        f"- **BTC 日线结构**：现价 **{fmt_px(btc.get('price_usd'))}**（24h {fmt_pct(btc.get('price_change_24h'))} / 7d {fmt_pct(btc.get('price_change_7d'))}）｜ "
-        f"`EMA20` {fmt_px(btc.get('ema20'))} / `EMA50` {fmt_px(btc.get('ema50'))} / `EMA200` {fmt_px(btc.get('ema200'))}（**{btc.get('trend_label','—')}**）",
-        f"- **BTC 通道与波幅**：20D 区间 `{fmt_px(btc.get('donchian_20d_low'))} – {fmt_px(btc.get('donchian_20d_high'))}` ｜ 日线 `ATR(14)` {fmt_px(btc.get('atr14'))}（{fmt_pct(btc.get('atr_pct'), signed=False)}）｜ 年化费率 {fmt_pct(btc.get('funding_ann_pct'), 1)}",
-        f"- **ETH 结构**：{fmt_px(eth.get('price_usd'))}（24h {fmt_pct(eth.get('chg_24h'))}，{eth.get('trend_label','—')}，ETH/BTC `{eth.get('eth_btc_ratio') or '—'}`）",
-        f"- **主流合约广度（{br['universe_count']} 币池）**：站上日线 `EMA20` **{br['above_ema20']}/{br['universe_count']}（{br['pct_above_ema20']}%）** ｜ "
-        f"站上 `EMA50` **{br['pct_above_ema50']}%** ｜ 中位年化费率 **{fmt_pct(reg['derivatives_overview'].get('median_funding_ann_pct'), 1)}**",
-        f"- **宏观流动性**：稳定币总供应 {fmt_usd(glob.get('stablecoin_total_supply'))}（{fmt_pct(glob.get('stablecoin_supply_change_pct'))}）｜ FGI **{btc.get('fear_greed','—')}**（{btc.get('fear_greed_label','')}）｜ MVRV `{mvrv_str}`",
         "",
-        "## 二、今日 Top 日线交易剧本（低倍合约执行卡）",
+        "| 核心基准 | 现价 (24h) | 日线趋势状态 | 关键均线参考 | 20日高低区间 | 日均波幅 (ATR) | 年化资金费率 |",
+        "|----------|------------|--------------|--------------|--------------|----------------|--------------|",
+        f"| **BTC** | **{fmt_px(btc.get('price_usd'))}** ({fmt_pct(btc.get('price_change_24h'), 1)}) | {btc.get('trend_label','—')} | 20日均线 {fmt_px(btc.get('ema20'))} / 200日均线 {fmt_px(btc.get('ema200'))} | {fmt_px(btc.get('donchian_20d_low'))} ~ {fmt_px(btc.get('donchian_20d_high'))} | {fmt_px(btc.get('atr14'))} ({fmt_pct(btc.get('atr_pct'), 1, False)}) | {fmt_pct(btc.get('funding_ann_pct'), 1)} |",
+        f"| **ETH** | **{fmt_px(eth.get('price_usd'))}** ({fmt_pct(eth.get('chg_24h'), 1)}) | {eth.get('trend_label','—')} | 20日均线 {fmt_px(eth.get('ema20'))} / 50日均线 {fmt_px(eth.get('ema50'))} | ETH/BTC 汇率 `{eth.get('eth_btc_ratio') or '—'}` | — | — |",
         "",
-        "> 仓位标尺说明：「1% 风险名义仓位」= 当价格触发结构止损时，账户总权益恰好亏损 1.0% 所对应的名义仓位占比（封顶 300% 即 3.0x）。",
+        f"- **市场广度与资金**：52 个主流合约中仅 **{br['above_ema20']} 个（{br['pct_above_ema20']}%）** 站上 20 日均线 ｜ 中位年化费率 **{fmt_pct(reg['derivatives_overview'].get('median_funding_ann_pct'), 1)}** ｜ 稳定币总市值 {fmt_usd(glob.get('stablecoin_total_supply'))} ｜ MVRV `{mvrv_str}`",
+        "",
+        "---",
+        "",
+        "## 二、今日交易计划",
+        "",
+        "### 🎯 可执行方向单（挂单 / 企稳介入）",
         "",
     ]
 
-    if not setups:
-        lines.append("**今日无满足高赔率过滤条件的日线标准剧本，建议观望或仅持既有顺势底仓。**")
+    if not action_setups:
+        lines.append("> 今日无满足高胜率过滤条件的直接做多/做空日线信号，建议空仓等待或只盯下方变盘观察池。")
         lines.append("")
     else:
-        for idx, s in enumerate(setups, 1):
-            icon = "🟢 LONG" if s["direction"] == "LONG" else ("🔴 SHORT" if s["direction"] == "SHORT" else "🟡 WATCH")
-            warn_tag = " ⚠️[排雷降级]" if s.get("action_override") == "AVOID" else ""
-            stop_desc = s.get("stop_rule") or f"{fmt_px(s['stop_price'])}（幅度 {s['stop_dist_pct']}%）"
+        for idx, s in enumerate(action_setups, 1):
+            dir_cn = "🟢 做多 LONG" if s["direction"] == "LONG" else "🔴 做空 SHORT"
+            warn_tag = " ⚠️【排雷规避】" if s.get("action_override") == "AVOID" else ""
+            lev = (s.get("notional_1r_pct") or 0) / 100.0
             lines += [
-                f"### {idx}. {icon} · **{s['symbol']}** — {s['setup_label']}（{s['score']['total']}/20）{warn_tag}",
-                f"- **关键价位**：现价 `{fmt_px(s['price_usd'])}`（24h {fmt_pct(s.get('chg_24h'))}）｜ **触发条件**：{s['trigger_rule']}",
-                f"- **风控与仓位**：**止损规则** {stop_desc} ｜ 日线 `ATR` `{fmt_pct(s.get('atr_pct'), signed=False)}` ｜ **1% 风险名义仓位：`{s['notional_1r_pct']}%`（约 `{s['notional_1r_pct']/100:.2f}x`）**",
-                f"- **衍生品与动量**：年化费率 `{fmt_pct(s.get('funding_ann_pct'), 1)}` ｜ 合约 OI {fmt_usd(s.get('oi_usd'))}"
-                + (f"（24h {fmt_pct(s.get('oi_change_24h_pct'))}）" if s.get("oi_change_24h_pct") is not None else "")
-                + f" ｜ 14D 相对 BTC `{fmt_pct(s.get('rs_14d'), 1)}` ｜ 量能比 `{s.get('vol_ratio_1d') or '—'}x`",
-                f"- **量化逻辑**：{s['quant_summary']}",
+                f"#### {idx}. {dir_cn} · **{s['symbol']}**（{s['setup_label']} · 评分 {s['score']['total']}/20）{warn_tag}",
+                "",
+                f"- **怎么进场**：{s['trigger_rule']}（当前价 `{fmt_px(s['price_usd'])}`，24h `{fmt_pct(s.get('chg_24h'), 1)}`）",
+                f"- **错了在哪砍**：{s['stop_rule']}",
+                f"- **建议开多大**：**名义仓位不超过本金的 `{s['notional_1r_pct']}%`（即 `{lev:.2f}x` 杠杆）** —— 按触及止损最多亏损总资金 1% 反推",
+                f"- **为什么选它**：{s.get('catalyst_note') or s.get('quant_summary')}",
+                f"- **持仓排雷**：{s.get('risk_landmine')}（年化费率 `{fmt_pct(s.get('funding_ann_pct'), 1)}` · 14天相对BTC `{fmt_pct(s.get('rs_14d'), 1)}` · 合约持仓 {fmt_usd(s.get('oi_usd'))}）",
+                "",
             ]
-            if s.get("catalyst_note"):
-                lines.append(f"- **催化剂核查**：{s['catalyst_note']}")
-            if s.get("risk_landmine"):
-                lines.append(f"- **持仓排雷**：{s['risk_landmine']}")
-            lines.append("")
+
+    if watch_setups:
+        lines += [
+            "### 👀 蓄势待变盘观察池（区间极度收敛，突破前勿提前猜方向）",
+            "",
+            "| 币种 | 现价 (24h) | 向上突破做多位 | 向下跌破做空位 | 收敛状态与关注逻辑 |",
+            "|------|------------|----------------|----------------|--------------------|",
+        ]
+        for s in watch_setups:
+            d20h = fmt_px(s.get("donchian_20d_high") or s.get("trigger_price"))
+            d20l = fmt_px(s.get("donchian_20d_low"))
+            why = s.get("catalyst_note") or s.get("quant_summary") or ""
+            lines.append(
+                f"| **{s['symbol']}** | {fmt_px(s.get('price_usd'))} ({fmt_pct(s.get('chg_24h'), 1)}) | "
+                f"**站稳 {d20h}** | **跌破 {d20l}** | {why} |"
+            )
+        lines.append("")
 
     lines += [
-        "## 三、核心自选池日线结构矩阵",
+        "---",
         "",
-        "| 币种 | 现价 | 24h | 14D 相对BTC | 日线趋势 | 距 EMA20 | 20D 通道分位 | 日线 ATR | 年化费率 | 合约 OI |",
-        "|------|------|-----|-------------|----------|----------|--------------|----------|----------|---------|",
+        "## 三、核心自选池日线体检",
+        "",
+        "| 币种 | 现价 (24h) | 日线趋势 | 距20日均线 | 20日区间位置 | 日均波幅(ATR) | 年化费率 | 合约持仓(OI) |",
+        "|------|------------|----------|------------|--------------|---------------|----------|--------------|",
     ]
     for w in watch:
         pos = f"{w['pos_in_20d_pct']:.0f}%" if w.get("pos_in_20d_pct") is not None else "—"
         lines.append(
-            f"| **{w['symbol']}** | {fmt_px(w.get('price_usd'))} | {fmt_pct(w.get('chg_24h'))} | "
-            f"{fmt_pct(w.get('rs_14d'), 1)} | {w.get('trend_label','—')} | "
-            f"{fmt_pct(w.get('dist_ema20_pct'), 1)} | {pos} | "
-            f"{fmt_pct(w.get('atr_pct'), signed=False)} | {fmt_pct(w.get('funding_ann_pct'), 1)} | "
+            f"| **{w['symbol']}** | {fmt_px(w.get('price_usd'))} ({fmt_pct(w.get('chg_24h'), 1)}) | "
+            f"{w.get('trend_label','—')} | {fmt_pct(w.get('dist_ema20_pct'), 1)} (均线 {fmt_px(w.get('ema20'))}) | "
+            f"{pos} | {fmt_pct(w.get('atr_pct'), 1, signed=False)} | {fmt_pct(w.get('funding_ann_pct'), 1)} | "
             f"{fmt_usd(w.get('oi_usd'))} |"
         )
 
     lines += [
         "",
-        "## 四、相对强弱龙头 & 衍生品费率极值",
+        "---",
         "",
-        "### 14D 相对 BTC 抗跌/领涨榜 vs 领跌弱势榜",
-        "- **强势前 6（多头备选池）**：" + "、".join(
-            f"**{m['symbol']}**（RS {fmt_pct(m.get('rs_14d'), 1)}，{m.get('trend_label','')}，费率 {fmt_pct(m.get('funding_ann_pct'), 0)}）"
+        "## 四、强弱选币与资金费率雷达",
+        "",
+        "- **🚀 抗跌领涨前 6（行情企稳首选做多）**：" + "、".join(
+            f"**{m['symbol']}**（跑赢BTC {fmt_pct(m.get('rs_14d'), 1)}，{m.get('trend_label','')}）"
             for m in scan.get("rs_leaders", [])[:6]
         ),
-        "- **弱势前 6（空头备选池）**：" + "、".join(
-            f"**{m['symbol']}**（RS {fmt_pct(m.get('rs_14d'), 1)}，{m.get('trend_label','')}，费率 {fmt_pct(m.get('funding_ann_pct'), 0)}）"
+        "- **🩸 领跌弱势前 6（反抽均线首选做空）**：" + "、".join(
+            f"**{m['symbol']}**（跑输BTC {fmt_pct(m.get('rs_14d'), 1)}，{m.get('trend_label','')}）"
             for m in scan.get("rs_laggards", [])[:6]
         ),
-        "",
-        "### 资金费率极值监控（持仓磨损与逼空预警）",
-        "- **负费率极值（空头拥挤/潜在轧空）**：" + "、".join(
-            f"**{m['symbol']}** `{fmt_pct(m.get('funding_ann_pct'), 1)}`（24h {fmt_pct(m.get('chg_24h'), 1)}）"
+        "- **🔥 空头拥挤负费率（提防逼空反弹）**：" + "、".join(
+            f"**{m['symbol']}**（年化 `{fmt_pct(m.get('funding_ann_pct'), 1)}`，24h {fmt_pct(m.get('chg_24h'), 1)}）"
             for m in scan.get("neg_funding_leaders", [])[:5]
         ),
-        "- **正费率极值（多头拥挤/持仓高磨损）**：" + "、".join(
-            f"**{m['symbol']}** `{fmt_pct(m.get('funding_ann_pct'), 1)}`（24h {fmt_pct(m.get('chg_24h'), 1)}）"
+        "- **⚠️ 多头拥挤高费率（持仓成本偏高）**：" + "、".join(
+            f"**{m['symbol']}**（年化 `{fmt_pct(m.get('funding_ann_pct'), 1)}`，24h {fmt_pct(m.get('chg_24h'), 1)}）"
             for m in scan.get("pos_funding_leaders", [])[:5]
         ),
         "",
-        "### 板块轮动（24h 市值涨跌）",
-        "| 板块 | 市值 | 24h 变化 | 连续同向 | 备注 |",
-        "|------|------|----------|----------|------|",
+        "---",
+        "",
+        "## 五、未来持仓排雷日历（解锁 / 升级 / 宏观）",
+        "",
     ]
-    for s in scan.get("sector_rotation", []):
-        lines.append(
-            f"| {s.get('name')} | {fmt_usd(s.get('market_cap'))} | "
-            f"{fmt_pct(s.get('market_cap_change_24h'))} | {s.get('trend_sessions', 1)} 期 | "
-            f"{s.get('note') or '—'} |"
-        )
 
-    lines += [
-        "",
-        "## 五、持仓排雷日历（解锁 / 主网 / 宏观）",
-        "",
-    ]
     if not events:
         lines.append("> 未来 14 天暂无已确认日期的重大解锁或宏观排雷事件。")
     else:
         lines += [
-            "| 日期 | 倒计时 | 币种 | 类型 | 事件与持仓排雷应对 |",
+            "| 日期 | 倒计时 | 标的 | 类型 | 事件说明与应对建议 |",
             "|------|--------|------|------|--------------------|",
         ]
         for e in events[:12]:
             da = e.get("days_away", 99)
-            cnt = f"**{da} 天 ⏰**" if da <= 2 else f"{da} 天"
+            cnt = f"**⏰ {da} 天**" if da <= 3 else f"{da} 天"
+            t_cn = EVENT_TYPE_CN.get(e.get("event_type"), e.get("event_type", "事件"))
             desc = e.get("description", "")
-            ang = f"（应对：{e['opportunity_angle']}）" if e.get("opportunity_angle") else ""
-            lines.append(f"| {e.get('date')} | {cnt} | **{str(e.get('coin','')).upper()}** | `{e.get('event_type')}` | {desc}{ang} |")
+            ang = f" **应对：{e['opportunity_angle']}**" if e.get("opportunity_angle") else ""
+            lines.append(f"| {e.get('date')} | {cnt} | **{str(e.get('coin','')).upper()}** | {t_cn} | {desc}{ang} |")
     if latest.get("events_note"):
         lines.append(f"\n> {latest['events_note']}")
 
-    if alerts:
-        lines += ["", "## 六、本期触发告警", ""]
-        for a in alerts[:8]:
-            lines.append(f"- **[{a['severity'].upper()}] `{a['rule']}`**：{a['message']}")
-
     return "\n".join(lines) + "\n"
+
+
+def enrich_setup_channels(s, collected):
+    """确保每条 setup 均带有 donchian_20d_high / donchian_20d_low 字段。"""
+    if s.get("donchian_20d_high") is not None and s.get("donchian_20d_low") is not None:
+        return
+    sym = s.get("symbol")
+    for pool_key in ("watchlist_rows", "rs_leaders", "rs_laggards", "neg_funding_leaders", "pos_funding_leaders"):
+        for m in collected.get(pool_key) or []:
+            if m.get("symbol") == sym and m.get("donchian_20d_high") is not None:
+                s["donchian_20d_high"] = m.get("donchian_20d_high")
+                s["donchian_20d_low"] = m.get("donchian_20d_low")
+                s.setdefault("bb_width_pctile", m.get("bb_width_pctile"))
+                return
+    # 从 trigger_rule 解析双向突破高低点兜底
+    nums = re.findall(r"\$([0-9]+(?:\.[0-9]+)?)", s.get("trigger_rule") or "")
+    if len(nums) >= 2 and s.get("direction") == "WATCH":
+        s["donchian_20d_high"] = float(nums[0])
+        s["donchian_20d_low"] = float(nums[1])
 
 
 def main(session="daily"):
@@ -348,7 +365,6 @@ def main(session="daily"):
     date_str = collected.get("date") or now.strftime("%Y-%m-%d")
     today_date = datetime.strptime(date_str, "%Y-%m-%d").date()
 
-    # 1. 处理交易剧本合并（仅合并文字与筛选，不改任何量化数值）
     max_setups = (load_json(ROOT / "config/scan-config.json", {})
                   .get("trend_setups", {})
                   .get("max_actionable_setups", 5))
@@ -369,13 +385,13 @@ def main(session="daily"):
 
     ov_map = overlay.get("setup_overlays") or {}
     for s in chosen:
+        enrich_setup_channels(s, collected)
         ov = ov_map.get(s["symbol"]) or ov_map.get(s["id"]) or {}
-        s["catalyst_note"] = ov.get("catalyst_note") or "纯日线量价结构驱动，未检出异常单日新闻干扰"
+        s["catalyst_note"] = ov.get("catalyst_note") or "纯日线量价结构驱动，无异常单日消息干扰"
         s["risk_landmine"] = ov.get("risk_landmine") or "近 7 日无已知大额悬崖解锁或硬分叉排雷项"
         s["action_override"] = ov.get("action_override")
         s["source_url"] = ov.get("source_url")
 
-    # 2. 处理核心自选池备注与板块备注
     watch_notes = overlay.get("watchlist_notes") or {}
     watch_rows = []
     for w in collected.get("watchlist_rows", []):
@@ -393,13 +409,11 @@ def main(session="daily"):
         )
         sectors.append(s_copy)
 
-    # 3. 合并事件日历（携带上期未过期 + overlay 新增/更新）
     base_events = collected.get("previous", {}).get("events", [])
     ov_events = overlay.get("events")
     merged_events_raw = ov_events if isinstance(ov_events, list) and len(ov_events) > 0 else base_events
     events = normalize_events(merged_events_raw, today_date)
 
-    # 4. 大盘择时评分微调（如宏观 48h 事件）
     regime = dict(collected["regime"])
     scores = dict(regime["scores"])
     if isinstance(overlay.get("macro_score_override"), int) and 1 <= overlay["macro_score_override"] <= 5:
@@ -411,7 +425,6 @@ def main(session="daily"):
     prev_total = ((collected.get("previous") or {}).get("market_score") or {}).get("total")
     vs_prev = f"{prev_total} -> {scores['total']}" if prev_total is not None else "baseline"
 
-    # 5. 告警评估
     prev_btc = (prev.get("market_context") or {}).get("btc") or {}
     alerts = build_alerts(
         collected["btc"],
@@ -464,18 +477,15 @@ def main(session="daily"):
         "_freshness": collected.get("freshness", {}),
     }
 
-    # 写 data/latest.json
     latest_path = ROOT / "data/latest.json"
     with open(latest_path, "w") as f:
         json.dump(latest, f, ensure_ascii=False, indent=2)
 
-    # 写 Markdown 日报
     md_text = generate_markdown(latest)
     md_path = ROOT / "reports" / f"{date_str}_{session}.md"
     with open(md_path, "w") as f:
         f.write(md_text)
 
-    # 写单行告警摘要
     top_setup_str = (
         ", ".join(f"{s['symbol']}({s['direction']} {s['score']['total']}/20)" for s in chosen[:3])
         if chosen else "无高分剧本"
@@ -490,7 +500,6 @@ def main(session="daily"):
 
     print(f"[assemble 2.0] wrote {latest_path}, {md_path} ({len(md_text.splitlines())} lines)", flush=True)
 
-    # 调用 HTML 渲染器
     subprocess.run([sys.executable, str(ROOT / "scripts/render-html.py"), date_str, session], check=True)
     return 0
 

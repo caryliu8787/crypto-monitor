@@ -18,7 +18,6 @@ API="https://api.telegram.org/bot${BOT_TOKEN}"
 DATE="${1:-$(date +%Y-%m-%d)}"
 SESSION="${2:-daily}"
 HTML_FILE="reports/${DATE}_${SESSION}.html"
-MD_FILE="reports/${DATE}_${SESSION}.md"
 PAGES_URL="https://caryliu8787.github.io/crypto-monitor/reports/${DATE}_${SESSION}.html"
 
 # Step 1: Push HTML & latest.json to GitHub
@@ -40,23 +39,29 @@ else
   exit 1
 fi
 
-# Step 2: Generate Telegram message from data/latest.json
+# Step 2: Generate clean, mobile-friendly Telegram message from data/latest.json
 export DATE SESSION PAGES_URL
 MESSAGE=$(python3 << 'PYEOF'
-import json, os, sys
+import json, os
 from html import escape
 
 date = os.environ.get("DATE", "")
-session = os.environ.get("SESSION", "")
 pages_url = os.environ.get("PAGES_URL", "")
 
 d = json.load(open("data/latest.json"))
 reg = d.get("regime", {})
 sc = reg.get("scores", {})
 br = reg.get("breadth", {})
-deriv = reg.get("derivatives_overview", {})
 btc = d.get("market_context", {}).get("btc", {})
 eth = d.get("market_context", {}).get("eth", {})
+
+FGI_CN = {
+    "Extreme Fear": "极度恐慌",
+    "Fear": "恐慌",
+    "Neutral": "中性",
+    "Greed": "贪婪",
+    "Extreme Greed": "极度贪婪",
+}
 
 def px(v):
     if v is None: return "—"
@@ -65,50 +70,81 @@ def px(v):
     if abs(v) >= 0.01: return f"${v:.4f}"
     return f"${v:.6f}"
 
-def pct(v, d=1):
+def pct(v, digits=1):
     if v is None: return "—"
-    return f"+{v:.{d}f}%" if v >= 0 else f"{v:.{d}f}%"
+    return f"+{v:.{digits}f}%" if v >= 0 else f"{v:.{digits}f}%"
+
+code = reg.get("regime_code", "")
+r_icon = "🟢" if "BULL" in code else ("🔴" if "BEAR" in code else "🟡")
+fgi_cn = FGI_CN.get(btc.get("fear_greed_label", ""), "")
 
 lines = [
-    f"<b>🧭 日线合约趋势早报</b>  <code>{date}</code>",
-    f"<b>{escape(reg.get('regime_label','—'))} ({sc.get('total','—')}/20)</b> | FGI <b>{btc.get('fear_greed','—')}</b>",
-    f"<i>{escape(reg.get('posture',''))}</i>",
+    f"🧭 <b>日线合约早报</b>  <code>{date}</code>",
     "",
-    f"<b>BTC</b> {px(btc.get('price_usd'))} ({pct(btc.get('price_change_24h'))}) · {escape(btc.get('trend_label',''))}",
-    f"  EMA20 {px(btc.get('ema20'))} | EMA50 {px(btc.get('ema50'))} | ATR {pct(btc.get('atr_pct'),1).lstrip('+')}",
-    f"<b>ETH</b> {px(eth.get('price_usd'))} ({pct(eth.get('chg_24h'))}) · 广度(站上EMA20) <b>{br.get('pct_above_ema20','—')}%</b> | 中位费率 {pct(deriv.get('median_funding_ann_pct'),1)}",
+    f"{r_icon} <b>大盘环境：{escape(reg.get('regime_label','—'))}</b>（{sc.get('total','—')}/20分 · 情绪 {btc.get('fear_greed','—')} {fgi_cn}）",
+    f"👉 {escape(reg.get('posture',''))}",
     "",
-    "<b>━━ 今日交易剧本 (1%风险仓位标尺) ━━</b>",
+    f"• <b>BTC</b> {px(btc.get('price_usd'))}（{pct(btc.get('price_change_24h'))}）{escape(btc.get('trend_label',''))}｜20日线压力 {px(btc.get('ema20'))}",
+    f"• <b>ETH</b> {px(eth.get('price_usd'))}（{pct(eth.get('chg_24h'))}）｜全场仅 <b>{br.get('pct_above_ema20','—')}%</b> 站上日线均线",
 ]
 
 setups = d.get("setups") or []
-if not setups:
-    lines.append("今日无高赔率标准剧本，建议观望或持既有底仓。")
+action_list = [s for s in setups if s.get("direction") in ("LONG", "SHORT")]
+watch_list = [s for s in setups if s.get("direction") == "WATCH"]
+
+lines.append("")
+lines.append("━━━━━━━━━━━━━━━")
+
+if not action_list:
+    lines.append("🎯 <b>今日可执行单：暂无</b>（建议观望等右侧信号）")
 else:
-    for s in setups[:5]:
-        icon = "🟢" if s.get("direction") == "LONG" else ("🔴" if s.get("direction") == "SHORT" else "🟡")
-        avoid = " [规避]" if s.get("action_override") == "AVOID" else ""
+    lines.append(f"🎯 <b>今日可执行单（共 {len(action_list)} 个）</b>")
+    for idx, s in enumerate(action_list[:4], 1):
+        is_long = s.get("direction") == "LONG"
+        tag = "🟢 做多" if is_long else "🔴 做空"
+        if s.get("action_override") == "AVOID":
+            tag += "[排雷规避]"
+        lev = (s.get("notional_1r_pct") or 0) / 100.0
+        why = (s.get("catalyst_note") or s.get("quant_summary") or "").strip()
+        if len(why) > 58:
+            why = why[:57] + "…"
+        lines.extend([
+            "",
+            f"<b>{idx}. {tag} {escape(s['symbol'])}</b>（{escape(s.get('setup_label',''))} · {s.get('score',{}).get('total','—')}分）",
+            f"• 现价：{px(s.get('price_usd'))}（{pct(s.get('chg_24h'))}）｜年化费率 {pct(s.get('funding_ann_pct'))}",
+            f"• 进场：{px(s.get('trigger_price'))} 附近（{escape(s.get('trigger_rule','')[:28])}）",
+            f"• 止损：{px(s.get('stop_price'))}（止损宽 {s.get('stop_dist_pct')}%）",
+            f"• 仓位：<b>≤ {lev:.2f}x 杠杆（{s.get('notional_1r_pct')}% 本金）</b>",
+            f"• 逻辑：{escape(why)}",
+        ])
+
+if watch_list:
+    lines.append("")
+    lines.append("👀 <b>变盘观察池（等突破再动）</b>")
+    for s in watch_list[:3]:
+        d20h = px(s.get("donchian_20d_high") or s.get("trigger_price"))
+        d20l = px(s.get("donchian_20d_low"))
         lines.append(
-            f"{icon} <b>{escape(s['symbol'])}</b> {s['direction']}{avoid} · {escape(s.get('setup_label',''))} ({s.get('score',{}).get('total','—')}/20)\n"
-            f"   现价 {px(s.get('price_usd'))} | 触发 {px(s.get('trigger_price'))} | 止损 {px(s.get('stop_price'))} (-{s.get('stop_dist_pct')}%)\n"
-            f"   费率(年化) {pct(s.get('funding_ann_pct'),1)} | 1%风险仓位 <b>{s.get('notional_1r_pct')}%</b>"
+            f"• <b>{escape(s['symbol'])}</b>（现价 {px(s.get('price_usd'))}）：上破 <b>{d20h}</b> 做多 / 跌破 <b>{d20l}</b> 做空"
         )
 
-# 7 天内排雷事件
 ev_lines = []
+TYPE_CN = {"unlock": "解锁", "upgrade": "升级", "macro": "宏观"}
 for e in d.get("events") or []:
     da = e.get("days_away")
     if da is not None and 0 <= da <= 7:
-        ic = "⏰" if da <= 2 else "📅"
-        ev_lines.append(f"{ic} {e.get('date','')[5:]} <b>{escape(str(e.get('coin','')).upper())}</b> ({e.get('event_type')}) {escape(e.get('description','')[:42])}")
+        when = "今天" if da == 0 else ("明天" if da == 1 else f"{da}天后")
+        t_cn = TYPE_CN.get(e.get("event_type"), "事件")
+        ev_lines.append(f"• {when} ({e.get('date','')[5:]}) <b>{escape(str(e.get('coin','')).upper())}</b> {t_cn}：{escape(e.get('description','')[:34])}")
 
 if ev_lines:
     lines.append("")
-    lines.append("<b>━━ 7天持仓排雷 ━━</b>")
-    lines.extend(ev_lines[:5])
+    lines.append("━━━━━━━━━━━━━━━")
+    lines.append("⚠️ <b>近 7 天持仓排雷</b>")
+    lines.extend(ev_lines[:4])
 
 lines.append("")
-lines.append(f"<b>👉 <a href=\"{pages_url}\">打开完整日线图表与自选矩阵</a></b>")
+lines.append(f"📈 <a href=\"{pages_url}\"><b>点击打开完整网页图表与自选池 →</b></a>")
 print("\n".join(lines))
 PYEOF
 )

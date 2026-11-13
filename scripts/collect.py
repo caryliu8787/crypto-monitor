@@ -933,6 +933,10 @@ class TrendCollector:
                 best["rs_14d"] = m["rs_14d"]
                 best["ema20"] = ema20
                 best["ema50"] = ema50
+                best["donchian_20d_high"] = round_sig(d20h, 5)
+                best["donchian_20d_low"] = round_sig(d20l, 5)
+                best["bb_width_pctile"] = m["bb_width_pctile"]
+                best["trend_label"] = m["trend_label"]
                 best["atr14"] = atr
                 best["atr_pct"] = m["atr_pct"]
                 best["dist_ema20_pct"] = m["dist_ema20_pct"]
