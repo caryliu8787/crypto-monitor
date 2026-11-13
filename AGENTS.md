@@ -60,5 +60,5 @@
 
 ## 双层自动调度与盘中脉冲监控
 1. **主力早报（`08:05` Antigravity Cron）**：完整执行 Step 1 → Step 2（联网核查催化与解锁）→ Step 3。
-2. **系统级兜底早报（`08:20` macOS `launchd` · `com.cary.crypto-daily`）**：运行 `python3 scripts/publish.py --auto-fallback`。若 `08:05` 已成功发布当日早报则秒退；若桌面端未开导致未发，则自动跑 `collect.py` + 纯量化诚实模式发布，确保早报永不断更。
+2. **系统级兜底早报（`08:20` / `08:50` macOS `launchd` · `com.cary.crypto-daily`）**：运行 `python3 scripts/publish.py --auto-fallback`。若当日早报已发，或检测到主流程 `collect.py` 正在运行 / 今日 `collected.json` 生成未满 40 分钟（主流程 Step 2 仍在进行），则自动避让退出；若桌面端未开（`08:20` 直接采集发布）或 Step 2 异常中断超 40 分钟（`08:50` 复用当日量化数据兜底发布），确保早报永不断更且绝不撞车重推。
 3. **盘中静默脉冲（每 2 小时 macOS `launchd` · `com.cary.crypto-pulse`）**：运行 `python3 scripts/pulse.py`（`--dry-run` 完全只读零落盘），覆盖早报候选剧本、核心自选与高流动性主流币，统一采用 `OKX+HL` 加权费率口径监控盘中新鲜 20D 突破、极端负费率逼空、均线 `3x ATR` 偏离与多头费率过热（6 小时独立冷却）。

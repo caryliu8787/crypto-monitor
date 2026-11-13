@@ -2,18 +2,21 @@
 """crypto-monitor 2.1 一体化组装、渲染与发布脚本（含熔断校验、日期防串、增量日历与自动兜底）。
 
 用法:
-  python3 scripts/publish.py                 # 组装 + 渲染 + 推送 GitHub Pages & Telegram
+  python3 scripts/publish.py                 # 组装 + 渲染 + 推送 GitHub Pages & Telegram（同日默认防重复推 TG）
+  python3 scripts/publish.py --force-tg      # 强制重新推送当日 Telegram 消息
   python3 scripts/publish.py --no-push       # 仅在本地生成报告文件，不执行 git push 与 Telegram 推送
-  python3 scripts/publish.py --auto-fallback # launchd 兜底模式：若今日早报未发，自动跑 collect + 纯量化发布
+  python3 scripts/publish.py --auto-fallback # launchd 兜底模式：避让运行中的主流程，仅在主流程缺席/超时后兜底发布
   python3 scripts/publish.py --restore-bak   # 从 data/latest.json.bak 恢复上一份完好快照
 """
 
+import fcntl
 import json
 import os
 import re
 import shutil
 import subprocess
 import sys
+import time
 import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
@@ -25,6 +28,7 @@ from collect import MIN_VALID_PERPS, TrendCollector, classify_regime, load_json
 ROOT = Path(__file__).resolve().parent.parent
 TZ = timezone(timedelta(hours=8))
 PAGES_BASE = "https://caryliu8787.github.io/crypto-monitor"
+PRIMARY_GRACE_SEC = 2400  # 主流程产生产物后预留 40 分钟供 Step 2 联网核查完成
 
 FGI_CN = {
     "Extreme Fear": "极度恐慌",
@@ -91,6 +95,32 @@ def size_text_cn(notional_pct):
     pct = int(notional_pct or 0)
     usd_per_10k = pct * 100
     return f"每 $1万本金开 ${usd_per_10k:,}（占 {pct}%）"
+
+
+def smart_truncate(text, max_len=36):
+    """按语义与词法边界截断摘要，避免把『11/16』『9260』『v1.21』等日期/数字切碎。"""
+    s = re.sub(r"\s+", " ", str(text or "")).strip()
+    if len(s) <= max_len:
+        return s
+    for sep in ("；", "。", "｜", "，", ", "):
+        pos = s.find(sep, 12, max_len + 1)
+        if pos != -1:
+            return s[:pos].rstrip("，、；： ") + "…"
+    cut = s[:max_len]
+    # 若刚好切在 ASCII 连续词/数字/日期串（如 11/16, 9260, v1.21）中间，回退到该词起点前
+    if max_len < len(s) and re.match(r"[0-9A-Za-z./_%$-]", s[max_len - 1]) and re.match(r"[0-9A-Za-z./_%$-]", s[max_len]):
+        m = re.search(r"[0-9A-Za-z./_%$-]+$", cut)
+        if m and m.start() >= 10:
+            cut = cut[:m.start()]
+    cut = cut.rstrip("（(【『「《-—/，、；： ")
+    return cut + "…"
+
+
+def risk_labels(latest):
+    unit_pct = float(latest.get("unit_risk_equity_pct") or 1.0)
+    pct_str = f"{unit_pct:g}"
+    loss_10k = int(round(10000.0 * unit_pct / 100.0))
+    return pct_str, loss_10k
 
 
 def restore_latest_from_bak():
@@ -231,6 +261,7 @@ def render_markdown(latest):
     events = latest["events"]
 
     action_list, avoid_list, watch_list = partition_setups(latest.get("setups"))
+    risk_pct_str, _ = risk_labels(latest)
     fgi_cn = FGI_CN.get(btc.get("fear_greed_label", ""), btc.get("fear_greed_label", ""))
 
     lines = [
@@ -272,7 +303,7 @@ def render_markdown(latest):
                 f"### {idx}. {d_cn} · **{s['symbol']}**（{s['setup_label']} · {s['score']['total']}/20 分）",
                 f"- **① 怎么进场**：{s['trigger_rule']}（现价 `{fmt_px(s['price_usd'])}`，24h `{fmt_pct(s.get('chg_24h'))}`）",
                 f"- **② 错了在哪砍**：`{fmt_px(s.get('stop_price'))}`（`{stop_sign}{s.get('stop_dist_pct')}%`）— {s['stop_rule']}",
-                f"- **③ 建议开多大**：**{size_text_cn(s.get('notional_1r_pct'))}**（按进场位 `{fmt_px(s.get('trigger_price'))}` 计，若打止损总账户亏 ≤1%）",
+                f"- **③ 建议开多大**：**{size_text_cn(s.get('notional_1r_pct'))}**（按进场位 `{fmt_px(s.get('trigger_price'))}` 计，若打止损总账户亏 ≤{risk_pct_str}%）",
                 f"- **📊 量化信号**：{s.get('quant_summary') or '—'}",
             ]
             if s.get("catalyst_note"):
@@ -408,6 +439,7 @@ def render_html(latest, date_str):
     )
 
     action_list, avoid_list, watch_list = partition_setups(latest.get("setups"))
+    risk_pct_str, loss_per_10k = risk_labels(latest)
     s_parts = []
     if not action_list:
         s_parts.append('<div class="card"><div class="muted">今日无满足过滤条件的直接入场单，建议观望或留意下方待变盘观察池。</div></div>')
@@ -437,7 +469,7 @@ def render_html(latest, date_str):
                 f'<div class="order-steps">'
                 f'<div class="step-box"><div class="s-label">① 怎么进场（计划触发位）</div><div class="s-main">{fmt_px(s.get("trigger_price"))}</div><div class="s-desc">{esc(s.get("trigger_rule",""))}</div></div>'
                 f'<div class="step-box"><div class="s-label">② 错了在哪砍（日线止损）</div><div class="s-main" style="color:var(--red);">{fmt_px(s.get("stop_price"))} <span style="font-size:13.5px;">({stop_sign}{s.get("stop_dist_pct")}%)</span></div><div class="s-desc">{esc(s.get("stop_rule",""))}</div></div>'
-                f'<div class="step-box"><div class="s-label">③ 建议开多大（按最多亏1%计）</div><div class="s-main" style="color:var(--accent);">${usd_10k:,} <span style="font-size:13.5px;">/ 每$1万本金 ({pct_sz}%)</span></div><div class="s-desc">按 {fmt_px(s.get("trigger_price"))} 进场打止损（宽 {s.get("stop_dist_pct")}%），每$1万本金亏 ≤$100</div></div>'
+                f'<div class="step-box"><div class="s-label">③ 建议开多大（按最多亏{risk_pct_str}%计）</div><div class="s-main" style="color:var(--accent);">${usd_10k:,} <span style="font-size:13.5px;">/ 每$1万本金 ({pct_sz}%)</span></div><div class="s-desc">按 {fmt_px(s.get("trigger_price"))} 进场打止损（宽 {s.get("stop_dist_pct")}%），每$1万本金亏 ≤${loss_per_10k:,}</div></div>'
                 f'</div>'
                 f'<div class="reason-list">'
                 f'<div class="reason-row"><strong>📊 量化信号：</strong><span>{esc(s.get("quant_summary",""))}</span></div>'
@@ -553,6 +585,7 @@ def render_html(latest, date_str):
         "report_date": date_str,
         "closed_candle_date": btc.get("last_closed_date") or "—",
         "report_timestamp": latest["timestamp"].replace("T", " ")[:16] + " (北京时间)",
+        "unit_risk_pct": risk_pct_str,
         "regime_hero_html": hero_html,
         "regime_kpis_html": kpis_html,
         "btc_20d_range": f'{fmt_px(btc.get("donchian_20d_low"))} ~ {fmt_px(btc.get("donchian_20d_high"))}',
@@ -607,9 +640,7 @@ def build_telegram_message(latest, date_str):
             stop_sign = "-" if s["direction"] == "LONG" else "+"
             q_txt = (s.get("quant_summary") or "").strip()
             c_txt = (s.get("catalyst_note") or "").strip()
-            why = f"{q_txt}｜{c_txt}" if (q_txt and c_txt) else (q_txt or c_txt)
-            if len(why) > 64:
-                why = why[:63] + "…"
+            why = smart_truncate(f"{q_txt}｜{c_txt}" if (q_txt and c_txt) else (q_txt or c_txt), 64)
             lines += [
                 "",
                 f"<b>{idx}. {tag} {html_escape(s['symbol'])}</b>（{html_escape(s.get('setup_label',''))} · {s['score']['total']}分）",
@@ -622,7 +653,7 @@ def build_telegram_message(latest, date_str):
 
     if avoid_list:
         av_syms = "、".join(
-            f"{html_escape(s['symbol'])}（{html_escape(resolve_risk_landmine_text(s, events)[:22])}）"
+            f"{html_escape(s['symbol'])}（{html_escape(smart_truncate(resolve_risk_landmine_text(s, events), 36))}）"
             for s in avoid_list[:3]
         )
         lines += ["", f"⛔ <b>排雷剔除</b>：{av_syms}"]
@@ -640,7 +671,7 @@ def build_telegram_message(latest, date_str):
         if da is not None and 0 <= da <= 7:
             when = "今天" if da == 0 else ("明天" if da == 1 else f"{da}天后")
             t_cn = EVENT_META.get(e.get("event_type"), ("", "", "事件"))[2]
-            ev_lines.append(f"• {when} ({e.get('date','')[5:]}) <b>{html_escape(str(e.get('coin','')).upper())}</b> {t_cn}：{html_escape(e.get('description','')[:34])}")
+            ev_lines.append(f"• {when} ({e.get('date','')[5:]}) <b>{html_escape(str(e.get('coin','')).upper())}</b> {t_cn}：{html_escape(smart_truncate(e.get('description',''), 38))}")
     if ev_lines:
         lines += ["", "━━━━━━━━━━━━━━━", "⚠️ <b>近 7 天持仓排雷</b>", *ev_lines[:4]]
 
@@ -648,7 +679,7 @@ def build_telegram_message(latest, date_str):
     return "\n".join(lines)
 
 
-def push_git_and_telegram(html_rel_path, date_str, tg_message):
+def push_git_and_telegram(html_rel_path, date_str, tg_message, force_tg=False):
     subprocess.run(["git", "add", "index.html", html_rel_path, "data/latest.json"], cwd=ROOT, check=False)
     diff_rc = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode
     if diff_rc != 0:
@@ -656,6 +687,12 @@ def push_git_and_telegram(html_rel_path, date_str, tg_message):
     ahead = subprocess.check_output(["git", "rev-list", "--count", "origin/main..HEAD"], cwd=ROOT).decode().strip()
     if int(ahead or 0) > 0:
         subprocess.run(["git", "push", "origin", "main"], cwd=ROOT, check=True)
+
+    state_path = ROOT / "data/publish-state.json"
+    pub_state = load_json(state_path, {}) or {}
+    if pub_state.get("last_tg_date") == date_str and not force_tg:
+        print(f"[publish] Telegram already pushed for {date_str}, skipped duplicate push (pass --force-tg to resend).", flush=True)
+        return
 
     out_cfg = load_json(ROOT / "config/output.json", {}) or {}
     tg_cfg = (out_cfg.get("formats") or {}).get("telegram") or {}
@@ -674,10 +711,50 @@ def push_git_and_telegram(html_rel_path, date_str, tg_message):
     req = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendMessage", data=data)
     with urllib.request.urlopen(req, timeout=20) as r:
         resp = json.loads(r.read().decode())
+    if resp.get("ok"):
+        with open(state_path, "w") as sf:
+            json.dump({"last_tg_date": date_str, "pushed_at": datetime.now(TZ).isoformat(timespec="seconds")}, sf, indent=2)
     print(f"[publish] Telegram: {'OK' if resp.get('ok') else resp.get('description', 'error')}", flush=True)
 
 
 # ---------- 主入口 ----------
+
+def _pid_alive(pid):
+    if not isinstance(pid, int) or pid <= 0:
+        return False
+    try:
+        os.kill(pid, 0)
+        return True
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+
+
+def primary_pipeline_in_progress(today_str, now_ts, grace_sec=PRIMARY_GRACE_SEC):
+    """检测 08:05 主流程是否正在采集中或正处于 Step 2 联网核查窗口内，防止兜底任务抢跑撞车。"""
+    pipe = load_json(ROOT / "data/.pipeline-run.json", {}) or {}
+    if pipe.get("date") == today_str:
+        if pipe.get("stage") == "collect" and (now_ts - (pipe.get("started_ts") or 0)) < 600 and _pid_alive(pipe.get("pid")):
+            return f"collect.py pid={pipe.get('pid')} actively running"
+
+    col_path = ROOT / "data/collected.json"
+    col = load_json(col_path)
+    if isinstance(col, dict) and col.get("date") == today_str:
+        col_ts = col.get("collected_ts")
+        if not col_ts and col.get("collected_at"):
+            try:
+                col_ts = datetime.fromisoformat(col["collected_at"]).timestamp()
+            except Exception:
+                col_ts = None
+        if not col_ts and col_path.is_file():
+            col_ts = col_path.stat().st_mtime
+        if col_ts:
+            age = now_ts - col_ts
+            if 0 <= age < grace_sec:
+                return f"today's collected.json is fresh ({int(age)}s < {grace_sec}s), waiting for Step 2"
+    return None
+
 
 def already_published_today(today_str):
     html_path = ROOT / "reports" / f"{today_str}_daily.html"
@@ -685,7 +762,6 @@ def already_published_today(today_str):
     btc_ok = (((latest.get("market_context") or {}).get("btc") or {}).get("price_usd") or 0) > 0
     if not (html_path.is_file() and html_path.stat().st_size > 2000 and btc_ok and latest.get("report_date") == today_str):
         return False
-    # 确认当日文件已提交且领先分支已推送
     st = subprocess.run(
         ["git", "status", "--porcelain", f"reports/{today_str}_daily.html", "index.html", "data/latest.json"],
         cwd=ROOT, capture_output=True, text=True,
@@ -704,19 +780,41 @@ def main():
         return 0 if restore_latest_from_bak() else 1
 
     no_push = "--no-push" in sys.argv
+    force_tg = "--force-tg" in sys.argv
     auto_fallback = "--auto-fallback" in sys.argv
+
+    (ROOT / "data").mkdir(exist_ok=True)
+    lock_file = open(ROOT / "data/.publish.lock", "w")
+    try:
+        lock_flags = (fcntl.LOCK_EX | fcntl.LOCK_NB) if auto_fallback else fcntl.LOCK_EX
+        fcntl.flock(lock_file.fileno(), lock_flags)
+    except BlockingIOError:
+        print("[publish] another publish.py holds the lock, auto-fallback skipped.", flush=True)
+        return 0
+
     now = datetime.now(TZ)
+    now_ts = time.time()
     now_date_str = now.strftime("%Y-%m-%d")
 
     if auto_fallback:
         if already_published_today(now_date_str):
             print(f"[publish] {now_date_str} report already live, auto-fallback skipped.", flush=True)
             return 0
-        print(f"[publish] {now_date_str} report not yet published at {now.strftime('%H:%M')}; running pure-quant fallback...", flush=True)
-        rc = TrendCollector().run("daily")
-        if rc != 0:
-            print(f"[publish] FATAL: fallback collect failed with code {rc}; aborting.", file=sys.stderr)
-            return rc
+        busy_reason = primary_pipeline_in_progress(now_date_str, now_ts)
+        if busy_reason:
+            print(f"[publish] {now_date_str} primary pipeline active ({busy_reason}); auto-fallback deferred.", flush=True)
+            return 0
+        # 若主流程 Step 1 已成功但 Step 2 超时未发（40m~2h 内），直接复用当日完好 collected.json，无需重复拉接口
+        existing_col = load_json(ROOT / "data/collected.json")
+        col_age = now_ts - ((existing_col or {}).get("collected_ts") or 0)
+        if isinstance(existing_col, dict) and existing_col.get("date") == now_date_str and validate_collected(existing_col) is None and col_age < 7200:
+            print(f"[publish] {now_date_str} reusing valid collected.json (age={int(col_age)}s) after Step 2 timeout...", flush=True)
+        else:
+            print(f"[publish] {now_date_str} report not yet published at {now.strftime('%H:%M')}; running pure-quant fallback...", flush=True)
+            rc = TrendCollector().run("daily", mark_pipeline=False)
+            if rc != 0:
+                print(f"[publish] FATAL: fallback collect failed with code {rc}; aborting.", file=sys.stderr)
+                return rc
 
     collected = load_json(ROOT / "data/collected.json")
     err = validate_collected(collected)
@@ -734,6 +832,7 @@ def main():
 
     today_date = datetime.strptime(date_str, "%Y-%m-%d").date()
     cfg = load_json(ROOT / "config/config.json", {}) or {}
+    unit_risk_pct = float(((cfg.get("setups") or {}).get("unit_risk_equity_pct")) or 1.0)
     raw_overlay = load_json(ROOT / "data/overlay.json", {}) or {}
 
     overlay_fresh = bool(raw_overlay and raw_overlay.get("date") == date_str)
@@ -814,6 +913,7 @@ def main():
         "schema_version": "2.1-slim",
         "report_date": date_str,
         "overlay_applied": overlay_fresh,
+        "unit_risk_equity_pct": unit_risk_pct,
         "timestamp": now.isoformat(timespec="seconds"),
         "session": "daily",
         "regime": regime,
@@ -836,6 +936,7 @@ def main():
         "_sources": collected.get("_sources", {}),
     }
 
+    replaced_latest = False
     try:
         (ROOT / "reports").mkdir(exist_ok=True)
         md_path = ROOT / "reports" / f"{date_str}_daily.md"
@@ -853,13 +954,16 @@ def main():
         with open(tmp_latest, "w") as f:
             json.dump(latest, f, ensure_ascii=False, indent=2)
         os.replace(tmp_latest, ROOT / "data/latest.json")
+        replaced_latest = True
 
         md_path.write_text(md_text)
         html_path.write_text(html_text)
         shutil.copy2(html_path, ROOT / "index.html")
+        (ROOT / "data/.pipeline-run.json").unlink(missing_ok=True)
     except Exception as exc:
         print(f"[publish] FATAL build error: {exc}", file=sys.stderr)
-        restore_latest_from_bak()
+        if replaced_latest:
+            restore_latest_from_bak()
         return 2
 
     print(
@@ -870,7 +974,7 @@ def main():
 
     if not no_push:
         tg_msg = build_telegram_message(latest, date_str)
-        push_git_and_telegram(html_rel, date_str, tg_msg)
+        push_git_and_telegram(html_rel, date_str, tg_msg, force_tg=force_tg)
         print(f"[publish] live -> {PAGES_BASE}/", flush=True)
     return 0
 

@@ -7,6 +7,7 @@
 
 import json
 import math
+import os
 import shutil
 import statistics
 import sys
@@ -851,12 +852,16 @@ class TrendCollector:
                 pass
         return out
 
-    def run(self, session="daily"):
+    def run(self, session="daily", mark_pipeline=True):
         t0 = time.time()
         now = datetime.now(TZ)
         today = now.date()
         today_str = today.strftime("%Y-%m-%d")
         housekeeping(now.timestamp())
+        pipe_path = ROOT / "data/.pipeline-run.json"
+        if mark_pipeline:
+            with open(pipe_path, "w") as pf:
+                json.dump({"pid": os.getpid(), "date": today_str, "started_ts": int(t0), "stage": "collect"}, pf)
         print(f"[collect 2.1] {now.isoformat(timespec='seconds')} start", flush=True)
 
         whitelist = self.get_crypto_whitelist()
@@ -865,6 +870,7 @@ class TrendCollector:
         # 失败熔断门禁 1: 两个核心合约交易所均失败时立即清除旧暂存文件并终止，防止下游误发旧数据
         if not self.sources.get("okx_swap") and not self.sources.get("hyperliquid"):
             (ROOT / "data/collected.json").unlink(missing_ok=True)
+            pipe_path.unlink(missing_ok=True)
             print("[collect 2.1] FATAL: both OKX Swap and Hyperliquid APIs failed; aborting.", file=sys.stderr)
             return 2
 
@@ -877,6 +883,7 @@ class TrendCollector:
         # 失败熔断门禁 2: 有效日线合约池不足或 BTC 核心数据缺失时立即清除旧暂存文件并终止
         if len(enriched) < MIN_VALID_PERPS or not btc_m.get("price_usd") or not btc_m.get("ema20"):
             (ROOT / "data/collected.json").unlink(missing_ok=True)
+            pipe_path.unlink(missing_ok=True)
             print(
                 f"[collect 2.1] FATAL: insufficient valid perps ({len(enriched)} < {MIN_VALID_PERPS}) or missing BTC daily candles; aborting.",
                 file=sys.stderr,
@@ -921,6 +928,7 @@ class TrendCollector:
         collected = {
             "schema_version": "2.1-slim",
             "collected_at": now.isoformat(timespec="seconds"),
+            "collected_ts": int(time.time()),
             "date": today_str,
             "session": session,
             "regime": regime,
@@ -967,6 +975,9 @@ class TrendCollector:
         out_path = ROOT / "data/collected.json"
         with open(out_path, "w") as f:
             json.dump(collected, f, ensure_ascii=False, indent=2)
+        if mark_pipeline:
+            with open(pipe_path, "w") as pf:
+                json.dump({"pid": os.getpid(), "date": today_str, "started_ts": int(t0), "collected_ts": int(time.time()), "stage": "step2_pending"}, pf)
 
         missing = [k for k, v in self.sources.items() if v is None]
         print(
