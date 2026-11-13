@@ -10,9 +10,9 @@
 ## 每日早报 3 步流水线（每日 `08:05` UTC+8 自动执行 + `08:20` 系统兜底）
 
 ### Step 1: 量化采集与熔断归档
-运行 `python3 /Users/cary/projects/crypto-monitor/scripts/collect.py`：
+运行 `python3 /Users/cary/projects/crypto-monitor/scripts/collect.py`（**若退出码非 `0`，必须立即中止流水线并汇报上游接口异常，严禁继续执行 Step 2 或 `publish.py`**）：
 - 自动轮转过期日志，仅在 `data/latest.json` 完好时备份 `latest.json.bak` 并归档至 `data/history/`；
-- 拉取 OKX Swap V5 + Hyperliquid 全市场永续合约，结合 CoinGecko Top 150 纯加密白名单与 `config/config.json`（`OI ≥ $10M`、`24h 成交 ≥ $15M`）筛选高流动性主流合约池（核心接口全挂或有效合约 `< 15` 时退出码 `2` 熔断，绝不产出残缺文件）；
+- 拉取 OKX Swap V5 + Hyperliquid 全市场永续合约，结合 CoinGecko Top 150 纯加密白名单与 `config/config.json`（`OI ≥ $10M`、`24h 成交 ≥ $15M`）筛选高流动性主流合约池（核心接口全挂或有效合约 `< 15` 时自动清理旧 `collected.json` 并以退出码 `2` 熔断）；
 - 拉取 220 根 `1Dutc` K 线计算 `EMA20/50/200`、`20D` 前值与现值唐奇安通道、Wilder `ATR(14)`、布林带宽分位 + 20D 振幅、相对 BTC 强弱（`RS 7d/14d`）及 `OKX+HL` 持仓加权资金费率，结合当前市场阶段（`regime_code`）扫描可执行单池（最多 4 个）与窄幅观察池（最多 3 个），输出 `data/collected.json`。
 
 ### Step 2: 定向催化验证与解锁排雷（模型职责，WebSearch ≤ 8 次）

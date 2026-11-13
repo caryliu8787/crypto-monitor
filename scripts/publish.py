@@ -724,8 +724,8 @@ def main():
         print(f"[publish] FATAL: {err}. Refusing to overwrite latest.json or push.", file=sys.stderr)
         return 2
 
-    date_str = collected.get("date") or now_date_str
-    if not no_push and date_str != now_date_str and "--allow-stale-collected" not in sys.argv:
+    date_str = collected.get("date")
+    if date_str != now_date_str and "--allow-stale-collected" not in sys.argv:
         print(
             f"[publish] FATAL: collected.json date ({date_str}) != today ({now_date_str}). Run collect.py first.",
             file=sys.stderr,

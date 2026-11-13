@@ -667,11 +667,12 @@ class TrendCollector:
                         if fr_ann <= -15.0
                         else f"大盘承压下日线维持多头排列，7天逆势跑赢大饼 {rs7:+.1f}%。"
                     )
-                    rule_txt = (
-                        f"等待回踩 20 日均线 {fmt_rule_px(entry_px)} 附近低吸（突破 {fmt_rule_px(d20h)} 右侧加仓）"
-                        if p > ema20 * 1.01
-                        else f"守稳 20 日均线 {fmt_rule_px(entry_px)} 附近低吸（突破 {fmt_rule_px(d20h)} 加仓）"
-                    )
+                    if p > ema20 * 1.01:
+                        rule_txt = f"等待回踩 20 日均线 {fmt_rule_px(entry_px)} 附近低吸（突破 {fmt_rule_px(d20h)} 右侧加仓）"
+                    elif p >= ema20:
+                        rule_txt = f"守稳 20 日均线 {fmt_rule_px(entry_px)} 附近低吸（突破 {fmt_rule_px(d20h)} 加仓）"
+                    else:
+                        rule_txt = f"现价略低于 20 日均线（{fmt_rule_px(ema20)}），于 {fmt_rule_px(entry_px)} 收复企稳低吸（突破 {fmt_rule_px(d20h)} 加仓）"
                     coin_actions.append({
                         "direction": "LONG", "setup_type": "rs_leader_squeeze", "setup_label": s_lbl,
                         "trigger_price": entry_px, "trigger_rule": rule_txt,
@@ -728,10 +729,15 @@ class TrendCollector:
             # C: WATCH 真正窄幅收敛（同时要求 BB 带宽低分位 + 20 日高低振幅 <= sq_rng_max，且独立池不挤占可执行单名额）
             if not coin_actions and m["bb_width_pctile"] is not None and m["bb_width_pctile"] <= sq_max and rng20 <= sq_rng_max and m["perp_vol_24h_usd"] >= 30_000_000:
                 entry_px, stop_px, stop_pct, size_1r, rr_sc = build_risk_from_entry(d20h, ema20, True)
+                watch_stop_rule = (
+                    f"上破后以 20 日均线 {fmt_rule_px(stop_px)} 为防守（-{stop_pct}%）"
+                    if stop_px == round_sig(ema20, 5)
+                    else f"上破后以 {fmt_rule_px(stop_px)} 为防守（1.8x ATR，-{stop_pct}%）"
+                )
                 coin_watch.append({
                     "direction": "WATCH", "setup_type": "volatility_squeeze", "setup_label": "日线窄幅收敛待变盘",
                     "trigger_price": entry_px, "trigger_rule": f"上破 {fmt_rule_px(d20h)} 做多 / 下破 {fmt_rule_px(d20l)} 做空",
-                    "stop_price": stop_px, "stop_rule": f"突破后以20日均线 {fmt_rule_px(ema20)} 为防守",
+                    "stop_price": stop_px, "stop_rule": watch_stop_rule,
                     "stop_dist_pct": stop_pct, "notional_1r_pct": size_1r,
                     "score": {"structure": 4, "momentum": 3, "crowding": 4, "risk_reward": rr_sc, "total": 11 + rr_sc},
                     "quant_summary": f"近20日高低振幅仅 {rng20:.1f}%（布林带宽处60日 {m['bb_width_pctile']}% 分位），蓄势待突破。",
@@ -856,8 +862,9 @@ class TrendCollector:
         whitelist = self.get_crypto_whitelist()
         selected, all_coins = self.fetch_perp_universe(whitelist)
 
-        # 失败熔断门禁 1: 两个核心合约交易所均失败时立即终止，绝不写出残缺数据
+        # 失败熔断门禁 1: 两个核心合约交易所均失败时立即清除旧暂存文件并终止，防止下游误发旧数据
         if not self.sources.get("okx_swap") and not self.sources.get("hyperliquid"):
+            (ROOT / "data/collected.json").unlink(missing_ok=True)
             print("[collect 2.1] FATAL: both OKX Swap and Hyperliquid APIs failed; aborting.", file=sys.stderr)
             return 2
 
@@ -867,8 +874,9 @@ class TrendCollector:
         by_sym = {m["symbol"]: m for m in enriched}
         btc_m = by_sym.get("BTC", {})
 
-        # 失败熔断门禁 2: 有效日线合约池不足或 BTC 核心数据缺失时立即终止
+        # 失败熔断门禁 2: 有效日线合约池不足或 BTC 核心数据缺失时立即清除旧暂存文件并终止
         if len(enriched) < MIN_VALID_PERPS or not btc_m.get("price_usd") or not btc_m.get("ema20"):
+            (ROOT / "data/collected.json").unlink(missing_ok=True)
             print(
                 f"[collect 2.1] FATAL: insufficient valid perps ({len(enriched)} < {MIN_VALID_PERPS}) or missing BTC daily candles; aborting.",
                 file=sys.stderr,
