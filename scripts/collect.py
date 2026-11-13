@@ -318,11 +318,11 @@ class TrendCollector:
         # 汇总成交额与 OI，过滤主流高流动性纯加密合约池（自动剔除美股/ETF/大宗商品合约）
         eligible = []
         for sym, c in coins.items():
-            if crypto_whitelist and sym not in crypto_whitelist and sym not in watch_syms:
-                continue
             c["perp_vol_24h_usd"] = c["okx_vol_usd"] + c["hl_vol_usd"]
             c["oi_usd"] = c["okx_oi_usd"] + c["hl_oi_usd"]
             c["in_watchlist"] = sym in watch_syms
+            if crypto_whitelist and sym not in crypto_whitelist and sym not in watch_syms:
+                continue
             if sym in watch_syms or (c["perp_vol_24h_usd"] >= min_vol and c["oi_usd"] >= min_oi):
                 eligible.append(c)
 
@@ -349,9 +349,12 @@ class TrendCollector:
         if not isinstance(hist, list):
             hist = []
 
-        # 只保留最近 72 小时快照，且若距离上一条 < 20 分钟则不重复追加
+        # 只保留最近 72 小时有效非空快照，且若距离上一条 < 20 分钟则不重复追加
         cutoff = now_ts - 72 * 3600
-        hist = [h for h in hist if isinstance(h, dict) and (h.get("ts") or 0) >= cutoff]
+        hist = [
+            h for h in hist
+            if isinstance(h, dict) and (h.get("ts") or 0) >= cutoff and bool(h.get("oi"))
+        ]
 
         cur_oi_snap = {
             sym: round(c["oi_usd"], 2)
@@ -374,7 +377,7 @@ class TrendCollector:
         snap_24h = find_snap(24 * 3600, 14 * 3600, 36 * 3600)
         snap_4h = find_snap(4 * 3600, 1.5 * 3600, 8 * 3600)
 
-        if not hist or (now_ts - hist[-1].get("ts", 0)) >= 1200:
+        if cur_oi_snap and (not hist or (now_ts - hist[-1].get("ts", 0)) >= 1200):
             hist.append({"ts": int(now_ts), "oi": cur_oi_snap})
             with open(oi_path, "w") as f:
                 json.dump(hist, f, separators=(",", ":"))
