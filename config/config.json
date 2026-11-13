@@ -1,0 +1,39 @@
+{
+  "watchlist": [
+    "BTC", "ETH", "SOL", "HYPE", "SUI",
+    "BNB", "DOGE", "AAVE", "LINK", "PENDLE"
+  ],
+  "universe": {
+    "top_n_perps": 60,
+    "coingecko_top_limit": 150,
+    "min_perp_vol_24h_usd": 15000000,
+    "min_open_interest_usd": 10000000,
+    "max_atr_pct_filter": 20.0,
+    "candle_days": 220,
+    "exclude_bases": [
+      "USDC", "USDT", "DAI", "USDE", "FDUSD", "PYUSD", "USD1", "RLUSD",
+      "WBTC", "WETH", "STETH", "WSTETH", "XAUT", "PAXG", "XAU", "XAG", "GRAM"
+    ]
+  },
+  "setups": {
+    "max_selected": 5,
+    "breakout_vol_ratio_min": 1.25,
+    "pullback_ema20_band_pct": [-2.8, 3.2],
+    "bounce_ema20_band_pct": [-3.2, 2.8],
+    "max_long_funding_ann_pct": 50.0,
+    "min_short_funding_ann_pct": -30.0,
+    "squeeze_bb_pctile_max": 15.0,
+    "unit_risk_equity_pct": 1.0,
+    "max_leverage_cap": 3.0
+  },
+  "pulse": {
+    "cooldown_hours": 6,
+    "min_perp_vol_24h_usd": 30000000,
+    "min_open_interest_usd": 15000000,
+    "breakout_buffer_pct": 0.3,
+    "short_squeeze_funding_ann_pct": -38.0,
+    "short_squeeze_24h_chg_min": 3.0,
+    "crowded_long_funding_ann_pct": 65.0,
+    "atr_extension_warn": 3.0
+  }
+}

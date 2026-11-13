@@ -1,36 +1,20 @@
-# Data snapshots (keep latest, ignore old history)
-data/history/*
-!data/history/.gitkeep
-data/latest.json.bak
-
-# Reports — HTML pushed for GitHub Pages, others ignored
-reports/*.md
-reports/latest-alert.txt
-
-# Runtime logs
-logs/
-
-# Sensitive config (contains bot tokens)
+# Secrets
 config/output.json
 
-# Brainstorm session files
-.superpowers/
-
-# Claude local settings
-.claude/
-
-# OS files
-.DS_Store
-
-# Editor files
-*.swp
-*.swo
-*~
-
-# Intermediate collector & runtime state artifacts
+# Runtime & intermediate data (latest.json is tracked for GitHub Pages)
 data/collected.json
 data/overlay.json
 data/oi_history.json
-data/pulse_state.json
-data/tmp/
-.tmp/
+data/pulse-state.json
+data/latest.json.bak
+data/history/
+
+# Local Markdown & logs (HTML reports & root index.html are tracked for GitHub Pages)
+reports/*.md
+logs/
+
+# OS / Python
+.DS_Store
+__pycache__/
+*.pyc
+.venv/

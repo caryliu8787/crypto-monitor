@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>加密货币日线合约趋势早报 — 2026-11-13</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+:root {
+  --bg: #0b0f17;
+  --bg-card: #131a26;
+  --bg-elevated: #192231;
+  --bg-hover: #1f2a3c;
+  --border: #263244;
+  --border-strong: #35465e;
+  --text: #f0f6fc;
+  --text-body: #d2dce6;
+  --text-muted: #91a1b5;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --green-bg: rgba(63, 185, 80, 0.14);
+  --red: #ff6b6b;
+  --red-bg: rgba(255, 107, 107, 0.14);
+  --amber: #f0b429;
+  --amber-bg: rgba(240, 180, 41, 0.14);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 30px 20px 64px; }
+
+.top-bar {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 12px; padding-bottom: 18px;
+  border-bottom: 1px solid var(--border); margin-bottom: 22px;
+}
+.top-bar h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.3px; }
+.top-bar .sub { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+.nav-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.nav-pills a {
+  color: var(--text-body); text-decoration: none; font-size: 13px; font-weight: 500;
+  padding: 5px 12px; border-radius: 999px; background: var(--bg-card); border: 1px solid var(--border);
+}
+.nav-pills a:hover { border-color: var(--accent); color: var(--accent); }
+
+.sec-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  flex-wrap: wrap; gap: 8px; margin: 38px 0 14px;
+}
+.sec-head h2 { font-size: 20px; font-weight: 800; }
+.sec-head .sec-hint { font-size: 13px; color: var(--text-muted); }
+
+.up { color: var(--green); font-weight: 600; }
+.down { color: var(--red); font-weight: 600; }
+.warn { color: var(--amber); font-weight: 600; }
+.muted { color: var(--text-muted); }
+
+/* Hero */
+.hero-card {
+  background: var(--bg-card); border: 1px solid var(--border-strong);
+  border-radius: var(--radius); padding: 22px 24px; margin-bottom: 16px;
+}
+.hero-card.bull { border-top: 4px solid var(--green); }
+.hero-card.bear { border-top: 4px solid var(--red); }
+.hero-card.chop { border-top: 4px solid var(--amber); }
+
+.hero-top {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 10px; margin-bottom: 12px;
+}
+.regime-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 14px; border-radius: 999px; font-size: 15.5px; font-weight: 800;
+}
+.regime-pill.bull { background: var(--green-bg); color: var(--green); }
+.regime-pill.bear { background: var(--red-bg); color: var(--red); }
+.regime-pill.chop { background: var(--amber-bg); color: var(--amber); }
+
+.score-chips { display: flex; flex-wrap: wrap; gap: 6px; font-size: 12.5px; color: var(--text-muted); }
+.score-chips span { background: var(--bg-elevated); padding: 3px 9px; border-radius: 6px; border: 1px solid var(--border); }
+
+.hero-posture { font-size: 16.5px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.hero-note {
+  font-size: 14px; color: var(--text-body); background: var(--bg-elevated);
+  border-left: 3px solid var(--accent); padding: 11px 15px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.key-warnings { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
+.kw-item {
+  display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; padding: 8px 13px;
+  border-radius: var(--radius-sm); background: rgba(240, 180, 41, 0.09);
+  border: 1px solid rgba(240, 180, 41, 0.28); color: var(--text-body);
+}
+.kw-item.crit { background: rgba(255, 107, 107, 0.09); border-color: rgba(255, 107, 107, 0.28); }
+
+/* KPIs */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(205px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.kpi-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; }
+.kpi-box .k-label { font-size: 12.5px; color: var(--text-muted); }
+.kpi-box .k-val { font-size: 21px; font-weight: 800; margin: 3px 0; }
+.kpi-box .k-sub { font-size: 12.5px; color: var(--text-body); }
+
+/* Trade Tickets */
+.ticket-card {
+  background: var(--bg-card); border: 1px solid var(--border-strong);
+  border-radius: var(--radius); padding: 20px 22px; margin-bottom: 16px;
+}
+.ticket-card.LONG { border-left: 5px solid var(--green); }
+.ticket-card.SHORT { border-left: 5px solid var(--red); }
+
+.ticket-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.ticket-title { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.act-badge { display: inline-block; padding: 4px 11px; border-radius: 6px; font-size: 13.5px; font-weight: 800; }
+.act-badge.LONG { background: var(--green-bg); color: var(--green); }
+.act-badge.SHORT { background: var(--red-bg); color: var(--red); }
+.coin-sym { font-size: 21px; font-weight: 800; }
+.setup-tag { font-size: 13.5px; color: var(--text-muted); }
+.score-pill { font-size: 12.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--bg-elevated); border: 1px solid var(--border); }
+
+.order-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.step-box { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 13px 15px; }
+.step-box .s-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 3px; }
+.step-box .s-main { font-size: 19px; font-weight: 800; margin-bottom: 3px; }
+.step-box .s-desc { font-size: 12.5px; color: var(--text-body); line-height: 1.45; }
+
+.reason-list { display: flex; flex-direction: column; gap: 7px; font-size: 14px; color: var(--text-body); padding-top: 12px; border-top: 1px solid var(--border); }
+.reason-row { display: flex; align-items: baseline; gap: 8px; line-height: 1.6; }
+.reason-row strong { color: var(--text); white-space: nowrap; }
+
+.meta-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.meta-pill { font-size: 12px; color: var(--text-muted); background: var(--bg-elevated); border: 1px solid var(--border); padding: 2px 9px; border-radius: 999px; }
+
+/* Watch */
+.watch-subhead { font-size: 15.5px; font-weight: 700; color: var(--amber); margin: 22px 0 10px; }
+.watch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 14px; }
+.watch-card { background: var(--bg-card); border: 1px solid var(--border); border-left: 4px solid var(--amber); border-radius: var(--radius); padding: 16px 18px; }
+.watch-triggers { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+.wt-box { background: var(--bg-elevated); border-radius: var(--radius-sm); padding: 9px 11px; border: 1px solid var(--border); }
+.wt-box .wt-lbl { font-size: 12px; color: var(--text-muted); }
+.wt-box .wt-val { font-size: 16px; font-weight: 800; margin-top: 2px; }
+
+/* Tables */
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 16px; }
+.card-title { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+.card-sub { font-size: 12.5px; color: var(--text-muted); margin-bottom: 10px; }
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.data-table th { text-align: left; color: var(--text-muted); font-size: 12px; font-weight: 600; padding: 9px 11px; border-bottom: 2px solid var(--border); white-space: nowrap; }
+.data-table td { padding: 12px 11px; border-bottom: 1px solid var(--border); white-space: nowrap; color: var(--text-body); }
+.data-table td.wrap { white-space: normal; min-width: 230px; line-height: 1.55; }
+.data-table tr:hover td { background: var(--bg-hover); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr.urgent-row td { background: rgba(240, 180, 41, 0.07); }
+
+.trend-pill { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+.trend-pill.STRONG_UP { background: var(--green-bg); color: var(--green); }
+.trend-pill.UP_PULLBACK { background: rgba(88, 166, 255, 0.16); color: var(--accent); }
+.trend-pill.STRONG_DOWN { background: var(--red-bg); color: var(--red); }
+.trend-pill.DOWN_BOUNCE { background: var(--amber-bg); color: var(--amber); }
+.trend-pill.RANGE_CHOP { background: rgba(145, 161, 181, 0.16); color: var(--text-muted); }
+
+.pos-cell { display: flex; align-items: center; gap: 8px; }
+.pos-track { width: 64px; height: 7px; background: var(--bg-elevated); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+.pos-fill { height: 100%; border-radius: 999px; }
+
+.ev-badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+.ev-badge.unlock { background: var(--red-bg); color: var(--red); }
+.ev-badge.upgrade { background: var(--green-bg); color: var(--green); }
+.ev-badge.macro { background: rgba(88, 166, 255, 0.16); color: var(--accent); }
+
+.two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+.chart-box { position: relative; height: 250px; margin-top: 10px; }
+.note-box { border-left: 3px solid var(--accent); background: var(--bg-elevated); padding: 11px 15px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: 13px; color: var(--text-body); margin-top: 12px; }
+.footer { margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--border); text-align: center; font-size: 12px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="top-bar">
+    <div>
+      <h1>🧭 日线合约趋势早报</h1>
+      <div class="sub">2026-11-13 ｜ 昨日收盘K线 (2026-11-12) + 实时盘面 ｜ 更新于 2026-11-13 21:37 (北京时间)</div>
+    </div>
+    <nav class="nav-pills">
+      <a href="#sec-regime">大盘总纲</a>
+      <a href="#sec-setups">今日交易单</a>
+      <a href="#sec-watchlist">核心自选</a>
+      <a href="#sec-events">排雷日历</a>
+      <a href="#sec-radar">多空备选池</a>
+    </nav>
+  </header>
+
+  <section id="sec-regime">
+    <div class="hero-card bear"><div class="hero-top"><div class="regime-pill bear">🔴 当前市场：空头承压期（7/20 分）</div><div class="score-chips"><span>大饼趋势 1/5</span><span>全场广度 1/5</span><span>情绪费率 2/5</span><span>宏观环境 3/5</span></div></div><div class="hero-posture">👉 今日操作原则：防守为主（总仓位 ≤1.0x）：严禁大跌后低位追空大饼；只做极少数独立强势/负费率逼空多单，弱势币等反抽20日线再空。</div><div class="hero-note"><strong>盘面解读：</strong>11/10 美国 10 月 CPI 已落地，下一次 CPI (12/10) 与 FOMC (12/9) 尚有近四周宏观空窗。盘面上 BTC 昨日日线收跌失守 200 日均线，今日盘中进一步跌破 20 日前低并偏离 20 日均线逾 3 倍波幅（ATR），切忌在地板位盲目追空大饼；最优策略是小仓位布局有独立强催化的多头回踩/负费率逼空品种，或耐心等弱势币反抽 20 日均线再做空。</div><div class="key-warnings"><div class="kw-item crit"><span>🚨</span><span>BTC 跌破近 20 日低点 $71,073（现价 $69,811），下行寻底阶段严控多单仓位</span></div><div class="kw-item"><span>⏰</span><span>BTC 短线偏离 20 日均线已达 -3.0 倍波幅（ATR），切忌顺向追涨杀跌</span></div><div class="kw-item"><span>⏰</span><span>48h 内排雷：STRK 解锁（2026-11-15）— 早期贡献者与投资者月度解锁约 1.27 亿枚 STRK（约占总供应 1.25%）。</span></div></div></div>
+    <div class="kpi-grid"><div class="kpi-box"><div class="k-label">BTC 现价 / 均线压力</div><div class="k-val">$69,811 <span class="down">-3.9%</span></div><div class="k-sub">空头排列 · 20日线 $76,830 / 200日线 $73,723</div></div><div class="kpi-box"><div class="k-label">ETH 现价 / 汇率</div><div class="k-val">$1,973 <span class="down">-2.0%</span></div><div class="k-sub">空头排列 · ETH/BTC 0.02826</div></div><div class="kpi-box"><div class="k-label">市场多头广度（站上20日线）</div><div class="k-val">5.4% <span style="font-size:13.5px;font-weight:500;color:var(--text-muted);">(2/37 币)</span></div><div class="k-sub">站上50日线 5.4% · 中位年化费率 +8.0%</div></div><div class="kpi-box"><div class="k-label">市场情绪 / 稳定币底池</div><div class="k-val">20 <span style="font-size:15px;font-weight:600;color:var(--amber);">极度恐慌</span></div><div class="k-sub">稳定币总市值 $2883.79亿 (-0.0%)</div></div></div>
+  </section>
+
+  <section id="sec-setups">
+    <div class="sec-head">
+      <h2>🎯 今日交易计划</h2>
+      <div class="sec-hint">仓位标尺：按「若触发日线止损，账户总本金最多亏损 1%」客观计算</div>
+    </div>
+    <div class="ticket-card LONG"><div class="ticket-head"><div class="ticket-title"><span class="act-badge LONG">🟢 做多 LONG</span><span class="coin-sym">1. INJ</span><span class="setup-tag">逆势多头领涨 · 现价 $8.21 (<span class="up">+10.0%</span>)</span></div><div class="score-pill">评分 15/20</div></div><div class="order-steps"><div class="step-box"><div class="s-label">① 怎么进场（参考位）</div><div class="s-main">$7.81 附近</div><div class="s-desc">守稳 20 日均线 $7.8057 低吸，突破 $8.591 加仓</div></div><div class="step-box"><div class="s-label">② 错了在哪砍（日线止损）</div><div class="s-main" style="color:var(--red);">$7.05 <span style="font-size:13.5px;">(-14.13%)</span></div><div class="s-desc">日线收盘跌破 $7.0501 离场（宽 14.13%）</div></div><div class="step-box"><div class="s-label">③ 建议开多大（按最多亏1%计）</div><div class="s-main" style="color:var(--accent);">$700 <span style="font-size:13.5px;">/ 每$1万本金 (7%)</span></div><div class="s-desc">若打止损（-14.13%），每$1万账户仅亏 $100</div></div></div><div class="reason-list"><div class="reason-row"><strong>💡 为什么做它：</strong><span>双重催化共振：① 纳斯达克批准 Canary 质押型 INJ ETF（代码 INJC）；② 11/12 开启年度 RWA 主网升级『Veyra (v1.21.0)』治理投票（目标 11/24 激活）。 <a href="https://www.thedefiant.io" target="_blank" style="font-size:13px;color:var(--accent);">[信源 ↗]</a></span></div><div class="reason-row"><strong>🛡️ 持仓排雷：</strong><span>近 14 天无大额代币悬崖解锁；留意 11/24 主网升级前后的利好兑现波动。</span></div></div><div class="meta-pills"><span class="meta-pill">14天相对大饼：+24.1%</span><span class="meta-pill">年化资金费率：-1.9%</span><span class="meta-pill">日均波幅(ATR)：7.8%</span><span class="meta-pill">合约持仓：$1421万</span></div></div>
+<div class="watch-subhead">👀 待变盘观察池（突破前观望，勿提前猜方向）</div><div class="watch-grid"><div class="watch-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><strong style="font-size:18px;">AVAX</strong> <span class="muted" style="font-size:13px;">现价 $8.56 (<span class="up">+2.5%</span>)</span></div><span class="trend-pill DOWN_BOUNCE">窄幅收敛待变盘</span></div><div class="watch-triggers"><div class="wt-box"><div class="wt-lbl">🟢 放量突破做多位</div><div class="wt-val up">$9.17</div></div><div class="wt-box"><div class="wt-lbl">🔴 放量跌破做空位</div><div class="wt-val down">$7.75</div></div></div><div style="font-size:13px;color:var(--text-body);line-height:1.55;"><strong>关注逻辑：</strong>11/9 纽交所（NYSE）确认选用 Avalanche 构建 24/7 代币化股票交易与清算底层；财库公司 AVAX One 披露全仓质押策略。 <a href="https://cryptobriefing.com" target="_blank" style="font-size:12px;color:var(--accent);">[信源 ↗]</a><div class="muted" style="font-size:12px;margin-top:3px;">排雷：11/8 基金会解锁已平稳消化，布林带宽压缩至近 60 日极值，静待日线突破区间上下沿再跟进。</div></div></div><div class="watch-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><strong style="font-size:18px;">SUI</strong> <span class="muted" style="font-size:13px;">现价 $0.8218 (<span class="up">+3.2%</span>)</span></div><span class="trend-pill DOWN_BOUNCE">窄幅收敛待变盘</span></div><div class="watch-triggers"><div class="wt-box"><div class="wt-lbl">🟢 放量突破做多位</div><div class="wt-val up">$0.9687</div></div><div class="wt-box"><div class="wt-lbl">🔴 放量跌破做空位</div><div class="wt-val down">$0.7817</div></div></div><div style="font-size:13px;color:var(--text-body);line-height:1.55;"><strong>关注逻辑：</strong>纯日线量价结构驱动：20 日布林带宽压缩至近两个月极低分位，多空在区间下沿博弈收敛。<div class="muted" style="font-size:12px;margin-top:3px;">排雷：近 7 天无新增悬崖解锁事件，突破前切勿在收敛区间内频繁重仓猜方向。</div></div></div><div class="watch-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><strong style="font-size:18px;">LIT</strong> <span class="muted" style="font-size:13px;">现价 $3.37 (<span class="up">+9.0%</span>)</span></div><span class="trend-pill DOWN_BOUNCE">窄幅收敛待变盘</span></div><div class="watch-triggers"><div class="wt-box"><div class="wt-lbl">🟢 放量突破做多位</div><div class="wt-val up">$3.57</div></div><div class="wt-box"><div class="wt-lbl">🔴 放量跌破做空位</div><div class="wt-val down">$2.59</div></div></div><div style="font-size:13px;color:var(--text-body);line-height:1.55;"><strong>关注逻辑：</strong>瑞士数字资产银行 Sygnum 上线 LIT 机构交易、托管与借贷服务，Perp DEX 赛道交易量维持头部，合约深度充沛。<div class="muted" style="font-size:12px;margin-top:3px;">排雷：11 月处于解锁空窗期；50% 总量三年线性解锁始于 2026-12-27（剩 44 天），短期无解锁抛压。</div></div></div><div class="watch-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;"><div><strong style="font-size:18px;">ARB</strong> <span class="muted" style="font-size:13px;">现价 $0.1491 (<span class="up">+3.2%</span>)</span></div><span class="trend-pill DOWN_BOUNCE">窄幅收敛待变盘</span></div><div class="watch-triggers"><div class="wt-box"><div class="wt-lbl">🟢 放量突破做多位</div><div class="wt-val up">$0.1879</div></div><div class="wt-box"><div class="wt-lbl">🔴 放量跌破做空位</div><div class="wt-val down">$0.1422</div></div></div><div style="font-size:13px;color:var(--text-body);line-height:1.55;"><strong>关注逻辑：</strong>日线布林带极度收敛，价格贴近区间下沿弱势震荡。<div class="muted" style="font-size:12px;margin-top:3px;">排雷：⚠️ 3 天后（11/16）面临约 9260 万枚月度悬崖解锁，谨防向下跌破区间支撑，不建议左侧做多。</div></div></div></div>
+  </section>
+
+  <section id="sec-watchlist">
+    <div class="sec-head">
+      <h2>📊 核心自选体检 & BTC 日线趋势图</h2>
+      <div class="sec-hint">20日位置：0% 代表贴近近一个月最低点，100% 代表贴近最高点</div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <div class="card-title" style="margin:0;">BTC 近 60 日收盘价与 20日 / 50日均线</div>
+        <div style="font-size:12.5px;color:var(--text-muted);">20日高低区间：$71,073 ~ $81,944 ｜ 日均波幅(ATR)：$2,329 (3.3%)</div>
+      </div>
+      <div class="chart-box"><canvas id="chartBtcDaily"></canvas></div>
+    </div>
+    <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>币种</th><th>现价 (24h)</th><th>日线结构</th><th>近20日位置</th><th>20日均线 (偏离)</th><th>14天相对大饼</th><th>年化费率</th><th>合约持仓</th></tr></thead><tbody><tr><td><strong style="color:var(--text);font-size:14.5px;">BTC</strong><div style="font-size:11.5px;color:var(--text-muted);">失守200日线并下破前低，偏离均线 &gt;3倍ATR 忌追空</div></td><td><strong style="color:var(--text);">$69,811</strong> (<span class="down">-3.9%</span>)</td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td><td><div class="pos-cell"><div class="pos-track"><div class="pos-fill" style="width:4%;background:var(--red);"></div></div><span>0%</span></div></td><td>$76,830 (<span class="down">-9.1%</span>)</td><td><span class="up">+0.0%</span></td><td><span class="up">+4.7%</span></td><td>$52.01亿</td></tr><tr><td><strong style="color:var(--text);font-size:14.5px;">ETH</strong></td><td><strong style="color:var(--text);">$1,973</strong> (<span class="down">-2.0%</span>)</td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td><td><div class="pos-cell"><div class="pos-track"><div class="pos-fill" style="width:4%;background:var(--red);"></div></div><span>0%</span></div></td><td>$2,226 (<span class="down">-11.4%</span>)</td><td><span class="down">-2.4%</span></td><td><span class="down">-1.2%</span></td><td>$28.41亿</td></tr><tr><td><strong style="color:var(--text);font-size:14.5px;">SOL</strong></td><td><strong style="color:var(--text);">$81.70</strong> (<span class="up">+0.1%</span>)</td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td><td><div class="pos-cell"><div class="pos-track"><div class="pos-fill" style="width:6%;background:var(--red);"></div></div><span>6%</span></div></td><td>$92.01 (<span class="down">-11.2%</span>)</td><td><span class="down">-5.5%</span></td><td><span class="down">-1.3%</span></td><td>$6.23亿</td></tr><tr><td><strong style="color:var(--text);font-size:14.5px;">HYPE</strong><div style="font-size:11.5px;color:var(--text-muted);">24h逆势走强且负费率明显，关注20日均线收复情况</div></td><td><strong style="color:var(--text);">$74.75</strong> (<span class="up">+6.2%</span>)</td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td><td><div class="pos-cell"><div class="pos-track"><div class="pos-fill" style="width:19%;background:var(--red);"></div></div><span>19%</span></div></td><td>$78.58 (<span class="down">-4.9%</span>)</td><td><span class="down">-7.2%</span></td><td><span class="up">+10.2%</span></td><td>$17.29亿</td></tr><tr><td><strong style="color:var(--text);font-size:14.5px;">SUI</strong><div style="font-size:11.5px;color:var(--text-muted);">日线窄幅收敛，紧盯区间下沿支撑</div></td><td><strong style="color:var(--text);">$0.8218</strong> (<span class="up">+3.2%</span>)</td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td><td><div class="pos-cell"><div class="pos-track"><div class="pos-fill" style="width:21%;background:var(--red);"></div></div><span>21%</span></div></td><td>$0.8818 (<span class="down">-6.8%</span>)</td><td><span class="up">+0.5%</span></td><td><span class="up">+4.4%</span></td><td>$4991万</td></tr><tr><td><strong style="color:var(--text);font-size:14.5px;">BNB</strong></td><td><strong style="color:var(--text);">$646.06</strong> (<span class="down">-1.5%</span>)</td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td><td><div class="pos-cell"><div class="pos-track"><div class="pos-fill" style="width:4%;background:var(--red);"></div></div><span>0%</span></div></td><td>$700.70 (<span class="down">-7.8%</span>)</td><td><span class="up">+1.5%</span></td><td><span class="up">+7.0%</span></td><td>$7299万</td></tr><tr><td><strong style="color:var(--text);font-size:14.5px;">DOGE</strong></td><td><strong style="color:var(--text);">$0.0661</strong> (<span class="up">+0.4%</span>)</td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td><td><div class="pos-cell"><div class="pos-track"><div class="pos-fill" style="width:10%;background:var(--red);"></div></div><span>10%</span></div></td><td>$0.0733 (<span class="down">-9.8%</span>)</td><td><span class="down">-3.3%</span></td><td><span class="down">-6.7%</span></td><td>$1.21亿</td></tr><tr><td><strong style="color:var(--text);font-size:14.5px;">AAVE</strong></td><td><strong style="color:var(--text);">$113.92</strong> (<span class="up">+2.4%</span>)</td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td><td><div class="pos-cell"><div class="pos-track"><div class="pos-fill" style="width:9%;background:var(--red);"></div></div><span>9%</span></div></td><td>$130.82 (<span class="down">-12.9%</span>)</td><td><span class="down">-2.0%</span></td><td><span class="up">+8.4%</span></td><td>$5546万</td></tr><tr><td><strong style="color:var(--text);font-size:14.5px;">LINK</strong></td><td><strong style="color:var(--text);">$10.15</strong> (<span class="up">+2.2%</span>)</td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td><td><div class="pos-cell"><div class="pos-track"><div class="pos-fill" style="width:17%;background:var(--red);"></div></div><span>17%</span></div></td><td>$11.02 (<span class="down">-7.9%</span>)</td><td><span class="down">-1.6%</span></td><td><span class="up">+10.9%</span></td><td>$6404万</td></tr><tr><td><strong style="color:var(--text);font-size:14.5px;">PENDLE</strong></td><td><strong style="color:var(--text);">$1.52</strong> (<span class="up">+2.7%</span>)</td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td><td><div class="pos-cell"><div class="pos-track"><div class="pos-fill" style="width:10%;background:var(--red);"></div></div><span>10%</span></div></td><td>$1.74 (<span class="down">-12.4%</span>)</td><td><span class="down">-7.6%</span></td><td><span class="up">+9.5%</span></td><td>$1016万</td></tr></tbody></table></div></div>
+  </section>
+
+  <section id="sec-events">
+    <div class="sec-head">
+      <h2>🗓️ 未来持仓排雷日历</h2>
+      <div class="sec-hint">提前规避近 3~7 天大额代币解锁标的多单</div>
+    </div>
+    <div class="card">
+      <div class="table-wrap"><table class="data-table"><thead><tr><th>日期 / 倒计时</th><th>标的</th><th>类型</th><th>事件内容与应对建议</th></tr></thead><tbody><tr class="urgent-row"><td><strong>2026-11-15</strong><div style="font-size:12px;"><span class="warn">⏰ 2 天后</span></div></td><td><strong style="color:var(--text);font-size:14.5px;">STRK</strong></td><td><span class="ev-badge unlock">🔓 代币解锁</span></td><td class="wrap">早期贡献者与投资者月度解锁约 1.27 亿枚 STRK（约占总供应 1.25%）。<div style="color:var(--amber);font-size:12.5px;margin-top:3px;">👉 应对：48h 内解锁抛压窗口，日线空头结构下不宜左侧抄底。</div></td></tr><tr class="urgent-row"><td><strong>2026-11-16</strong><div style="font-size:12px;"><span class="warn">⏰ 3 天后</span></div></td><td><strong style="color:var(--text);font-size:14.5px;">ARB</strong></td><td><span class="ev-badge unlock">🔓 代币解锁</span></td><td class="wrap">团队与投资者月度悬崖解锁约 9260 万枚 ARB。<div style="color:var(--amber);font-size:12.5px;margin-top:3px;">👉 应对：处于收敛区间下沿，若放量跌破 20 日低点顺势偏空对待。</div></td></tr><tr><td><strong>2026-11-20</strong><div style="font-size:12px;">7 天后</div></td><td><strong style="color:var(--text);font-size:14.5px;">ZRO</strong></td><td><span class="ev-badge unlock">🔓 代币解锁</span></td><td class="wrap">战略伙伴、团队与投资者月度解锁约 2330 万枚 ZRO。<div style="color:var(--amber);font-size:12.5px;margin-top:3px;">👉 应对：7 天排雷窗口内占流通比例较高，多单规避。</div></td></tr><tr><td><strong>2026-11-24</strong><div style="font-size:12px;">11 天后</div></td><td><strong style="color:var(--text);font-size:14.5px;">INJ</strong></td><td><span class="ev-badge upgrade">🚀 主网升级</span></td><td class="wrap">Injective『Veyra (v1.21.0)』主网升级目标激活日（扩展机构级 RWA 基础设施）。<div style="color:var(--amber);font-size:12.5px;margin-top:3px;">👉 应对：支撑 INJ 逆势多头排列的核心时间窗，临近激活日注意分批锁利。</div></td></tr><tr><td><strong>2026-11-24</strong><div style="font-size:12px;">11 天后</div></td><td><strong style="color:var(--text);font-size:14.5px;">MON</strong></td><td><span class="ev-badge unlock">🔓 代币解锁</span></td><td class="wrap">本月最大单笔规模悬崖解锁窗口（团队与生态早期份额年度解锁）。<div style="color:var(--amber);font-size:12.5px;margin-top:3px;">👉 应对：重度供给冲击事件，解锁前 1 周严禁重仓做多。</div></td></tr><tr><td><strong>2026-11-25</strong><div style="font-size:12px;">12 天后</div></td><td><strong style="color:var(--text);font-size:14.5px;">XPL</strong></td><td><span class="ev-badge unlock">🔓 代币解锁</span></td><td class="wrap">生态、团队与投资者月度解锁约 2.28 亿枚 XPL。<div style="color:var(--amber);font-size:12.5px;margin-top:3px;">👉 应对：XPL 当前处于全市场最弱领跌梯队，供给压力延续。</div></td></tr><tr><td><strong>2026-12-09</strong><div style="font-size:12px;">26 天后</div></td><td><strong style="color:var(--text);font-size:14.5px;">MACRO</strong></td><td><span class="ev-badge macro">🏛️ 宏观节点</span></td><td class="wrap">美联储 12 月 FOMC 利率决议与经济预测点阵图。<div style="color:var(--amber);font-size:12.5px;margin-top:3px;">👉 应对：年末核心宏观波动节点，会议前属于纯技术结构交易窗口。</div></td></tr><tr><td><strong>2026-12-10</strong><div style="font-size:12px;">27 天后</div></td><td><strong style="color:var(--text);font-size:14.5px;">MACRO</strong></td><td><span class="ev-badge macro">🏛️ 宏观节点</span></td><td class="wrap">美国 11 月 CPI 通胀数据发布（紧随 FOMC 次日）。<div style="color:var(--amber);font-size:12.5px;margin-top:3px;">👉 应对：与 FOMC 构成连续 48h 宏观高波动窗口，届时提前降杠杆。</div></td></tr><tr><td><strong>2026-12-27</strong><div style="font-size:12px;">44 天后</div></td><td><strong style="color:var(--text);font-size:14.5px;">LIT</strong></td><td><span class="ev-badge unlock">🔓 代币解锁</span></td><td class="wrap">TGE 一周年解锁起点：5 亿枚 LIT（占总量 50%）开启三年线性释放。<div style="color:var(--amber);font-size:12.5px;margin-top:3px;">👉 应对：12 月中下旬起防范前置避险抛压，11 月暂不受影响。</div></td></tr></tbody></table></div>
+      <div class="note-box">近 7 天重点规避 STRK (11/15)、ARB (11/16) 与 ZRO (11/20) 解锁多单；宏观端至 12/9 FOMC 前无重大数据干扰。</div>
+    </div>
+  </section>
+
+  <section id="sec-radar">
+    <div class="sec-head">
+      <h2>🧭 多空选币备选池（Top 200 主流高流动性合约）</h2>
+      <div class="sec-hint">仅筛选合约持仓 OI ≥ $1500万 的主流币，已剔除小市值杂币与美股映射</div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-title">🚀 多头备选：逆势抗跌 & 负费率逼空 Top 6</div>
+        <div class="card-sub">大盘企稳时优先从这里找做多标的（负费率越深越容易轧空）</div>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>币种</th><th>现价 (24h)</th><th>14天相对大饼</th><th>年化费率</th><th>日线趋势</th></tr></thead><tbody><tr><td><strong style="color:var(--text);">LIT</strong></td><td>$3.37 (<span class="up">+9.0%</span>)</td><td><span class="up">+31.2%</span></td><td><span class="up">+10.0%</span></td><td><span class="trend-pill DOWN_BOUNCE">空头反抽</span></td></tr><tr><td><strong style="color:var(--text);">INJ</strong></td><td>$8.21 (<span class="up">+10.0%</span>)</td><td><span class="up">+24.1%</span></td><td><span class="down">-1.9%</span></td><td><span class="trend-pill UP_PULLBACK">多头回踩</span></td></tr><tr><td><strong style="color:var(--text);">AVAX</strong></td><td>$8.56 (<span class="up">+2.5%</span>)</td><td><span class="up">+10.0%</span></td><td><span class="up">+0.5%</span></td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td></tr><tr><td><strong style="color:var(--text);">ZRO</strong></td><td>$1.62 (<span class="up">+5.7%</span>)</td><td><span class="up">+4.2%</span></td><td><span class="up">+10.1%</span></td><td><span class="trend-pill RANGE_CHOP">均线纠缠</span></td></tr><tr><td><strong style="color:var(--text);">PEPE</strong></td><td>$0.000005 (<span class="up">+4.0%</span>)</td><td><span class="up">+2.4%</span></td><td><span class="down">-1.5%</span></td><td><span class="trend-pill UP_PULLBACK">多头回踩</span></td></tr></tbody></table></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🩸 空头备选：领跌弱势 Top 6</div>
+        <div class="card-sub">反弹至 20 日均线受阻时优先从这里找顺势做空标的</div>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>币种</th><th>现价 (24h)</th><th>14天相对大饼</th><th>年化费率</th><th>日线趋势</th></tr></thead><tbody><tr><td><strong style="color:var(--text);">XPL</strong></td><td>$0.0509 (<span class="up">+4.2%</span>)</td><td><span class="down">-27.7%</span></td><td><span class="up">+10.1%</span></td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td></tr><tr><td><strong style="color:var(--text);">TRUMP</strong></td><td>$1.11 (<span class="up">+0.5%</span>)</td><td><span class="down">-20.6%</span></td><td><span class="down">-1.5%</span></td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td></tr><tr><td><strong style="color:var(--text);">ENA</strong></td><td>$0.1409 (<span class="up">+0.8%</span>)</td><td><span class="down">-16.1%</span></td><td><span class="up">+9.3%</span></td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td></tr><tr><td><strong style="color:var(--text);">WLD</strong></td><td>$0.3049 (<span class="up">+1.1%</span>)</td><td><span class="down">-15.4%</span></td><td><span class="down">-3.3%</span></td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td></tr><tr><td><strong style="color:var(--text);">BCH</strong></td><td>$226.54 (<span class="up">+0.2%</span>)</td><td><span class="down">-13.2%</span></td><td><span class="up">+7.1%</span></td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td></tr><tr><td><strong style="color:var(--text);">ZEC</strong></td><td>$983.06 (<span class="up">+2.2%</span>)</td><td><span class="down">-12.9%</span></td><td><span class="up">+8.3%</span></td><td><span class="trend-pill STRONG_DOWN">空头排列</span></td></tr></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    加密货币日线合约趋势雷达 2.0 ｜ 数据源：OKX Swap V5 · Hyperliquid · CoinGecko · DeFiLlama · Alternative.me
+  </footer>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  Chart.defaults.color = '#91a1b5';
+  Chart.defaults.borderColor = '#263244';
+  Chart.defaults.font.size = 12;
+  var chartData = {"dates": ["09-14", "09-15", "09-16", "09-17", "09-18", "09-19", "09-20", "09-21", "09-22", "09-23", "09-24", "09-25", "09-26", "09-27", "09-28", "09-29", "09-30", "10-01", "10-02", "10-03", "10-04", "10-05", "10-06", "10-07", "10-08", "10-09", "10-10", "10-11", "10-12", "10-13", "10-14", "10-15", "10-16", "10-17", "10-18", "10-19", "10-20", "10-21", "10-22", "10-23", "10-24", "10-25", "10-26", "10-27", "10-28", "10-29", "10-30", "10-31", "11-01", "11-02", "11-03", "11-04", "11-05", "11-06", "11-07", "11-08", "11-09", "11-10", "11-11", "11-12"], "closes": [78158.4, 75611.2, 76168.1, 76390.1, 80876.6, 81231.2, 81144.3, 86589.1, 86167.5, 84366.1, 84369.4, 84059.9, 84394.1, 84440.9, 83461.0, 83627.0, 83579.9, 84837.7, 84480.0, 84719.9, 86484.8, 85715.0, 85512.1, 83283.9, 81714.9, 82586.8, 82940.4, 83716.0, 81808.0, 83136.6, 81641.4, 82193.0, 81585.8, 81453.3, 82069.5, 81909.6, 82984.5, 84049.9, 81380.9, 81149.9, 80850.0, 80119.1, 80124.9, 80881.4, 81309.9, 77966.9, 77286.8, 77521.0, 78308.7, 76795.5, 77439.4, 80466.1, 76049.5, 75816.3, 75829.9, 74818.1, 75320.0, 73769.4, 73979.9, 71428.4], "ema20": [77099.84, 76958.06, 76882.83, 76835.9, 77220.73, 77602.68, 77939.98, 78763.7, 79468.83, 79935.23, 80357.54, 80710.14, 81061.0, 81382.89, 81580.81, 81775.68, 81947.51, 82222.77, 82437.74, 82655.09, 83019.82, 83276.51, 83489.42, 83469.85, 83302.71, 83234.53, 83206.52, 83255.04, 83117.23, 83119.07, 82978.34, 82903.55, 82778.05, 82651.88, 82596.42, 82531.0, 82574.19, 82714.74, 82587.71, 82450.77, 82298.32, 82090.77, 81903.55, 81806.2, 81758.93, 81397.79, 81006.26, 80674.33, 80449.04, 80101.08, 79847.59, 79906.49, 79539.16, 79184.6, 78865.11, 78479.68, 78178.76, 77758.82, 77398.92, 76830.3], "ema50": [73361.78, 73450.0, 73556.59, 73667.71, 73950.41, 74235.93, 74506.85, 74980.66, 75419.36, 75770.21, 76107.44, 76419.3, 76732.03, 77034.34, 77286.37, 77535.02, 77772.08, 78049.16, 78301.35, 78553.06, 78864.1, 79132.77, 79382.94, 79535.92, 79621.37, 79737.66, 79863.26, 80014.34, 80084.68, 80204.37, 80260.72, 80336.5, 80385.49, 80427.36, 80491.76, 80547.36, 80642.94, 80776.54, 80800.24, 80813.96, 80815.37, 80788.06, 80762.06, 80766.74, 80788.04, 80677.41, 80544.44, 80425.87, 80342.85, 80203.74, 80095.33, 80109.87, 79950.64, 79788.51, 79633.27, 79444.44, 79282.7, 79066.49, 78867.02, 78575.3]};
+  if (chartData && Array.isArray(chartData.dates) && chartData.dates.length > 0) {
+    new Chart(document.getElementById('chartBtcDaily'), {
+      type: 'line',
+      data: {
+        labels: chartData.dates,
+        datasets: [
+          { label: 'BTC 日线收盘价', data: chartData.closes, borderColor: '#f0f6fc', backgroundColor: 'rgba(240,246,252,0.06)', borderWidth: 2.2, pointRadius: 0, fill: true, tension: 0.15 },
+          { label: '20日均线 (EMA20)', data: chartData.ema20, borderColor: '#3fb950', borderWidth: 1.8, pointRadius: 0, fill: false, tension: 0.15 },
+          { label: '50日均线 (EMA50)', data: chartData.ema50, borderColor: '#ff6b6b', borderWidth: 1.8, borderDash: [6, 4], pointRadius: 0, fill: false, tension: 0.15 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { position: 'top', labels: { boxWidth: 14, padding: 16 } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { maxTicksLimit: 10 } },
+          y: { grid: { color: '#1f2938' }, ticks: { callback: function (v) { return '$' + Number(v).toLocaleString(); } } }
+        }
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>
