@@ -173,6 +173,7 @@ def main():
         return 0
     if bot_token and chat_id:
         send_telegram(bot_token, chat_id, msg)
+        print(f"[pulse] {now.strftime('%H:%M')} sent {len(hits)} alert(s)")
     return 0
 
 

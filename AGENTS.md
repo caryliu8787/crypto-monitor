@@ -7,7 +7,7 @@
 
 ---
 
-## 每日早报 3 步流水线（每日 `08:05` UTC+8 自动执行 + `08:20` 系统兜底）
+## 每日早报 3 步流水线（每日 `08:05` UTC+8 系统级 `launchd` 自动执行）
 
 ### Step 1: 量化采集与熔断归档
 运行 `python3 /Users/cary/projects/crypto-monitor/scripts/collect.py`（**若退出码非 `0`，必须立即中止流水线并汇报上游接口异常，严禁继续执行 Step 2 或 `publish.py`**）：
@@ -58,7 +58,10 @@
 
 ---
 
-## 双层自动调度与盘中脉冲监控
-1. **主力早报（`08:05` Antigravity Cron）**：完整执行 Step 1 → Step 2（联网核查催化与解锁）→ Step 3。
-2. **系统级兜底早报（`08:20` / `08:50` macOS `launchd` · `com.cary.crypto-daily`）**：运行 `python3 scripts/publish.py --auto-fallback`。若当日早报已发，或检测到主流程 `collect.py` 正在运行 / 今日 `collected.json` 生成未满 40 分钟（主流程 Step 2 仍在进行），则自动避让退出；若桌面端未开（`08:20` 直接采集发布）或 Step 2 异常中断超 40 分钟（`08:50` 复用当日量化数据兜底发布），确保早报永不断更且绝不撞车重推。
-3. **盘中静默脉冲（每 2 小时 macOS `launchd` · `com.cary.crypto-pulse`）**：运行 `python3 scripts/pulse.py`（`--dry-run` 完全只读零落盘），覆盖早报候选剧本、核心自选与高流动性主流币，统一采用 `OKX+HL` 加权费率口径监控盘中新鲜 20D 突破、极端负费率逼空、均线 `3x ATR` 偏离与多头费率过热（6 小时独立冷却）。
+## 全系统级 `launchd` 自动调度（关掉桌面软件、重启电脑均自动运行）
+全部挂载于 `~/Library/LaunchAgents/`，彻底脱离对话窗口临时内存定时器：
+1. **每日早报主流程 + 自愈兜底（`08:05` 主跑 + `08:35` / `09:05` 零 Token 巡检重试 · `com.cary.crypto-daily` → `scripts/daily_run.sh`）**：
+   - 先由 Python（`publish.py --check-live`）零 Token 检查今日网页与 Telegram 是否均已送达（已发则毫秒级静默退出，绝不重推）；
+   - 执行 Step 1 `collect.py`（若上游接口熔断则零 Token 中止等待重试，不耗额度、不发脏数据）；
+   - 调用 `agy` CLI（`/Applications/Gemini.app/Contents/Helpers/agy`）完成 Step 2 联网核查催化/解锁并写入 `data/overlay.json`、执行 Step 3 发布；若 `agy` 超时或异常退出，`daily_run.sh` 自动降级调用 `publish.py` 输出纯量化早报，确保永不断更（合盖休眠唤醒后 `StartCalendarInterval` 亦会自动补跑）。
+2. **盘中静默脉冲（每 2 小时 · `com.cary.crypto-pulse` → `scripts/pulse.py`）**：零 Token 纯 Python 监控（`--dry-run` 完全只读零落盘），覆盖早报候选剧本、核心自选与高流动性主流币，统一采用 `OKX+HL` 加权费率口径监控盘中新鲜 20D 突破、极端负费率逼空、均线 `3x ATR` 偏离与多头费率过热（6 小时独立冷却）。

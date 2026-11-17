@@ -786,9 +786,34 @@ def already_published_today(today_str):
     return True
 
 
+def send_ops_alert(text):
+    out_cfg = load_json(ROOT / "config/output.json", {}) or {}
+    tg_cfg = (out_cfg.get("formats") or {}).get("telegram") or {}
+    token = os.environ.get("TELEGRAM_BOT_TOKEN") or tg_cfg.get("bot_token") or ""
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID") or tg_cfg.get("chat_id") or ""
+    if not token or not chat_id:
+        return False
+    data = urllib.parse.urlencode({"chat_id": chat_id, "parse_mode": "HTML", "text": text}).encode()
+    req = urllib.request.Request(f"https://api.telegram.org/bot{token}/sendMessage", data=data)
+    with urllib.request.urlopen(req, timeout=15) as r:
+        return bool(json.loads(r.read().decode()).get("ok"))
+
+
 def main():
     if "--restore-bak" in sys.argv:
         return 0 if restore_latest_from_bak() else 1
+
+    if "--check-live" in sys.argv:
+        return 0 if already_published_today(datetime.now(TZ).strftime("%Y-%m-%d")) else 1
+
+    if "--notify-error" in sys.argv:
+        idx = sys.argv.index("--notify-error")
+        msg = sys.argv[idx + 1] if idx + 1 < len(sys.argv) else "⚠️ 加密货币早报流水线执行异常"
+        try:
+            send_ops_alert(msg)
+        except Exception as exc:
+            print(f"[publish] warning: ops alert failed: {exc}", file=sys.stderr)
+        return 0
 
     no_push = "--no-push" in sys.argv
     force_tg = "--force-tg" in sys.argv

@@ -99,8 +99,14 @@ def housekeeping(now_ts):
     hist_dir.mkdir(parents=True, exist_ok=True)
 
     for p in (ROOT / "logs").glob("*"):
-        if p.is_file() and (now_ts - p.stat().st_mtime) > 7 * 86400:
+        if not p.is_file():
+            continue
+        st = p.stat()
+        if (now_ts - st.st_mtime) > 7 * 86400:
             p.unlink(missing_ok=True)
+        elif st.st_size > 2_000_000:
+            tail = p.read_bytes()[-200_000:]
+            p.write_bytes(tail)
 
     latest_path = ROOT / "data/latest.json"
     prev = load_json(latest_path, {}) or {}

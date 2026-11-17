@@ -6,16 +6,17 @@
   <string>com.cary.crypto-daily</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/usr/bin/python3</string>
-    <string>/Users/cary/projects/crypto-monitor/scripts/publish.py</string>
-    <string>--auto-fallback</string>
+    <string>/bin/bash</string>
+    <string>/Users/cary/projects/crypto-monitor/scripts/daily_run.sh</string>
   </array>
   <key>EnvironmentVariables</key>
   <dict>
     <key>PATH</key>
-    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/cary/.gemini/antigravity/bin</string>
     <key>HOME</key>
     <string>/Users/cary</string>
+    <key>LANG</key>
+    <string>en_US.UTF-8</string>
   </dict>
   <key>WorkingDirectory</key>
   <string>/Users/cary/projects/crypto-monitor</string>
@@ -25,20 +26,26 @@
       <key>Hour</key>
       <integer>8</integer>
       <key>Minute</key>
-      <integer>20</integer>
+      <integer>5</integer>
     </dict>
     <dict>
       <key>Hour</key>
       <integer>8</integer>
       <key>Minute</key>
-      <integer>50</integer>
+      <integer>35</integer>
+    </dict>
+    <dict>
+      <key>Hour</key>
+      <integer>9</integer>
+      <key>Minute</key>
+      <integer>5</integer>
     </dict>
   </array>
   <key>RunAtLoad</key>
   <false/>
   <key>StandardOutPath</key>
-  <string>/Users/cary/projects/crypto-monitor/logs/daily-fallback.log</string>
+  <string>/Users/cary/projects/crypto-monitor/logs/daily.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/cary/projects/crypto-monitor/logs/daily-fallback.err</string>
+  <string>/Users/cary/projects/crypto-monitor/logs/daily.err</string>
 </dict>
 </plist>
